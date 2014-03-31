@@ -20,7 +20,6 @@ public class SpringContextHolder implements ApplicationContextAware {
 	 * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量.
 	 */
 	public void setApplicationContext(ApplicationContext applicationContext) {
-        System.out.println("start注入");
         logger.debug("spring初始化注入:{}",new Object[]{applicationContext});
 		SpringContextHolder.applicationContext =(ConfigurableApplicationContext)applicationContext;
 	}
@@ -54,9 +53,10 @@ public class SpringContextHolder implements ApplicationContextAware {
 	}
 
 	private static void checkApplicationContext() {
-		if (applicationContext == null){}
-			throw new RuntimeException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
-	}
+		if (applicationContext == null){
+            throw new RuntimeException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");
+        }
+    }
 	
 	/*public static  void loadbean( ) {
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(

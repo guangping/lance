@@ -19,13 +19,13 @@ public class SpringMainTest {
 
     @BeforeClass
     public void setUp(){
-        String configs[]=new String[]{"classpath*:dataAccessContext-jdbc.xml"};
+        String configs[]=new String[]{"classpath*:spring/dataAccessContext-jdbc.xml"};
         context=new ClassPathXmlApplicationContext(configs);
     }
 
-    @Test
+    @Test(enabled = false)
     public void runContext(){
-        System.out.println("spring测试");
+        System.out.println("spring测试"+context);
     }
 
     @Test
