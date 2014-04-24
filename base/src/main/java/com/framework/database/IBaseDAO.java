@@ -159,5 +159,9 @@ public interface IBaseDAO<T> {
     public void delete(String sql,Serializable...args);
 
 
-
+    /**
+     * 获取当前事务最后一次更新的主键值
+     * @return
+     */
+    public Serializable getLastId();
 }
