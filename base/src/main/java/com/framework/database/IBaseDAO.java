@@ -37,14 +37,6 @@ public interface IBaseDAO<T> {
      */
     public int queryForInt(String sql, Object... args);
 
-    /**
-     * 查询单一结果集<br/>
-     * 并将结果转为<code>int</code>型返回
-     * @param sql 查询的sql语句，使用:name占位符  确定结果为一行一列，且为数字型
-     * @param args K-V 键值对
-     * @return
-     */
-    public int queryForIntByMap(String sql, Map args);
 
     /**
      * 查询单一结果集<br/>
@@ -152,11 +144,6 @@ public interface IBaseDAO<T> {
      */
     @SuppressWarnings("unchecked")
     public int update(String table, Map fields, String where);
-
-    /*
-    * 删除数据
-    * */
-    public void delete(String sql,Serializable...args);
 
 
     /**
