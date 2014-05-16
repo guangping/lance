@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -48,8 +49,14 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         }
         SqlParameterSource parameterSource = new MapSqlParameterSource(arg);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        this.namedParameterJdbcTemplate.update(getInsertSql(table, column), parameterSource, keyHolder);
-        return String.valueOf(keyHolder.getKey());
+
+        try {
+            this.namedParameterJdbcTemplate.update(getInsertSql(table, column), parameterSource, keyHolder);
+            return String.valueOf(keyHolder.getKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -60,8 +67,14 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(arg);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        this.namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
-        return String.valueOf(keyHolder.getKey());
+
+        try {
+            this.namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
+            return String.valueOf(keyHolder.getKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /*
@@ -89,6 +102,7 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     }
 
 
+    @Transactional
     @Override
     public void batchInsert(String table, List<Object> list) {
         Assert.hasText(table, "表名不能为空!");
@@ -114,7 +128,12 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
                 params.add(new BeanPropertySqlParameterSource(obj));
             }
         }
-        this.namedParameterJdbcTemplate.batchUpdate(sql, params.toArray(new SqlParameterSource[]{}));
+        try {
+            this.namedParameterJdbcTemplate.batchUpdate(sql, params.toArray(new SqlParameterSource[]{}));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("批量插入数据出错!");
+        }
     }
 
     protected String removeOrders(String hql) {
@@ -222,7 +241,13 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
 
     @Override
     public void execute(String sql, Object... args) {
-        this.jdbcTemplate.update(sql, args);
+
+        try {
+            this.jdbcTemplate.update(sql, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -249,8 +274,12 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     @Override
     public void update(String sql, Object... args) {
         Assert.hasText(sql, "sql不能为空!");
-
-        this.jdbcTemplate.update(sql, args);
+        try {
+            this.jdbcTemplate.update(sql, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 
@@ -258,13 +287,18 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     public void updateNamedParameter(String sql, Object arg) {
         Assert.hasText(sql, "sql不能为空!");
         Assert.notNull(arg, "参数不能为空!");
-        SqlParameterSource parameterSource=null;
-        if(arg instanceof Map){
-            parameterSource=new MapSqlParameterSource((HashMap)arg);
-        }else {
-            parameterSource=new BeanPropertySqlParameterSource(arg);
+        SqlParameterSource parameterSource = null;
+        if (arg instanceof Map) {
+            parameterSource = new MapSqlParameterSource((HashMap) arg);
+        } else {
+            parameterSource = new BeanPropertySqlParameterSource(arg);
         }
-        this.namedParameterJdbcTemplate.update(sql,parameterSource);
+        try {
+            this.namedParameterJdbcTemplate.update(sql, parameterSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -296,7 +330,13 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         params.putAll(fields);
         params.putAll(where);
         SqlParameterSource parameterSource = new MapSqlParameterSource(params);
-        this.namedParameterJdbcTemplate.update(buffer.toString(), parameterSource);
+
+        try {
+            this.namedParameterJdbcTemplate.update(buffer.toString(), parameterSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 

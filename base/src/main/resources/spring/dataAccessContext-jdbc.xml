@@ -69,6 +69,7 @@
             <ref bean="dataSource"/>
         </property>
     </bean>
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <tx:advice id="transactionManagerAdivice" transaction-manager="transactionManager">
         <tx:attributes>
@@ -78,13 +79,6 @@
                        rollback-for="java.lang.RuntimeException"/>
         </tx:attributes>
     </tx:advice>
-
-    <!--
-          <aop:config proxy-target-class="true">
-               <aop:pointcut expression="execution(*com.ztesoft.net.mall.core.action.order.service.cloud.CloudCardAcceptHander.*(..))" id="cloudCardAcceptHander"/>
-               <aop:advisor advice-ref="transactionManagerAdivice" pointcut-ref="cloudCardAcceptHander"/>
-         </aop:config>
-          -->
 
 
 </beans>

@@ -101,19 +101,15 @@ public class MainSpringTest {
     public void defaultDaoBatchInsert() {
         Operation operation = null;
         List list=new ArrayList();
-        for(int i=0;i<10;i++){
+        for(int i=0;i<10000;i++){
             operation=new Operation();
             operation.setCode("ESB"+i);
             operation.setDescription("测试"+1);
-            operation.setFlag("true"+i);
+            operation.setFlag("true");
             operation.setEndpoint_id("1"+i);
             operation.setRequest_id("1"+i);
             operation.setResponse_id("1"+i);
-            if(i%2==0){
-                list.add(operation);
-            } else {
-                list.add(JSONObject.parseObject(JSONObject.toJSONString(operation),Map.class));
-            }
+            list.add(operation);
         }
         defaultDAO.batchInsert("INF_COMM_CLIENT_OPERATION",list);
     }
@@ -123,8 +119,9 @@ public class MainSpringTest {
         Map fields=new HashMap();
         fields.put("code","sms");
         fields.put("description","短信发送");
+        fields.put("flag","143214433232");
         Map where=new HashMap();
-        where.put("id","119");
+        where.put("id","2147483647");
 
         defaultDAO.update("INF_COMM_CLIENT_OPERATION",fields,where);
     }
