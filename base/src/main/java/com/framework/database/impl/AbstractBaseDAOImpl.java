@@ -42,13 +42,13 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         Assert.hasText(table, "表名不能为空!");
         Assert.notNull(arg, "参数不能为空!");
         Assert.notEmpty(arg, "参数不能为空!");
-        List<String> column=new ArrayList<String>();
-        for(Object obj : arg.keySet()){
+        List<String> column = new ArrayList<String>();
+        for (Object obj : arg.keySet()) {
             column.add(String.valueOf(obj));
         }
-        SqlParameterSource parameterSource= new MapSqlParameterSource(arg);
-        KeyHolder keyHolder=new GeneratedKeyHolder();
-        this.namedParameterJdbcTemplate.update(getInsertSql(table,column),parameterSource,keyHolder);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(arg);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        this.namedParameterJdbcTemplate.update(getInsertSql(table, column), parameterSource, keyHolder);
         return String.valueOf(keyHolder.getKey());
     }
 
@@ -56,17 +56,18 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     public String insert(String table, Object arg) {
         Assert.hasText(table, "表名不能为空!");
         Assert.notNull(arg, "参数不能为空!");
-        String sql=getInsertSql(table,ReflectionUtil.getFields(arg.getClass()));
+        String sql = getInsertSql(table, ReflectionUtil.getFields(arg.getClass()));
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(arg);
 
-        KeyHolder keyHolder=new GeneratedKeyHolder();
-        this.namedParameterJdbcTemplate.update(sql,parameterSource,keyHolder);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        this.namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
         return String.valueOf(keyHolder.getKey());
     }
+
     /*
     *获取插入sql
     * **/
-    private String getInsertSql(String table,List<String> columns) {
+    private String getInsertSql(String table, List<String> columns) {
         StringBuffer buffer = new StringBuffer(1000);
         buffer.append("INSERT INTO ");
         buffer.append(table);
@@ -87,32 +88,33 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         return buffer.toString();
     }
 
+
     @Override
     public void batchInsert(String table, List<Object> list) {
         Assert.hasText(table, "表名不能为空!");
         Assert.notNull(list, "参数不能为空!");
         Assert.notEmpty(list, "参数不能为空!");
 
-        List<String> columns=new ArrayList<String>();
-        Object param=list.get(0);
-        if(param instanceof Map){
-            Map arg=(HashMap)param;
-            for(Object obj : arg.keySet()){
+        List<String> columns = new ArrayList<String>();
+        Object param = list.get(0);
+        if (param instanceof Map) {
+            Map arg = (HashMap) param;
+            for (Object obj : arg.keySet()) {
                 columns.add(String.valueOf(obj));
             }
-        }else {
-            columns=ReflectionUtil.getFields(param.getClass());
+        } else {
+            columns = ReflectionUtil.getFields(param.getClass());
         }
-        String sql=getInsertSql(table,columns);
-        List<SqlParameterSource> params=new ArrayList<SqlParameterSource>();
-        for(Object obj :list){
-            if(obj instanceof Map){
-                params.add(new MapSqlParameterSource((Map)obj));
-            }else {
+        String sql = getInsertSql(table, columns);
+        List<SqlParameterSource> params = new ArrayList<SqlParameterSource>();
+        for (Object obj : list) {
+            if (obj instanceof Map) {
+                params.add(new MapSqlParameterSource((Map) obj));
+            } else {
                 params.add(new BeanPropertySqlParameterSource(obj));
             }
         }
-        this.namedParameterJdbcTemplate.batchUpdate(sql,params.toArray(new SqlParameterSource[]{}));
+        this.namedParameterJdbcTemplate.batchUpdate(sql, params.toArray(new SqlParameterSource[]{}));
     }
 
     protected String removeOrders(String hql) {
@@ -243,6 +245,62 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         String sql = "SELECT LAST_INSERT_ID() AS ID";
         return jdbcTemplate.queryForObject(sql, String.class);
     }
+
+    @Override
+    public void update(String sql, Object... args) {
+        Assert.hasText(sql, "sql不能为空!");
+
+        this.jdbcTemplate.update(sql, args);
+    }
+
+
+    @Override
+    public void updateNamedParameter(String sql, Object arg) {
+        Assert.hasText(sql, "sql不能为空!");
+        Assert.notNull(arg, "参数不能为空!");
+        SqlParameterSource parameterSource=null;
+        if(arg instanceof Map){
+            parameterSource=new MapSqlParameterSource((HashMap)arg);
+        }else {
+            parameterSource=new BeanPropertySqlParameterSource(arg);
+        }
+        this.namedParameterJdbcTemplate.update(sql,parameterSource);
+    }
+
+    @Override
+    public void update(String table, Map fields, Map where) {
+        Assert.hasText(table, "表名不能为空!");
+        Assert.notEmpty(fields, "修改字段不能为空!");
+
+
+        StringBuffer buffer = new StringBuffer(1000);
+        buffer.append("UPDATE ");
+        buffer.append(table);
+        buffer.append(" SET ");
+        for (Object obj : fields.keySet()) {
+            buffer.append(" ");
+            buffer.append(obj);
+            buffer.append("=:");
+            buffer.append(obj);
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        buffer.append(" WHERE 1=1");
+        for (Object obj : where.keySet()) {
+            buffer.append(" AND ");
+            buffer.append(obj);
+            buffer.append("=:");
+            buffer.append(obj);
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        Map params = new HashMap();
+        params.putAll(fields);
+        params.putAll(where);
+        SqlParameterSource parameterSource = new MapSqlParameterSource(params);
+        this.namedParameterJdbcTemplate.update(buffer.toString(), parameterSource);
+    }
+
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

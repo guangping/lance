@@ -11,25 +11,9 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class DefaultDAOImpl<T> extends AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
-    @Override
-    public void batchExecute(String sql, List<Object[]> batchArgs) {
-
-    }
-
-    @Override
-    public void update(String sql, Object... args) {
-
-    }
 
 
-    @Override
-    public void update(String table, Map fields, Map where) {
 
-    }
 
-    @Override
-    public int update(String table, Map fields, String where) {
-        return 0;
-    }
 
 }

@@ -18,15 +18,9 @@ import java.util.Map;
  * 数据操作接口
  */
 public interface IBaseDAO<T> {
+
     /**执行sql语句**/
     public void execute(String sql, Object... args) ;
-
-    /**
-     * 批量执行sql语句
-     * @param sql
-     * @param args
-     */
-    public void batchExecute(String sql, List<Object[]> batchArgs);
 
     /**
      * 查询单一结果集<br/>
@@ -126,20 +120,30 @@ public interface IBaseDAO<T> {
     /*
     *新增数据
     *@param table 表名
-    *@param arg 键值对
+    *@param arg 键值对 键与数据库列对应
     * **/
     public String insert(String table, Map arg);
 
      /*
       *批量新增数据
       *@param table 表名
-      *@param list 批量插入的数据 支持对象 map
+      *@param list 批量插入的数据 支持对象 map  字段名与数据库列对应
       * **/
     public void batchInsert(String table, List<Object> list);
 
 
-    //提供namedjdbctemplate操作功能
+    /*
+    *更新操作
+    * **/
     public void update(String sql, Object...args) ;
+
+
+    /*
+    *更新操作
+    *@param arg 支持对象 map
+    * **/
+    public void updateNamedParameter(String sql, Object arg) ;
+
 
     /**
      * 更新数据
@@ -149,15 +153,6 @@ public interface IBaseDAO<T> {
      */
     @SuppressWarnings("unchecked")
     public void update(String table, Map fields, Map where);
-
-    /**
-     * 更新数据
-     * @param table  表名
-     * @param fields 字段-值Map
-     * @param where 更新条件,如"a='1' AND b='2'"
-     */
-    @SuppressWarnings("unchecked")
-    public int update(String table, Map fields, String where);
 
 
     /**

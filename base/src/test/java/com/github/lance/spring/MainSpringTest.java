@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,6 +116,17 @@ public class MainSpringTest {
             }
         }
         defaultDAO.batchInsert("INF_COMM_CLIENT_OPERATION",list);
+    }
+
+    @Test
+    public void updateMap(){
+        Map fields=new HashMap();
+        fields.put("code","sms");
+        fields.put("description","短信发送");
+        Map where=new HashMap();
+        where.put("id","119");
+
+        defaultDAO.update("INF_COMM_CLIENT_OPERATION",fields,where);
     }
 
 
