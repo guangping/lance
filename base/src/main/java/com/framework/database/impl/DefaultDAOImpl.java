@@ -16,11 +16,11 @@ public class DefaultDAOImpl<T> extends AbstractBaseDAOImpl<T> implements IBaseDA
 
     }
 
-
     @Override
-    public void update(String sql, Map args) {
+    public void update(String sql, Object... args) {
 
     }
+
 
     @Override
     public void update(String table, Map fields, Map where) {

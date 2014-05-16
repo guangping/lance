@@ -1,5 +1,6 @@
 package com.framework.utils;
 
+import java.sql.Timestamp;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -614,5 +615,7 @@ public class DateFormatUtils {
         return 0L;
     }
 
-
+    public static Timestamp currentTime() {
+        return new Timestamp(System.currentTimeMillis());
+    }
 }

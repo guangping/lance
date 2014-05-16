@@ -3,13 +3,20 @@ package com.framework.database.impl;
 
 import com.framework.database.IBaseDAO;
 import com.framework.database.pojo.Page;
+import com.framework.utils.ReflectionUtil;
+import com.framework.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -31,13 +38,86 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public void insert(String table, Object po) {
+    public String insert(String table, Map arg) {
+        Assert.hasText(table, "表名不能为空!");
+        Assert.notNull(arg, "参数不能为空!");
+        Assert.notEmpty(arg, "参数不能为空!");
+        List<String> column=new ArrayList<String>();
+        for(Object obj : arg.keySet()){
+            column.add(String.valueOf(obj));
+        }
+        SqlParameterSource parameterSource= new MapSqlParameterSource(arg);
+        KeyHolder keyHolder=new GeneratedKeyHolder();
+        this.namedParameterJdbcTemplate.update(getInsertSql(table,column),parameterSource,keyHolder);
+        return String.valueOf(keyHolder.getKey());
+    }
 
+    @Override
+    public String insert(String table, Object arg) {
+        Assert.hasText(table, "表名不能为空!");
+        Assert.notNull(arg, "参数不能为空!");
+        String sql=getInsertSql(table,ReflectionUtil.getFields(arg.getClass()));
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(arg);
+
+        KeyHolder keyHolder=new GeneratedKeyHolder();
+        this.namedParameterJdbcTemplate.update(sql,parameterSource,keyHolder);
+        return String.valueOf(keyHolder.getKey());
+    }
+    /*
+    *获取插入sql
+    * **/
+    private String getInsertSql(String table,List<String> columns) {
+        StringBuffer buffer = new StringBuffer(1000);
+        buffer.append("INSERT INTO ");
+        buffer.append(table);
+        buffer.append("(");
+        for (String key : columns) {
+            buffer.append(key.toUpperCase());
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        buffer.append(") VALUES(");
+        for (String key : columns) {
+            buffer.append(":");
+            buffer.append(key);
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        buffer.append(")");
+        return buffer.toString();
+    }
+
+    @Override
+    public void batchInsert(String table, List<Object> list) {
+        Assert.hasText(table, "表名不能为空!");
+        Assert.notNull(list, "参数不能为空!");
+        Assert.notEmpty(list, "参数不能为空!");
+
+        List<String> columns=new ArrayList<String>();
+        Object param=list.get(0);
+        if(param instanceof Map){
+            Map arg=(HashMap)param;
+            for(Object obj : arg.keySet()){
+                columns.add(String.valueOf(obj));
+            }
+        }else {
+            columns=ReflectionUtil.getFields(param.getClass());
+        }
+        String sql=getInsertSql(table,columns);
+        List<SqlParameterSource> params=new ArrayList<SqlParameterSource>();
+        for(Object obj :list){
+            if(obj instanceof Map){
+                params.add(new MapSqlParameterSource((Map)obj));
+            }else {
+                params.add(new BeanPropertySqlParameterSource(obj));
+            }
+        }
+        this.namedParameterJdbcTemplate.batchUpdate(sql,params.toArray(new SqlParameterSource[]{}));
     }
 
     protected String removeOrders(String hql) {
         Assert.hasText(hql);
-        Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*",Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("order\\s*by[\\w|\\W|\\s|\\S]*", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(hql);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
@@ -170,5 +250,33 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
 
     public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    /**
+     * 格式化列名 只适用于Mysql
+     *
+     * @param col
+     * @return
+     */
+    protected String quoteCol(String col) {
+        if (StringUtils.isBlank(col)) {
+            return "";
+        } else {
+            return col;
+        }
+    }
+
+    /**
+     * 格式化值 只适用于Mysql
+     *
+     * @param value
+     * @return
+     */
+    protected String quoteValue(String value) {
+        if (StringUtils.isBlank(value)) {
+            return "''";
+        } else {
+            return "'" + value.replaceAll("'", "''") + "'";
+        }
     }
 }

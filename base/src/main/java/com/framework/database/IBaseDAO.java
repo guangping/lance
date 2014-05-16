@@ -121,11 +121,25 @@ public interface IBaseDAO<T> {
      * @param table 表名
      * @param po 要新增的对象，保证对象的属性名和字段名对应
      */
-    public void insert(String table, Object po);
+    public String insert(String table, Object po);
+
+    /*
+    *新增数据
+    *@param table 表名
+    *@param arg 键值对
+    * **/
+    public String insert(String table, Map arg);
+
+     /*
+      *批量新增数据
+      *@param table 表名
+      *@param list 批量插入的数据 支持对象 map
+      * **/
+    public void batchInsert(String table, List<Object> list);
 
 
     //提供namedjdbctemplate操作功能
-    public void update(String sql, Map args) ;
+    public void update(String sql, Object...args) ;
 
     /**
      * 更新数据

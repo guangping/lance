@@ -224,4 +224,21 @@ public class StringUtils {
     }
 
 
+    public static boolean isEqual(String o, boolean c) {
+
+        if (o == null || "".equals(o))
+            return false;
+        return o.equals(String.valueOf(c).toLowerCase());
+
+    }
+
+    public static boolean isEqual(String o, String c) {
+        if (StringUtils.isEmpty(o)) {
+            o = "";
+        }
+        if (StringUtils.isEmpty(c)) {
+            c = "";
+        }
+        return o.equals(c);
+    }
 }
