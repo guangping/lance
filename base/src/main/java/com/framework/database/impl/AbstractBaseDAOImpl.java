@@ -271,8 +271,6 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     public void update(String table, Map fields, Map where) {
         Assert.hasText(table, "表名不能为空!");
         Assert.notEmpty(fields, "修改字段不能为空!");
-
-
         StringBuffer buffer = new StringBuffer(1000);
         buffer.append("UPDATE ");
         buffer.append(table);
