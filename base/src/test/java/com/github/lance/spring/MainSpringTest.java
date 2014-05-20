@@ -101,7 +101,7 @@ public class MainSpringTest {
     public void defaultDaoBatchInsert() {
         Operation operation = null;
         List list=new ArrayList();
-        for(int i=0;i<10000;i++){
+        for(int i=0;i<1000000;i++){
             operation=new Operation();
             operation.setCode("ESB"+i);
             operation.setDescription("测试"+1);
