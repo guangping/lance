@@ -6,7 +6,7 @@ package com.framework.utils;
  * Date: 2014-04-24 21:29
  * To change this template use File | Settings | File Templates.
  *
- *常用字符变量及基础正则
+ *常用字符变量
  */
 public class Constants {
     public static final String UTF8 = "UTF-8";
