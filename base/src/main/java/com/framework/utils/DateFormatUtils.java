@@ -17,8 +17,6 @@ import java.util.Locale;
 public class DateFormatUtils {
     //系统默认日期格式
     public static final String DATE_FORMAT = "yyyy-MM-dd";
-    //数据库默认日期时间格式
-    public static final String DATE_TIME_FORMAT_DB = "yyyy-MM-dd HH24:mi:ss";
     //系统默认日期时间格式
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     //23位时间格式，带毫秒
@@ -133,10 +131,8 @@ public class DateFormatUtils {
      * @return
      */
     public static String formatDate(String pattern) {
-
-        Date date = new Date();
-        SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
-        String str = dateFormator.format(date);
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        String str = format.format(getCurrentDate());
 
         return str;
     }
