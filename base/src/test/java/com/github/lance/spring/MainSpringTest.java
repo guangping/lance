@@ -2,7 +2,11 @@ package com.github.lance.spring;
 
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.IBaseDAO;
+import com.framework.database.pojo.Page;
 import com.framework.spring.SpringContextHolder;
+import com.framework.utils.ChineseUtils;
+import com.framework.utils.DateFormatUtils;
+import com.framework.utils.EnglishUtils;
 import com.framework.utils.ReflectionUtil;
 import com.github.lance.pojo.Operation;
 import org.springframework.context.ApplicationContext;
@@ -98,13 +102,22 @@ public class MainSpringTest {
     }
 
     @Test
+    public void time(){
+        //System.out.println(DateFormatUtils.getFormatedDate());
+       // System.out.println("start time:"+DateFormatUtils.formatDate(DateFormatUtils.DATE_TIME_FORMAT_DB));
+        //String.valueOf(EnglishUtils.getRandomEngilish()+EnglishUtils.getRandomEngilish());
+        System.out.println(String.valueOf(EnglishUtils.getRandomEngilish()));
+    }
+
+    @Test
     public void defaultDaoBatchInsert() {
+        System.out.println("start time:"+DateFormatUtils.formatDate(DateFormatUtils.DATE_TIME_FORMAT));
         Operation operation = null;
         List list=new ArrayList();
-        for(int i=0;i<1000000;i++){
+        for(int i=0;i<100000;i++){
             operation=new Operation();
-            operation.setCode("ESB"+i);
-            operation.setDescription("测试"+1);
+            operation.setCode(String.valueOf(EnglishUtils.getRandomEngilish())+String.valueOf(EnglishUtils.getRandomEngilish()));
+            operation.setDescription(ChineseUtils.getRandomChinese()+ChineseUtils.getRandomChinese());
             operation.setFlag("true");
             operation.setEndpoint_id("1"+i);
             operation.setRequest_id("1"+i);
@@ -112,6 +125,7 @@ public class MainSpringTest {
             list.add(operation);
         }
         defaultDAO.batchInsert("INF_COMM_CLIENT_OPERATION",list);
+        System.out.println("end time:"+DateFormatUtils.formatDate(DateFormatUtils.DATE_TIME_FORMAT));
     }
 
     @Test
@@ -179,4 +193,11 @@ public class MainSpringTest {
         //SqlParameterSource parameterSource=new BeanPropertySqlParameterSource(arg);
     }
 
+
+    @Test
+    public void page(){
+        String sql="SELECT * FROM inf_comm_client_operation";
+        Page page=defaultDAO.queryForPage(sql,1,1000,Operation.class);
+        System.out.println("page====>"+page);
+    }
 }

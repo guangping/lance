@@ -161,10 +161,20 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         Assert.hasText(sql, "SQL语句不能为空");
         Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
         String listSql = buildPageSql(sql, pageNo, pageSize);
-        String countSql = "SELECT COUNT(1) " + removeOrders(sql);
+        String countSql = "SELECT COUNT(1) count from (" + removeOrders(sql)+") ty";
         List list = queryForList(listSql, args);
         int totalCount = queryForInt(countSql, args);
-        return new Page(0, totalCount, pageSize, list);
+        return new Page(pageNo, totalCount, pageSize, list);
+    }
+
+    @Override
+    public Page queryForPage(String sql, String countSql, int pageNo, int pageSize, Class<T> clazz, Object... args) {
+        Assert.hasText(sql, "SQL语句不能为空");
+        Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
+        String listSql = buildPageSql(sql, pageNo, pageSize);
+        List<T> list = queryForList(listSql, clazz,args);
+        int totalCount = queryForInt(countSql, args);
+        return new Page(pageNo, totalCount, pageSize, list);
     }
 
     @Override
@@ -174,9 +184,30 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         String listSql = buildPageSql(sql, pageNo, pageSize);
         List list = queryForList(listSql, args);
         int totalCount = queryForInt(countSql, args);
-        return new Page(0, totalCount, pageSize, list);
+        return new Page(pageNo, totalCount, pageSize, list);
     }
 
+
+    @Override
+    public Page queryForPage(String sql, int pageNo, int pageSize, Class<T> clazz, Object... args) {
+        Assert.hasText(sql, "SQL语句不能为空");
+        Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
+        String listSql = buildPageSql(sql, pageNo, pageSize);
+        String countSql = "SELECT COUNT(1) count from (" + removeOrders(sql)+") ty";
+        List<T> list = queryForList(listSql, clazz,args);
+        int totalCount = queryForInt(countSql, args);
+        return new Page(pageNo, totalCount, pageSize, list);
+    }
+
+    @Override
+    public Page queryForPage(String sql, String countSql, int pageNo, int pageSize, RowMapper rowMapper, Object... args) {
+        Assert.hasText(sql, "SQL语句不能为空");
+        Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
+        String listSql = buildPageSql(sql, pageNo, pageSize);
+        List<T> list = queryForList(listSql, rowMapper,args);
+        int totalCount = queryForInt(countSql, args);
+        return new Page(pageNo, totalCount, pageSize, list);
+    }
 
     @Override
     public List<Map> queryForList(String sql, Object... args) {

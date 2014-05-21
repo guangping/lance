@@ -105,9 +105,15 @@ public interface IBaseDAO<T> {
      * @param args  对应sql语句中的参数值
      * @return 分页结果集对象
      */
-    public Page queryForPage(String sql, int pageNo, int pageSize, Object... args) ;
+    public Page queryForPage(String sql, int pageNo, int pageSize, Object... args);
 
-    public Page queryForPage(String sql,String countSql,int pageNo, int pageSize, Object... args) ;
+    public Page queryForPage(String sql,String countSql,int pageNo, int pageSize, Object... args);
+
+    public Page queryForPage(String sql,String countSql,int pageNo, int pageSize,Class<T> clazz, Object... args);
+
+    public Page queryForPage(String sql, int pageNo, int pageSize,Class<T> clazz, Object... args);
+
+    public Page queryForPage(String sql, String countSql,int pageNo, int pageSize,RowMapper rowMapper, Object... args);
 
 
     /**
