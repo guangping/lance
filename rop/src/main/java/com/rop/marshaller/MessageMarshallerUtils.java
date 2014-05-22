@@ -3,6 +3,7 @@
  */
 package com.rop.marshaller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
@@ -102,6 +103,16 @@ public class MessageMarshallerUtils {
         return sb.toString();
     }
 
+    /*
+    * 将请求对象转换为json String
+    * */
+    public static String convertJSONString(Map<String,String> allParams) {
+        if(null!=allParams){
+           return JSONObject.toJSONString(allParams);
+        }else{
+           return "";
+        }
+    }
 
     /**
      * 将{@link RopRequest}转换为字符串
