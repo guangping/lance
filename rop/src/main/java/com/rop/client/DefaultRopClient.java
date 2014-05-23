@@ -55,7 +55,7 @@ public class DefaultRopClient implements RopClient {
     private String sessionId;
 
     //报文格式
-    private MessageFormat messageFormat = MessageFormat.xml;
+    private MessageFormat messageFormat = MessageFormat.json;
 
     private Locale locale = Locale.SIMPLIFIED_CHINESE;
 
