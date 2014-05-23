@@ -1,5 +1,6 @@
-package com.rop.client.exception;
+package com.rop.client;
 
+import com.rop.client.exception.ApiException;
 import com.rop.pojo.RopRequest;
 import com.rop.pojo.RopResponse;
 
@@ -18,7 +19,7 @@ public interface RopApiClient {
      * @return
      * @throws ApiException
      */
-    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> class1) throws ApiException ;
+    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> class1) throws ApiException;
     /**
      * 执行TOP隐私API请求。
      * @param <T>
