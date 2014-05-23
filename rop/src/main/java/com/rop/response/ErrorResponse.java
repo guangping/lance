@@ -11,6 +11,7 @@ import com.rop.security.MainErrors;
 import com.rop.security.SubError;
 
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,7 +25,7 @@ import java.util.Locale;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "error")
-public class ErrorResponse{
+public class ErrorResponse implements Serializable{
 
     @XmlAttribute
     protected String errorToken = CommonConstant.ERROR_TOKEN;
