@@ -6,20 +6,26 @@ import com.framework.spring.SpringContextHolder;
 
 /**
  * Cache 工厂
+ *
  * @author
  */
 public class CacheFactory {
 
-    private CacheFactory() {}
+    private CacheFactory() {
+    }
+
 
     public static INetCache getDefaultCache() {
-        if (Boolean.valueOf(CacheConfig.get("uba.memcached.enable"))) {
-            Object obj = SpringContextHolder.getBean("xmCache");
-            if (null != obj) {
-                return (INetCache) obj;
+        CacheConfig config = SpringContextHolder.getBean("cacheConfig");
+        if (null != config) {
+            if (config.getCahceType().equals(CacheConfig.DEFAULT_CACHE_TYPE)) {
+                return DefaultCache.getInstance();
             }
-            return null;
+            if (config.getCahceType().endsWith(CacheConfig.DEFAULT_MEMCACHED_CACHE_TYPE)) {
+                INetCache netCache = SpringContextHolder.getBean("xmCache");
+                return netCache;
+            }
         }
-        return DefaultCache.getInstance();
+        return null;
     }
 }
