@@ -1,85 +1,95 @@
-/*    */ package com.ztesoft.inf.extend.xstream.io.xml;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.converters.ErrorWriter;
-/*    */ import java.util.List;
-/*    */ import org.dom4j.Attribute;
-/*    */ import org.dom4j.Document;
-/*    */ import org.dom4j.Element;
-/*    */ 
-/*    */ public class Dom4JReader extends AbstractDocumentReader
-/*    */ {
-/*    */   private Element currentElement;
-/*    */ 
-/*    */   public Dom4JReader(Element rootElement)
-/*    */   {
-/* 24 */     this(rootElement, new XmlFriendlyReplacer());
-/*    */   }
-/*    */ 
-/*    */   public Dom4JReader(Document document) {
-/* 28 */     this(document.getRootElement());
-/*    */   }
-/*    */ 
-/*    */   public Dom4JReader(Element rootElement, XmlFriendlyReplacer replacer)
-/*    */   {
-/* 35 */     super(rootElement, replacer);
-/*    */   }
-/*    */ 
-/*    */   public Dom4JReader(Document document, XmlFriendlyReplacer replacer)
-/*    */   {
-/* 42 */     this(document.getRootElement(), replacer);
-/*    */   }
-/*    */ 
-/*    */   public String getNodeName() {
-/* 46 */     return unescapeXmlName(this.currentElement.getName());
-/*    */   }
-/*    */ 
-/*    */   public String getValue() {
-/* 50 */     return this.currentElement.getText();
-/*    */   }
-/*    */ 
-/*    */   public String getAttribute(String name) {
-/* 54 */     return this.currentElement.attributeValue(name);
-/*    */   }
-/*    */ 
-/*    */   public String getAttribute(int index) {
-/* 58 */     return this.currentElement.attribute(index).getValue();
-/*    */   }
-/*    */ 
-/*    */   public int getAttributeCount() {
-/* 62 */     return this.currentElement.attributeCount();
-/*    */   }
-/*    */ 
-/*    */   public String getAttributeName(int index) {
-/* 66 */     return unescapeXmlName(this.currentElement.attribute(index).getQualifiedName());
-/*    */   }
-/*    */ 
-/*    */   protected Object getParent()
-/*    */   {
-/* 72 */     return this.currentElement.getParent();
-/*    */   }
-/*    */ 
-/*    */   protected Object getChild(int index)
-/*    */   {
-/* 77 */     return this.currentElement.elements().get(index);
-/*    */   }
-/*    */ 
-/*    */   protected int getChildCount()
-/*    */   {
-/* 82 */     return this.currentElement.elements().size();
-/*    */   }
-/*    */ 
-/*    */   protected void reassignCurrentElement(Object current)
-/*    */   {
-/* 87 */     this.currentElement = ((Element)current);
-/*    */   }
-/*    */ 
-/*    */   public void appendErrors(ErrorWriter errorWriter)
-/*    */   {
-/* 92 */     errorWriter.add("xpath", this.currentElement.getPath());
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.xml.Dom4JReader
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2004, 2005, 2006 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 07. March 2004 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.io.xml;
+
+import com.ztesoft.inf.extend.xstream.converters.ErrorWriter;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+
+public class Dom4JReader extends AbstractDocumentReader {
+
+	private Element currentElement;
+
+	public Dom4JReader(Element rootElement) {
+		this(rootElement, new XmlFriendlyReplacer());
+	}
+
+	public Dom4JReader(Document document) {
+		this(document.getRootElement());
+	}
+
+	/**
+	 * @since 1.2
+	 */
+	public Dom4JReader(Element rootElement, XmlFriendlyReplacer replacer) {
+		super(rootElement, replacer);
+	}
+
+	/**
+	 * @since 1.2
+	 */
+	public Dom4JReader(Document document, XmlFriendlyReplacer replacer) {
+		this(document.getRootElement(), replacer);
+	}
+
+	public String getNodeName() {
+		return unescapeXmlName(currentElement.getName());
+	}
+
+	public String getValue() {
+		return currentElement.getText();
+	}
+
+	public String getAttribute(String name) {
+		return currentElement.attributeValue(name);
+	}
+
+	public String getAttribute(int index) {
+		return currentElement.attribute(index).getValue();
+	}
+
+	public int getAttributeCount() {
+		return currentElement.attributeCount();
+	}
+
+	public String getAttributeName(int index) {
+		return unescapeXmlName(currentElement.attribute(index)
+				.getQualifiedName());
+	}
+
+	@Override
+	protected Object getParent() {
+		return currentElement.getParent();
+	}
+
+	@Override
+	protected Object getChild(int index) {
+		return currentElement.elements().get(index);
+	}
+
+	@Override
+	protected int getChildCount() {
+		return currentElement.elements().size();
+	}
+
+	@Override
+	protected void reassignCurrentElement(Object current) {
+		currentElement = (Element) current;
+	}
+
+	@Override
+	public void appendErrors(ErrorWriter errorWriter) {
+		errorWriter.add("xpath", currentElement.getPath());
+	}
+
+}

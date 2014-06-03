@@ -1,71 +1,85 @@
-/*    */ package com.ztesoft.inf.extend.xstream.core.util;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.converters.UnmarshallingContext;
-/*    */ import com.ztesoft.inf.extend.xstream.io.HierarchicalStreamReader;
-/*    */ import com.ztesoft.inf.extend.xstream.io.path.Path;
-/*    */ import com.ztesoft.inf.extend.xstream.io.path.PathTracker;
-/*    */ import com.ztesoft.inf.extend.xstream.mapper.CannotResolveClassException;
-/*    */ import com.ztesoft.inf.extend.xstream.mapper.Mapper;
-/*    */ 
-/*    */ public class HierarchicalStreams
-/*    */ {
-/*    */   public static Class readClassType(HierarchicalStreamReader reader, Mapper mapper, UnmarshallingContext context)
-/*    */   {
-/* 31 */     return readClassType(reader, mapper, context, null);
-/*    */   }
-/*    */ 
-/*    */   public static Class readClassType(HierarchicalStreamReader reader, Mapper mapper, UnmarshallingContext context, Class defaultType)
-/*    */   {
-/* 36 */     String classAttribute = readClassAttribute(reader, mapper);
-/* 37 */     Class type = readClassByXPath(mapper, context);
-/* 38 */     if (type == null) {
-/* 39 */       type = readClassType(classAttribute == null ? reader.getNodeName() : classAttribute, reader, mapper, defaultType);
-/*    */     }
-/*    */ 
-/* 42 */     return type;
-/*    */   }
-/*    */ 
-/*    */   public static Class readClassByXPath(Mapper mapper, UnmarshallingContext context)
-/*    */   {
-/* 47 */     PathTracker pathTracker = context.getPathTracker();
-/* 48 */     if (pathTracker != null) {
-/* 49 */       return mapper.realClassByPath(pathTracker.getPath().toString());
-/*    */     }
-/* 51 */     return null;
-/*    */   }
-/*    */ 
-/*    */   public static Class readClassType(String elementName, HierarchicalStreamReader reader, Mapper mapper)
-/*    */   {
-/* 56 */     return mapper.realClass(elementName);
-/*    */   }
-/*    */ 
-/*    */   public static Class readClassType(String elementName, HierarchicalStreamReader reader, Mapper mapper, Class defaultType)
-/*    */   {
-/*    */     try {
-/* 62 */       return mapper.realClass(elementName);
-/*    */     } catch (CannotResolveClassException e) {
-/* 64 */       if (defaultType != null)
-/* 65 */         return mapper.defaultImplementationOf(defaultType);
-/* 66 */       throw e;
-/*    */     }
-/*    */   }
-/*    */ 
-/*    */   public static String readClassAttribute(HierarchicalStreamReader reader, Mapper mapper)
-/*    */   {
-/* 73 */     String attributeName = mapper.aliasForSystemAttribute("resolves-to");
-/* 74 */     String classAttribute = attributeName == null ? null : reader.getAttribute(attributeName);
-/*    */ 
-/* 76 */     if (classAttribute == null) {
-/* 77 */       attributeName = mapper.aliasForSystemAttribute("class");
-/* 78 */       if (attributeName != null) {
-/* 79 */         classAttribute = reader.getAttribute(attributeName);
-/*    */       }
-/*    */     }
-/* 82 */     return classAttribute;
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.core.util.HierarchicalStreams
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2008 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 09. October 2008 by Joerg Schaible
  */
+package com.ztesoft.inf.extend.xstream.core.util;
+
+import com.ztesoft.inf.extend.xstream.converters.UnmarshallingContext;
+import com.ztesoft.inf.extend.xstream.io.HierarchicalStreamReader;
+import com.ztesoft.inf.extend.xstream.io.HierarchicalStreamWriter;
+import com.ztesoft.inf.extend.xstream.io.path.PathTracker;
+import com.ztesoft.inf.extend.xstream.mapper.CannotResolveClassException;
+import com.ztesoft.inf.extend.xstream.mapper.Mapper;
+
+/**
+ * Helper methods for {@link HierarchicalStreamReader} and
+ * {@link HierarchicalStreamWriter}.
+ * 
+ * @author J&ouml;rg Schaible
+ * @since 1.3.1
+ */
+public class HierarchicalStreams {
+
+	public static Class readClassType(HierarchicalStreamReader reader,
+			Mapper mapper, UnmarshallingContext context) {
+		return readClassType(reader, mapper, context, null);
+	}
+
+	public static Class readClassType(HierarchicalStreamReader reader,
+			Mapper mapper, UnmarshallingContext context, Class defaultType) {
+		String classAttribute = readClassAttribute(reader, mapper);
+		Class type = readClassByXPath(mapper, context);
+		if (type == null) {
+			type = readClassType(classAttribute == null ? reader.getNodeName()
+					: classAttribute, reader, mapper, defaultType);
+		}
+		return type;
+	}
+
+	public static Class readClassByXPath(Mapper mapper,
+			UnmarshallingContext context) {
+		PathTracker pathTracker = context.getPathTracker();
+		if (pathTracker != null) {
+			return mapper.realClassByPath(pathTracker.getPath().toString());
+		}
+		return null;
+	}
+
+	public static Class readClassType(String elementName,
+			HierarchicalStreamReader reader, Mapper mapper) {
+		return mapper.realClass(elementName);
+	}
+
+	public static Class readClassType(String elementName,
+			HierarchicalStreamReader reader, Mapper mapper, Class defaultType) {
+		try {
+			return mapper.realClass(elementName);
+		} catch (CannotResolveClassException e) {
+			if (defaultType != null)
+				return mapper.defaultImplementationOf(defaultType);
+			throw e;
+		}
+
+	}
+
+	public static String readClassAttribute(HierarchicalStreamReader reader,
+			Mapper mapper) {
+		String attributeName = mapper.aliasForSystemAttribute("resolves-to");
+		String classAttribute = attributeName == null ? null : reader
+				.getAttribute(attributeName);
+		if (classAttribute == null) {
+			attributeName = mapper.aliasForSystemAttribute("class");
+			if (attributeName != null) {
+				classAttribute = reader.getAttribute(attributeName);
+			}
+		}
+		return classAttribute;
+	}
+
+}

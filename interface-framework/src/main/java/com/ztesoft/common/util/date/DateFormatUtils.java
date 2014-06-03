@@ -1,364 +1,579 @@
-/*     */ package com.ztesoft.common.util.date;
-/*     */ 
-/*     */ import java.text.ParsePosition;
-/*     */ import java.text.SimpleDateFormat;
-/*     */ import java.util.Calendar;
-/*     */ import java.util.Date;
-/*     */ import java.util.GregorianCalendar;
-/*     */ import java.util.Locale;
-/*     */ 
-/*     */ public class DateFormatUtils
-/*     */ {
-/*     */   public static final String YEAR = "year";
-/*     */   public static final String MONTH = "month";
-/*     */   public static final String DAY = "day";
-/*     */   public static final String HOUR = "hour";
-/*     */   public static final String MINUTE = "minute";
-/*     */   public static final String SECOND = "second";
-/*     */   public static final String WEEK = "week";
-/*     */ 
-/*     */   public static String getFormatedDate()
-/*     */   {
-/*  32 */     Date date = getCurrentDate();
-/*  33 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd");
-/*  34 */     return dateFormator.format(date);
-/*     */   }
-/*     */ 
-/*     */   public static String getFormatedDateTime()
-/*     */   {
-/*  45 */     Date date = getCurrentDate();
-/*  46 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-/*  47 */     return dateFormator.format(date);
-/*     */   }
-/*     */ 
-/*     */   public static Date getCurrentDate()
-/*     */   {
-/*  57 */     return new Date(System.currentTimeMillis());
-/*     */   }
-/*     */ 
-/*     */   public static long getCurrentTimeMillis()
-/*     */   {
-/*  66 */     return System.currentTimeMillis();
-/*     */   }
-/*     */ 
-/*     */   public static String formatDate(String pattern)
-/*     */   {
-/*  78 */     Date date = new Date();
-/*  79 */     SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
-/*  80 */     String str = dateFormator.format(date);
-/*     */ 
-/*  82 */     return str;
-/*     */   }
-/*     */ 
-/*     */   public static String formatDate(Date date, String pattern)
-/*     */   {
-/*  95 */     if (date == null) {
-/*  96 */       return "";
-/*     */     }
-/*     */ 
-/*  99 */     SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
-/* 100 */     String str = dateFormator.format(date);
-/*     */ 
-/* 102 */     return str;
-/*     */   }
-/*     */ 
-/*     */   public static String formatDate(Date date, String pattern, Locale loc)
-/*     */   {
-/* 116 */     if ((pattern == null) || (date == null)) {
-/* 117 */       return "";
-/*     */     }
-/* 119 */     String newDate = "";
-/* 120 */     if (loc == null) {
-/* 121 */       loc = Locale.getDefault();
-/*     */     }
-/* 123 */     if (date != null) {
-/* 124 */       SimpleDateFormat sdf = new SimpleDateFormat(pattern, loc);
-/* 125 */       newDate = sdf.format(date);
-/*     */     }
-/* 127 */     return newDate;
-/*     */   }
-/*     */ 
-/*     */   public static String convertDateFormat(String dateStr, String patternFrom, String patternTo)
-/*     */   {
-/* 146 */     if ((dateStr == null) || (patternFrom == null) || (patternTo == null)) {
-/* 147 */       return "";
-/*     */     }
-/*     */ 
-/* 150 */     String newDate = "";
-/*     */     try
-/*     */     {
-/* 154 */       Date dateFrom = parseStrToDate(dateStr, patternFrom);
-/* 155 */       newDate = formatDate(dateFrom, patternTo);
-/*     */     }
-/*     */     catch (Exception e)
-/*     */     {
-/*     */     }
-/* 160 */     return newDate;
-/*     */   }
-/*     */ 
-/*     */   public static Date parseStrToDate(String dateStr)
-/*     */   {
-/* 171 */     if ((null == dateStr) || ("".equals(dateStr))) {
-/* 172 */       return null;
-/*     */     }
-/*     */ 
-/* 175 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd");
-/*     */ 
-/* 177 */     Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
-/*     */ 
-/* 179 */     return tDate;
-/*     */   }
-/*     */ 
-/*     */   public static String parseDateStrToDateTimeStr(String dateStr)
-/*     */   {
-/* 184 */     if ((null == dateStr) || ("".equals(dateStr))) {
-/* 185 */       return null;
-/*     */     }
-/*     */ 
-/* 188 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd");
-/*     */ 
-/* 190 */     Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
-/* 191 */     return formatDate(tDate, "yyyy-MM-dd HH:mm:ss");
-/*     */   }
-/*     */ 
-/*     */   public static Calendar parseStrToCalendar(String dateStr)
-/*     */   {
-/* 203 */     if ((null == dateStr) || ("".equals(dateStr))) {
-/* 204 */       return null;
-/*     */     }
-/*     */ 
-/* 207 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd");
-/*     */ 
-/* 209 */     Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
-/*     */ 
-/* 211 */     Locale loc = Locale.getDefault();
-/* 212 */     Calendar cal = new GregorianCalendar(loc);
-/* 213 */     cal.setTime(tDate);
-/*     */ 
-/* 215 */     return cal;
-/*     */   }
-/*     */ 
-/*     */   public static Date parseStrToDateTime(String dateStr)
-/*     */   {
-/* 226 */     if ((null == dateStr) || ("".equals(dateStr))) {
-/* 227 */       return null;
-/*     */     }
-/*     */ 
-/* 230 */     SimpleDateFormat dateFormator = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-/*     */ 
-/* 232 */     Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
-/*     */ 
-/* 234 */     return tDate;
-/*     */   }
-/*     */ 
-/*     */   public static Date parseStrToDate(String dateStr, String pattern)
-/*     */   {
-/* 247 */     if ((null == dateStr) || ("".equals(dateStr))) {
-/* 248 */       return null;
-/*     */     }
-/*     */ 
-/* 251 */     SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
-/*     */ 
-/* 253 */     Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
-/*     */ 
-/* 255 */     return tDate;
-/*     */   }
-/*     */ 
-/*     */   public static String addMonth(Date dt, int step)
-/*     */   {
-/* 260 */     Locale loc = Locale.getDefault();
-/* 261 */     Calendar cal = new GregorianCalendar(loc);
-/* 262 */     cal.setTime(dt);
-/* 263 */     cal.add(2, step);
-/* 264 */     return formatDate(cal.getTime(), "yyyyMM");
-/*     */   }
-/*     */ 
-/*     */   public static String addDate(String dateStr, String pattern, int step, String type)
-/*     */   {
-/* 281 */     if (dateStr == null) {
-/* 282 */       return dateStr;
-/*     */     }
-/* 284 */     Date date1 = parseStrToDate(dateStr, pattern);
-/*     */ 
-/* 286 */     Locale loc = Locale.getDefault();
-/* 287 */     Calendar cal = new GregorianCalendar(loc);
-/* 288 */     cal.setTime(date1);
-/*     */ 
-/* 290 */     if ("week".equals(type))
-/*     */     {
-/* 292 */       cal.add(4, step);
-/*     */     }
-/* 294 */     else if ("year".equals(type))
-/*     */     {
-/* 296 */       cal.add(1, step);
-/*     */     }
-/* 298 */     else if ("month".equals(type))
-/*     */     {
-/* 300 */       cal.add(2, step);
-/*     */     }
-/* 302 */     else if ("day".equals(type))
-/*     */     {
-/* 304 */       cal.add(5, step);
-/*     */     }
-/* 306 */     else if ("hour".equals(type))
-/*     */     {
-/* 308 */       cal.add(10, step);
-/*     */     }
-/* 310 */     else if ("minute".equals(type))
-/*     */     {
-/* 312 */       cal.add(12, step);
-/*     */     }
-/* 314 */     else if ("second".equals(type))
-/*     */     {
-/* 316 */       cal.add(13, step);
-/*     */     }
-/*     */ 
-/* 320 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static String minusDate(String dateStr, String pattern, int step, String type)
-/*     */   {
-/* 338 */     return addDate(dateStr, pattern, 0 - step, type);
-/*     */   }
-/*     */ 
-/*     */   public static Date addDay(Date date, int days)
-/*     */   {
-/* 350 */     if (date == null) {
-/* 351 */       return date;
-/*     */     }
-/* 353 */     Locale loc = Locale.getDefault();
-/* 354 */     Calendar cal = new GregorianCalendar(loc);
-/* 355 */     cal.setTime(date);
-/* 356 */     cal.add(5, days);
-/* 357 */     return cal.getTime();
-/*     */   }
-/*     */ 
-/*     */   public static int getDays(Date date1, Date date2)
-/*     */   {
-/* 362 */     if ((date1 == null) || (date2 == null)) {
-/* 363 */       return 0;
-/*     */     }
-/* 365 */     return (int)((date2.getTime() - date1.getTime()) / 86400000L);
-/*     */   }
-/*     */ 
-/*     */   public static int compareDate(String dateStr1, String dateStr2, String pattern)
-/*     */   {
-/* 379 */     Date date1 = parseStrToDate(dateStr1, pattern);
-/* 380 */     Date date2 = parseStrToDate(dateStr2, pattern);
-/*     */ 
-/* 382 */     return date1.compareTo(date2);
-/*     */   }
-/*     */ 
-/*     */   public static String getFirstDayInMonth(String dateStr, String pattern)
-/*     */   {
-/* 392 */     Calendar cal = parseStrToCalendar(dateStr);
-/* 393 */     int month = cal.get(2);
-/* 394 */     int day = cal.get(5);
-/*     */ 
-/* 396 */     cal.add(5, 1 - day);
-/*     */ 
-/* 398 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static String getFirstDayInMonth(String dateStr, String pattern, String isZeroSecond)
-/*     */   {
-/* 409 */     Calendar cal = parseStrToCalendar(dateStr);
-/* 410 */     int year = cal.get(1);
-/* 411 */     int month = cal.get(2);
-/* 412 */     int day = cal.get(5);
-/* 413 */     int hour = cal.get(10);
-/* 414 */     int minute = cal.get(12);
-/* 415 */     int second = cal.get(13);
-/* 416 */     day = 1;
-/* 417 */     hour = 0;
-/* 418 */     minute = 0;
-/* 419 */     second = 0;
-/* 420 */     cal.clear();
-/* 421 */     cal.set(year, month, day, hour, minute, second);
-/* 422 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static String getLastDayInMonth(String dateStr, String pattern)
-/*     */   {
-/* 431 */     Calendar cal = parseStrToCalendar(dateStr);
-/* 432 */     int month = cal.get(2);
-/* 433 */     int day = cal.get(5);
-/*     */ 
-/* 435 */     int maxDayInMonth = cal.getActualMaximum(5);
-/* 436 */     int step = maxDayInMonth - day;
-/*     */ 
-/* 438 */     cal.add(5, step);
-/*     */ 
-/* 440 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static String getFirstDayInWeek(String dateStr, String pattern)
-/*     */   {
-/* 449 */     Calendar cal = parseStrToCalendar(dateStr);
-/* 450 */     int day = cal.get(7);
-/*     */ 
-/* 452 */     cal.add(5, 1 - day);
-/*     */ 
-/* 454 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static String getLastDayInWeek(String dateStr, String pattern)
-/*     */   {
-/* 463 */     Calendar cal = parseStrToCalendar(dateStr);
-/* 464 */     int day = cal.get(7);
-/*     */ 
-/* 466 */     cal.add(5, 6 - day);
-/*     */ 
-/* 468 */     return formatDate(cal.getTime(), pattern);
-/*     */   }
-/*     */ 
-/*     */   public static long calendarDayPlus(String dateStr1, String dateStr2)
-/*     */   {
-/* 473 */     if ((dateStr1 == null) || (dateStr2 == null) || (dateStr1.equals("")) || (dateStr2.equals(""))) {
-/* 474 */       return 0L;
-/*     */     }
-/* 476 */     Date date1 = parseStrToDate(dateStr1);
-/* 477 */     Date date2 = parseStrToDate(dateStr2);
-/* 478 */     Calendar c1 = Calendar.getInstance();
-/* 479 */     c1.setTime(date1);
-/* 480 */     Calendar c2 = Calendar.getInstance();
-/* 481 */     c2.setTime(date2);
-/* 482 */     long t1 = c1.getTimeInMillis();
-/* 483 */     long t2 = c2.getTimeInMillis();
-/* 484 */     long day = (t2 - t1) / 86400000L;
-/* 485 */     return day;
-/*     */   }
-/*     */ 
-/*     */   public static int calendarPlus(String dateStr1, String dateStr2)
-/*     */   {
-/* 495 */     if ((dateStr1 == null) || (dateStr2 == null) || (dateStr1.equals("")) || (dateStr2.equals(""))) {
-/* 496 */       return 0;
-/*     */     }
-/*     */ 
-/* 499 */     Calendar cal1 = parseStrToCalendar(dateStr1);
-/*     */ 
-/* 501 */     Calendar cal2 = parseStrToCalendar(dateStr2);
-/*     */ 
-/* 503 */     int dataStr1Year = cal1.get(1);
-/* 504 */     int dataStr2Year = cal2.get(1);
-/*     */ 
-/* 506 */     int dataStr1Month = cal1.get(2);
-/* 507 */     int dataStr2Month = cal2.get(2);
-/*     */ 
-/* 509 */     return dataStr2Year * 12 + dataStr2Month + 1 - (dataStr1Year * 12 + dataStr1Month);
-/*     */   }
-/*     */ 
-/*     */   public static void main(String[] argv)
-/*     */   {
-/* 515 */     String dateStr = "2004-2-18 12:13:34";
-/* 516 */     String dateStr1 = "2006-7-18 12:13:34";
-/* 517 */     String dateStr2 = "2006-7-18 12:13:34";
-/*     */ 
-/* 519 */     Date date = addDay(parseStrToDate(dateStr, "yyyy-MM-dd HH:mm:ss"), 20);
-/*     */   }
-/*     */ }
+package com.ztesoft.common.util.date;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.common.util.date.DateFormatUtils
- * JD-Core Version:    0.6.2
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import org.apache.log4j.Logger;
+
+
+/**
+ * <p>
+ * Description: 时间以及时间格式相关的处理功能
+ * </p>
+ * <p>
+ * Copyright 2006 ZTEsoft Corp.
+ * </p>
+ * 
+ * @Create Date : 2006-4-19
+ * @Version : 1.0
  */
+public class DateFormatUtils {
+
+	/**
+	 * 得到应用服务器当前日期，以默认格式显示。
+	 * 
+	 * @return
+	 */
+	public static String getFormatedDate() {
+		Date date = getCurrentDate();
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_FORMAT);
+		return dateFormator.format(date);
+
+	}
+
+	/**
+	 * 得到应用服务器当前日期时间，以默认格式显示。
+	 * 
+	 * @return
+	 */
+	public static String getFormatedDateTime() {
+
+		Date date = getCurrentDate();
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
+		return dateFormator.format(date);
+
+	}
+
+	/**
+	 * 得到应用服务器的当前时间
+	 * 
+	 * @return
+	 */
+	public static Date getCurrentDate() {
+		return new Date(System.currentTimeMillis());
+	}
+
+	/**
+	 * 得到应用服务器的当前时间，毫秒。
+	 * 
+	 * @return
+	 */
+	public static long getCurrentTimeMillis() {
+		return System.currentTimeMillis();
+	}
+
+	/**
+	 * 得到应用服务器当前日期 按照指定的格式返回。
+	 * 
+	 * @param pattern
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @return
+	 */
+	public static String formatDate(String pattern) {
+
+		Date date = new Date();
+		SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
+		String str = dateFormator.format(date);
+
+		return str;
+	}
+
+	/**
+	 * 转换输入日期 按照指定的格式返回。
+	 * 
+	 * @param date
+	 * @param pattern
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @return
+	 */
+	public static String formatDate(Date date, String pattern) {
+
+		if (date == null) {
+			return "";
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
+		String str = dateFormator.format(date);
+
+		return str;
+	}
+
+	/**
+	 * 转换输入日期 按照指定的格式返回。
+	 * 
+	 * @param date
+	 * @param pattern
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @param loc
+	 *            locale
+	 * @return
+	 */
+	public static String formatDate(Date date, String pattern, Locale loc) {
+		if (pattern == null || date == null) {
+			return "";
+		}
+		String newDate = "";
+		if (loc == null) {
+			loc = Locale.getDefault();
+		}
+		if (date != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat(pattern, loc);
+			newDate = sdf.format(date);
+		}
+		return newDate;
+	}
+
+	/**
+	 * 将字符时间从一个格式转换成另一个格式。时间的格式，最好通过系统常量定义。 如：
+	 * String dateStr = "2006-10-9 12:09:08";
+	 * DateFormatUtils.convertDateFormat(dateStr,
+	 * DateUtil.DATE_TIME_FORMAT,
+	 * DateUtil.DATE_FORMAT_8);
+	 * 
+	 * @param sdate
+	 * @param patternFrom
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @param patternTo
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @return
+	 */
+	public static String convertDateFormat(String dateStr, String patternFrom, String patternTo) {
+
+		if (dateStr == null || patternFrom == null || patternTo == null) {
+			return "";
+		}
+
+		String newDate = "";
+
+		try {
+
+			Date dateFrom = parseStrToDate(dateStr, patternFrom);
+			newDate = formatDate(dateFrom, patternTo);
+
+		} catch (Exception e) {
+		}
+
+		return newDate;
+	}
+
+	/**
+	 * 将时间串按照默认格式DateUtil.DATE_FORMAT，格式化成Date。
+	 * 
+	 * @param dateStr
+	 * @return
+	 */
+	public static Date parseStrToDate(String dateStr) {
+
+		if (null == dateStr || "".equals(dateStr)) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_FORMAT);
+
+		java.util.Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
+
+		return tDate;
+	}
+
+	public static String parseDateStrToDateTimeStr(String dateStr) {
+
+		if (null == dateStr || "".equals(dateStr)) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_FORMAT);
+
+		java.util.Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
+		return formatDate(tDate, DateUtil.DATE_TIME_FORMAT);
+
+	}
+
+	/**
+	 * 将时间串按照默认格式DateUtil.DATE_FORMAT，格式化成Date。
+	 * 
+	 * @param dateStr
+	 * @return
+	 */
+	public static Calendar parseStrToCalendar(String dateStr) {
+
+		if (null == dateStr || "".equals(dateStr)) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_FORMAT);
+
+		java.util.Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
+
+		Locale loc = Locale.getDefault();
+		Calendar cal = new GregorianCalendar(loc);
+		cal.setTime(tDate);
+
+		return cal;
+	}
+
+	/**
+	 * 将时间串按照默认格式DateUtil.DATE_TIME_FORMAT，格式化成Date。
+	 * 
+	 * @param dateStr
+	 * @return
+	 */
+	public static Date parseStrToDateTime(String dateStr) {
+
+		if (null == dateStr || "".equals(dateStr)) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(DateUtil.DATE_TIME_FORMAT);
+
+		java.util.Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
+
+		return tDate;
+	}
+
+	/**
+	 * 将时间串按照指定格式，格式化成Date。
+	 * 
+	 * @param date
+	 * @param pattern
+	 *            格式类型，通过系统常量中定义，如：DateUtil.DATE_FORMAT_8
+	 * @return
+	 */
+
+	public static Date parseStrToDate(String dateStr, String pattern) {
+		if (null == dateStr || "".equals(dateStr)) {
+			return null;
+		}
+
+		SimpleDateFormat dateFormator = new SimpleDateFormat(pattern);
+
+		java.util.Date tDate = dateFormator.parse(dateStr, new ParsePosition(0));
+
+		return tDate;
+	}
+
+	
+	public static String addMonth(Date dt,int step) {
+		Locale loc = Locale.getDefault();
+		Calendar cal = new GregorianCalendar(loc);
+		cal.setTime(dt);
+		cal.add(Calendar.MONTH, step);
+		return DateFormatUtils.formatDate(cal.getTime(), DateUtil.DATE_FORMAT_MONTH);
+	}
+	
+	/**
+	 * 按时间格式相加：
+	 * 输入要相加的时间基点（字符串型或时间类型），相加的时长（整型），格式（"year"年、"month"月、"day"日、”hour“时、”minute“分、”second“秒、"week"周）
+	 * 输出相加后的时间（字符串型或时间类型）
+	 * 
+	 * @param dateStr
+	 * @param pattern
+	 * @param step
+	 * @param type
+	 *            "year"年、"month"月、"day"日、”hour“时、”minute“分、”second“秒、"week"周
+	 *            通过常量DateFormatUtils.YEAR等来设置.
+	 * @return
+	 */
+	public static String addDate(String dateStr, String pattern, int step, String type) {
+		if (dateStr == null) {
+			return dateStr;
+		} else {
+			Date date1 = DateFormatUtils.parseStrToDate(dateStr, pattern);
+
+			Locale loc = Locale.getDefault();
+			Calendar cal = new GregorianCalendar(loc);
+			cal.setTime(date1);
+
+			if (DateFormatUtils.WEEK.equals(type)) {
+
+				cal.add(Calendar.WEEK_OF_MONTH, step);
+
+			} else if (DateFormatUtils.YEAR.equals(type)) {
+
+				cal.add(Calendar.YEAR, step);
+
+			} else if (DateFormatUtils.MONTH.equals(type)) {
+
+				cal.add(Calendar.MONTH, step);
+
+			} else if (DateFormatUtils.DAY.equals(type)) {
+
+				cal.add(Calendar.DAY_OF_MONTH, step);
+
+			} else if (DateFormatUtils.HOUR.equals(type)) {
+
+				cal.add(Calendar.HOUR, step);
+
+			} else if (DateFormatUtils.MINUTE.equals(type)) {
+
+				cal.add(Calendar.MINUTE, step);
+
+			} else if (DateFormatUtils.SECOND.equals(type)) {
+
+				cal.add(Calendar.SECOND, step);
+
+			}
+
+			return DateFormatUtils.formatDate(cal.getTime(), pattern);
+		}
+	}
+
+	/**
+	 * 按时间格式相减：
+	 * 输入要相加的时间基点（字符串型或时间类型），相加的时长（整型），格式（"year"年、"month"月、"day"日、”hour“时、”minute“分、”second“秒、"week"周）
+	 * 输出相加后的时间（字符串型或时间类型）
+	 * 
+	 * @param dateStr
+	 * @param pattern
+	 * @param step
+	 * @param type
+	 *            "year"年、"month"月、"day"日、”hour“时、”minute“分、”second“秒、"week"周
+	 * @return
+	 */
+	public static String minusDate(String dateStr, String pattern, int step, String type) {
+
+		return addDate(dateStr, pattern, (0 - step), type);
+
+	}
+
+	/**
+	 * 日期增加天数
+	 * 
+	 * @param date
+	 * @param days
+	 * @return
+	 */
+	public static Date addDay(Date date, int days) {
+		if (date == null) {
+			return date;
+		} else {
+			Locale loc = Locale.getDefault();
+			Calendar cal = new GregorianCalendar(loc);
+			cal.setTime(date);
+			cal.add(Calendar.DAY_OF_MONTH, days);
+			return cal.getTime();
+		}
+	}
+
+	public static int getDays(Date date1, Date date2) {
+		if (date1 == null || date2 == null) {
+			return 0;
+		} else {
+			return (int) ((date2.getTime() - date1.getTime()) / 0x5265c00L);
+		}
+	}
+
+	/**
+	 * 日期比较大小
+	 * 
+	 * @param dateStr1
+	 * @param dateStr2
+	 * @param pattern
+	 * @return
+	 */
+	public static int compareDate(String dateStr1, String dateStr2, String pattern) {
+
+		Date date1 = DateFormatUtils.parseStrToDate(dateStr1, pattern);
+		Date date2 = DateFormatUtils.parseStrToDate(dateStr2, pattern);
+
+		return date1.compareTo(date2);
+
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static String getFirstDayInMonth(String dateStr, String pattern) {
+		Calendar cal = DateFormatUtils.parseStrToCalendar(dateStr);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+
+		cal.add(Calendar.DAY_OF_MONTH, (1 - day));
+
+		return DateFormatUtils.formatDate(cal.getTime(), pattern);
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @author mzp
+	 * @time 20080717
+	 * @return
+	 */
+	public static String getFirstDayInMonth(String dateStr, String pattern, String isZeroSecond) {
+		Calendar cal = DateFormatUtils.parseStrToCalendar(dateStr);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		int hour = cal.get(Calendar.HOUR);
+		int minute = cal.get(Calendar.MINUTE);
+		int second = cal.get(Calendar.SECOND);
+		day = 1;
+		hour = 0;
+		minute = 0;
+		second = 0;
+		cal.clear();
+		cal.set(year, month, day, hour, minute, second);
+		return DateFormatUtils.formatDate(cal.getTime(), pattern);
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static String getLastDayInMonth(String dateStr, String pattern) {
+		Calendar cal = DateFormatUtils.parseStrToCalendar(dateStr);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+
+		int maxDayInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int step = maxDayInMonth - day;
+
+		cal.add(Calendar.DAY_OF_MONTH, step);
+
+		return DateFormatUtils.formatDate(cal.getTime(), pattern);
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static String getFirstDayInWeek(String dateStr, String pattern) {
+		Calendar cal = DateFormatUtils.parseStrToCalendar(dateStr);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+
+		cal.add(Calendar.DAY_OF_MONTH, (1 - day));
+
+		return DateFormatUtils.formatDate(cal.getTime(), pattern);
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static String getLastDayInWeek(String dateStr, String pattern) {
+		Calendar cal = DateFormatUtils.parseStrToCalendar(dateStr);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+
+		cal.add(Calendar.DAY_OF_MONTH, (6 - day));
+
+		return DateFormatUtils.formatDate(cal.getTime(), pattern);
+	}
+
+	public static long calendarDayPlus(String dateStr1, String dateStr2) {
+
+		if (dateStr1 == null || dateStr2 == null || dateStr1.equals("") || dateStr2.equals("")) {
+			return 0;
+		}
+		Date date1 = DateFormatUtils.parseStrToDate(dateStr1);
+		Date date2 = DateFormatUtils.parseStrToDate(dateStr2);
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(date1);
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(date2);
+		long t1 = c1.getTimeInMillis();
+		long t2 = c2.getTimeInMillis();
+		long day = (t2 - t1) / (1000 * 60 * 60 * 24);
+		return day;
+	}
+
+	/**
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static int calendarPlus(String dateStr1, String dateStr2) {
+
+		if (dateStr1 == null || dateStr2 == null || dateStr1.equals("") || dateStr2.equals("")) {
+			return 0;
+		}
+
+		Calendar cal1 = DateFormatUtils.parseStrToCalendar(dateStr1);
+
+		Calendar cal2 = DateFormatUtils.parseStrToCalendar(dateStr2);
+
+		int dataStr1Year = cal1.get(Calendar.YEAR);
+		int dataStr2Year = cal2.get(Calendar.YEAR);
+
+		int dataStr1Month = cal1.get(Calendar.MONTH);
+		int dataStr2Month = cal2.get(Calendar.MONTH);
+
+		return ((dataStr2Year * 12 + dataStr2Month + 1) - (dataStr1Year * 12 + dataStr1Month));
+
+	}
+
+	public static void main(String[] argv) {
+
+		String dateStr = "2004-2-18 12:13:34";
+		String dateStr1 = "2006-7-18 12:13:34";
+		String dateStr2 = "2006-7-18 12:13:34";
+		// add
+		Date date = DateFormatUtils.addDay(DateFormatUtils.parseStrToDate(dateStr, DateUtil.DATE_TIME_FORMAT), 20);
+
+	
+		// add
+
+		// sub
+
+		// get day
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.DAY_OF_MONTH));
+		// get month 要加1才是当前月数
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.MONTH) + 1);
+		// // get year
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.YEAR));
+		// // get hour
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.HOUR_OF_DAY));
+		// // get minute
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.MINUTE));
+		// // get second
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr).get(
+		// Calendar.SECOND));
+		//
+		// // compareDate
+		// logger.debug(DateFormatUtils.compareDate(dateStr1,
+		// dateStr2,
+		// DateUtil.DATE_TIME_FORMAT));
+
+		// first or last
+		// logger.debug(DateFormatUtils.getFirstDayInWeek(dateStr,
+		// DateUtil.DATE_TIME_FORMAT));
+		// logger.debug(DateFormatUtils.getLastDayInWeek(dateStr,
+		// DateUtil.DATE_TIME_FORMAT));
+		// logger.debug(DateFormatUtils.getFirstDayInMonth(dateStr,
+		// DateUtil.DATE_TIME_FORMAT));
+		// logger.debug(DateFormatUtils.getLastDayInMonth(dateStr,
+		// DateUtil.DATE_TIME_FORMAT));
+		//
+		// logger.debug(DateFormatUtils.parseStrToCalendar(dateStr)
+		// .getActualMaximum(Calendar.DAY_OF_MONTH));
+
+	}
+
+	public final static String YEAR = "year";
+
+	public final static String MONTH = "month";
+
+	public final static String DAY = "day";
+
+	public final static String HOUR = "hour";
+
+	public final static String MINUTE = "minute";
+
+	public final static String SECOND = "second";
+
+	public final static String WEEK = "week";
+
+}

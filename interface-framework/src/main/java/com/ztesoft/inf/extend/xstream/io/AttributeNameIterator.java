@@ -1,34 +1,44 @@
-/*    */ package com.ztesoft.inf.extend.xstream.io;
-/*    */ 
-/*    */ import java.util.Iterator;
-/*    */ 
-/*    */ public class AttributeNameIterator
-/*    */   implements Iterator
-/*    */ {
-/*    */   private int current;
-/*    */   private final int count;
-/*    */   private final HierarchicalStreamReader reader;
-/*    */ 
-/*    */   public AttributeNameIterator(HierarchicalStreamReader reader)
-/*    */   {
-/* 28 */     this.reader = reader;
-/* 29 */     this.count = reader.getAttributeCount();
-/*    */   }
-/*    */ 
-/*    */   public boolean hasNext() {
-/* 33 */     return this.current < this.count;
-/*    */   }
-/*    */ 
-/*    */   public Object next() {
-/* 37 */     return this.reader.getAttributeName(this.current++);
-/*    */   }
-/*    */ 
-/*    */   public void remove() {
-/* 41 */     throw new UnsupportedOperationException();
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.AttributeNameIterator
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 24. April 2005 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.io;
+
+import java.util.Iterator;
+
+/**
+ * Provide an iterator over the attribute names of the current node of a reader.
+ * 
+ * @author Joe Walnes
+ */
+public class AttributeNameIterator implements Iterator {
+
+	private int current;
+	private final int count;
+	private final HierarchicalStreamReader reader;
+
+	public AttributeNameIterator(HierarchicalStreamReader reader) {
+		this.reader = reader;
+		count = reader.getAttributeCount();
+	}
+
+	public boolean hasNext() {
+		return current < count;
+	}
+
+	public Object next() {
+		return reader.getAttributeName(current++);
+	}
+
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
+
+}

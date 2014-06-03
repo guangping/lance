@@ -6,23 +6,23 @@ select * from inf_comm_client_request where req_id='INF_GetCustBasicByProduct_RE
 select * from inf_comm_client_response  where rsp_id='INF_GetCustBasicByProduct_RSP';
 
 
----1ï¿½ï¿½ï¿½Ã½Ó¿Ú·ï¿½ï¿½ï¿½ï¿½Ã»ï¿½,ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î¼ï¿½ï¿½ï¿½
+---1ÅäÖÃ½Ó¿Ú·ÃÎÊÓÃ»§,ÅäÖÃÒ»´Î¼´¿É
 
 insert into inf_comm_client_request_user (USER_ID, USER_CODE, USER_NAME, USER_PWD, USER_PARAM, USER_DESC)
-values ('-1', 'mmarkt', 'CRMï¿½Ó¿ï¿½ï¿½Ã»ï¿½', 'mmarkt', '', 'Ä¬ï¿½ï¿½ï¿½Ã»ï¿½');
+values ('-1', 'mmarkt', 'CRM½Ó¿ÚÓÃ»§', 'mmarkt', '', 'Ä¬ÈÏÓÃ»§');
 
 
----2ï¿½ï¿½ï¿½Ã½Ó¿Ú·ï¿½ï¿½Êµï¿½Ö·,Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ôºï¿½ï¿½ï¿½
+---2ÅäÖÃ½Ó¿Ú·ÃÎÊµØÖ·,Ò»´ÎÅäÖÃ,ÒÔºó¸´ÓÃ
 insert into inf_comm_client_endpoint (EP_ID, EP_ADDRESS, EP_DESC, TIMEOUT, EP_TYPE)
-values ('3001', 'http://10.45.47.190:7010/CrmWeb/services/exchangeSOAP', 'ï¿½ï¿½ï¿½ï¿½CRMï¿½Ô·ï¿½ï¿½ï¿½Ó¿Úµï¿½Ö·--ï¿½ï¿½ï¿½ï¿½', 30, '');
+values ('3001', 'http://10.45.47.190:7010/CrmWeb/services/exchangeSOAP', '½­Î÷CRM×Ô·þÎñ½Ó¿ÚµØÖ·--ÍøÌü»·¾³', 30, '');
 
 
-----3ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½
+----3½Ó¿ÚÅäÖÃ
 insert into inf_comm_client_operation (OP_ID, OP_CODE, EP_ID, REQ_ID, RSP_ID, OP_DESC, LOG_LEVEL, CLOSE_FLAG, REQ_USER_ID, DEAL_SUCCESS_FLAG)
-values ('1230', 'INF_GetCustBasicByProduct', '3001', 'INF_GetCustBasicByProduct_REQ', 'INF_GetCustBasicByProduct_RSP', 'ï¿½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½-ï¿½ï¿½Ý²ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢', '', 'F', '', '');
+values ('1230', 'INF_GetCustBasicByProduct', '3001', 'INF_GetCustBasicByProduct_REQ', 'INF_GetCustBasicByProduct_RSP', '½­Î÷×Ô·þÎñ-¸ù¾Ý²úÆ·ºÅÂë²éÑ¯¿Í»§»ù±¾ÐÅÏ¢', '', 'F', '', '');
 
 
----4 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½blobï¿½Ö¶ï¿½
+---4 ÇëÇó±¨ÎÄ,ÓÃÒÔÏÂ±¨ÎÄÌùµ½blob×Ö¶Î
 
 insert into inf_comm_client_request (REQ_ID, GVAR_ID, REQ_TPL, CLASS_PATH, QNAME_ENCODE, QNAME, OPER_CLASSNAME, OPER_METHOD)
 values ('INF_GetCustBasicByProduct_REQ', '', '<BLOB>', '', '', '', '', '');
@@ -53,7 +53,7 @@ values ('INF_GetCustBasicByProduct_REQ', '', '<BLOB>', '', '', '', '', '');
 </soapenv:Envelope>
 
 
------5 ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½ï¿½blobï¿½Ö¶ï¿½
+-----5 ·µ»Ø±¨ÎÄ,ÓÃÒÔÏÂ±¨ÎÄÌùµ½blob×Ö¶Î
 insert into inf_comm_client_response (RSP_ID, CDATA_PATH, TRANS_TPL, XML_MAPPER, TRANS_FAULT, RSP_CLASSPATH)
 values ('INF_GetCustBasicByProduct_RSP', 'namespace.soap=http://schemas.xmlsoap.org/soap/envelope/
 namespace.ns=http://ws.inf.crm.ztesoft.com/exchange/

@@ -1,45 +1,44 @@
-/*    */ package com.ztesoft.inf.framework.logger;
-/*    */ 
-/*    */ public class AppLogContext
-/*    */ {
-/*    */   public static final int TIME_OUT = 5000;
-/*    */   private AppLogger appLogger;
-/*    */   private Object logObj;
-/*    */ 
-/*    */   public AppLogContext()
-/*    */   {
-/*    */   }
-/*    */ 
-/*    */   public AppLogContext(AppLogger appLogger, Object logObj)
-/*    */   {
-/* 16 */     this.appLogger = appLogger;
-/* 17 */     this.logObj = logObj;
-/*    */   }
-/*    */ 
-/*    */   public AppLogger getAppLogger() {
-/* 21 */     return this.appLogger;
-/*    */   }
-/*    */ 
-/*    */   public void setAppLogger(AppLogger appLogger) {
-/* 25 */     this.appLogger = appLogger;
-/*    */   }
-/*    */ 
-/*    */   public Object getLogObj() {
-/* 29 */     return this.logObj;
-/*    */   }
-/*    */ 
-/*    */   public void setLogObj(Object logObj) {
-/* 33 */     this.logObj = logObj;
-/*    */   }
-/*    */ 
-/*    */   public void logToDB()
-/*    */     throws Exception
-/*    */   {
-/* 40 */     this.appLogger.log(this.logObj);
-/*    */   }
-/*    */ }
+package com.ztesoft.inf.framework.logger;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.framework.logger.AppLogContext
- * JD-Core Version:    0.6.2
- */
+
+public class AppLogContext {
+
+	public static final int TIME_OUT = 5 * 1000; 
+
+	private AppLogger appLogger;
+	
+	private Object logObj;
+	
+	public AppLogContext(){
+	}
+	
+	public AppLogContext(AppLogger appLogger,Object logObj) {
+		this.appLogger = appLogger;
+		this.logObj = logObj;
+	}
+
+	public AppLogger getAppLogger() {
+		return appLogger;
+	}
+
+	public void setAppLogger(AppLogger appLogger) {
+		this.appLogger = appLogger;
+	}
+
+	public Object getLogObj() {
+		return logObj;
+	}
+
+	public void setLogObj(Object logObj) {
+		this.logObj = logObj;
+	}
+
+	public void logToDB() throws Exception {
+	/*	TimeOutException timeOutException = new TimeOutException("记录日志超时:log="+logObj);
+		TimeOutThread timeOutThread = new TimeOutThread(TIME_OUT, timeOutException);
+		timeOutThread.start();*/
+		appLogger.log(logObj);
+		//timeOutThread.cancel();
+	}
+	
+}

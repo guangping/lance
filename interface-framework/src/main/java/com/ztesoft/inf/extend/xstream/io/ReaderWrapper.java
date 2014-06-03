@@ -1,72 +1,83 @@
-/*    */ package com.ztesoft.inf.extend.xstream.io;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.converters.ErrorWriter;
-/*    */ import java.util.Iterator;
-/*    */ 
-/*    */ public abstract class ReaderWrapper
-/*    */   implements HierarchicalStreamReader
-/*    */ {
-/*    */   protected HierarchicalStreamReader wrapped;
-/*    */ 
-/*    */   protected ReaderWrapper(HierarchicalStreamReader reader)
-/*    */   {
-/* 29 */     this.wrapped = reader;
-/*    */   }
-/*    */ 
-/*    */   public boolean hasMoreChildren() {
-/* 33 */     return this.wrapped.hasMoreChildren();
-/*    */   }
-/*    */ 
-/*    */   public void moveDown() {
-/* 37 */     this.wrapped.moveDown();
-/*    */   }
-/*    */ 
-/*    */   public void moveUp() {
-/* 41 */     this.wrapped.moveUp();
-/*    */   }
-/*    */ 
-/*    */   public String getNodeName() {
-/* 45 */     return this.wrapped.getNodeName();
-/*    */   }
-/*    */ 
-/*    */   public String getValue() {
-/* 49 */     return this.wrapped.getValue();
-/*    */   }
-/*    */ 
-/*    */   public String getAttribute(String name) {
-/* 53 */     return this.wrapped.getAttribute(name);
-/*    */   }
-/*    */ 
-/*    */   public String getAttribute(int index) {
-/* 57 */     return this.wrapped.getAttribute(index);
-/*    */   }
-/*    */ 
-/*    */   public int getAttributeCount() {
-/* 61 */     return this.wrapped.getAttributeCount();
-/*    */   }
-/*    */ 
-/*    */   public String getAttributeName(int index) {
-/* 65 */     return this.wrapped.getAttributeName(index);
-/*    */   }
-/*    */ 
-/*    */   public Iterator getAttributeNames() {
-/* 69 */     return this.wrapped.getAttributeNames();
-/*    */   }
-/*    */ 
-/*    */   public void appendErrors(ErrorWriter errorWriter) {
-/* 73 */     this.wrapped.appendErrors(errorWriter);
-/*    */   }
-/*    */ 
-/*    */   public void close() {
-/* 77 */     this.wrapped.close();
-/*    */   }
-/*    */ 
-/*    */   public HierarchicalStreamReader underlyingReader() {
-/* 81 */     return this.wrapped.underlyingReader();
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.ReaderWrapper
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 10. April 2005 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.io;
+
+import com.ztesoft.inf.extend.xstream.converters.ErrorWriter;
+
+import java.util.Iterator;
+
+/**
+ * Base class to make it easy to create wrappers (decorators) for
+ * HierarchicalStreamReader.
+ * 
+ * @author Joe Walnes
+ */
+public abstract class ReaderWrapper implements HierarchicalStreamReader {
+
+	protected HierarchicalStreamReader wrapped;
+
+	protected ReaderWrapper(HierarchicalStreamReader reader) {
+		this.wrapped = reader;
+	}
+
+	public boolean hasMoreChildren() {
+		return wrapped.hasMoreChildren();
+	}
+
+	public void moveDown() {
+		wrapped.moveDown();
+	}
+
+	public void moveUp() {
+		wrapped.moveUp();
+	}
+
+	public String getNodeName() {
+		return wrapped.getNodeName();
+	}
+
+	public String getValue() {
+		return wrapped.getValue();
+	}
+
+	public String getAttribute(String name) {
+		return wrapped.getAttribute(name);
+	}
+
+	public String getAttribute(int index) {
+		return wrapped.getAttribute(index);
+	}
+
+	public int getAttributeCount() {
+		return wrapped.getAttributeCount();
+	}
+
+	public String getAttributeName(int index) {
+		return wrapped.getAttributeName(index);
+	}
+
+	public Iterator getAttributeNames() {
+		return wrapped.getAttributeNames();
+	}
+
+	public void appendErrors(ErrorWriter errorWriter) {
+		wrapped.appendErrors(errorWriter);
+	}
+
+	public void close() {
+		wrapped.close();
+	}
+
+	public HierarchicalStreamReader underlyingReader() {
+		return wrapped.underlyingReader();
+	}
+}

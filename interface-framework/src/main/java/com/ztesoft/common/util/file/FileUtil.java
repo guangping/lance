@@ -1,318 +1,371 @@
-/*     */ package com.ztesoft.common.util.file;
-/*     */ 
-/*     */ import com.ztesoft.common.util.StringUtils;
-/*     */ import java.io.File;
-/*     */ import java.io.FileInputStream;
-/*     */ import java.io.FileOutputStream;
-/*     */ import java.io.IOException;
-/*     */ import java.io.InputStream;
-/*     */ import java.io.PrintStream;
-/*     */ 
-/*     */ public class FileUtil
-/*     */ {
-/*     */   public static boolean moveA_File(String sourceFileName, String targetFileName)
-/*     */   {
-/*  15 */     return moveA_File(sourceFileName, targetFileName, false);
-/*     */   }
-/*     */ 
-/*     */   public static boolean moveA_File(String sourceFileName, String targetFileName, boolean isOverlay)
-/*     */   {
-/*  22 */     File sourceFile = new File(sourceFileName);
-/*  23 */     if (!sourceFile.exists()) {
-/*  24 */       System.out.println("移动文件失败：原文件" + sourceFileName + "不存在！");
-/*  25 */       return false;
-/*  26 */     }if (!sourceFile.isFile()) {
-/*  27 */       System.out.println("移动文件失败：" + sourceFileName + "不是一个文件！");
-/*  28 */       return false;
-/*     */     }
-/*  30 */     File targetFile = new File(targetFileName);
-/*  31 */     if (targetFile.exists()) {
-/*  32 */       if (isOverlay)
-/*     */       {
-/*  34 */         System.out.println("该文件已存在，准备删除它！");
-/*  35 */         if (!targetFile.delete()) {
-/*  36 */           System.out.println("文件移动失败，删除文件" + targetFileName + "失败！");
-/*  37 */           return false;
-/*     */         }
-/*     */       } else {
-/*  40 */         System.out.println("文件移动失败，文件" + targetFileName + "已存在！");
-/*  41 */         return false;
-/*     */       }
-/*     */     }
-/*  44 */     else if (!targetFile.getParentFile().exists())
-/*     */     {
-/*  46 */       System.out.println("该文件所在目录不存在，正在创建！");
-/*  47 */       if (!targetFile.getParentFile().mkdirs()) {
-/*  48 */         System.out.println("移动文件失败，创建文件所在的目录失败！");
-/*  49 */         return false;
-/*     */       }
-/*     */ 
-/*     */     }
-/*     */ 
-/*  54 */     if (sourceFile.renameTo(targetFile)) {
-/*  55 */       System.out.println("移动文件" + sourceFileName + "到" + targetFileName + "成功！");
-/*     */ 
-/*  57 */       return true;
-/*     */     }
-/*  59 */     System.out.println("移动文件" + sourceFileName + "到" + targetFileName + "失败！");
-/*     */ 
-/*  61 */     return true;
-/*     */   }
-/*     */ 
-/*     */   public static boolean moveDir(String sourceDirName, String targetDirName)
-/*     */   {
-/*  67 */     return moveDir(sourceDirName, targetDirName, false);
-/*     */   }
-/*     */ 
-/*     */   public static boolean moveDir(String sourceDirName, String targetDirName, boolean isOverlay)
-/*     */   {
-/*  74 */     File sourceDir = new File(sourceDirName);
-/*  75 */     if (!sourceDir.exists()) {
-/*  76 */       System.out.println("移动目录失败，原始目录" + sourceDirName + "不存在！");
-/*  77 */       return false;
-/*  78 */     }if (!sourceDir.isDirectory()) {
-/*  79 */       System.out.println("移动目录失败，" + sourceDirName + "不是一个目录！");
-/*  80 */       return false;
-/*     */     }
-/*     */ 
-/*  83 */     if (!targetDirName.endsWith(File.separator)) {
-/*  84 */       targetDirName = targetDirName + File.separator;
-/*     */     }
-/*  86 */     File targetDir = new File(targetDirName);
-/*     */ 
-/*  88 */     if (targetDir.exists()) {
-/*  89 */       if (isOverlay)
-/*     */       {
-/*  91 */         System.out.println("该目录已存在，准备删除它！");
-/*  92 */         if (!delFolder(targetDirName))
-/*  93 */           System.out.println("移动目录失败：删除目录" + targetDirName + "失败！");
-/*     */       }
-/*     */       else {
-/*  96 */         System.out.println("移动目录失败：该目录" + targetDirName + "已存在！");
-/*  97 */         return false;
-/*     */       }
-/*     */     }
-/*     */     else {
-/* 101 */       System.out.println("该目录不存在，正在创建！");
-/* 102 */       if (!targetDir.mkdirs()) {
-/* 103 */         System.out.println("移动目录失败：创建该目录失败！");
-/* 104 */         return false;
-/*     */       }
-/*     */     }
-/* 107 */     boolean flag = true;
-/*     */ 
-/* 109 */     File[] files = sourceDir.listFiles();
-/* 110 */     for (int i = 0; i < files.length; i++)
-/*     */     {
-/* 112 */       if (files[i].isFile()) {
-/* 113 */         flag = moveA_File(files[i].getAbsolutePath(), targetDirName + files[i].getName(), isOverlay);
-/*     */ 
-/* 115 */         if (!flag) {
-/* 116 */           break;
-/*     */         }
-/*     */ 
-/*     */       }
-/* 120 */       else if (files[i].isDirectory()) {
-/* 121 */         flag = moveDir(files[i].getAbsolutePath(), targetDirName + files[i].getName(), isOverlay);
-/*     */ 
-/* 123 */         if (!flag) {
-/*     */           break;
-/*     */         }
-/*     */       }
-/*     */     }
-/* 128 */     if (!flag) {
-/* 129 */       System.out.println("目录" + sourceDirName + "移动到" + targetDirName + "失败！");
-/*     */ 
-/* 131 */       return false;
-/*     */     }
-/*     */ 
-/* 134 */     if (delFolder(sourceDirName)) {
-/* 135 */       System.out.println("目录" + sourceDirName + "移动到" + targetDirName + "成功！");
-/*     */ 
-/* 137 */       return true;
-/*     */     }
-/* 139 */     System.out.println("目录" + sourceDirName + "移动到" + targetDirName + "失败！");
-/*     */ 
-/* 141 */     return false;
-/*     */   }
-/*     */ 
-/*     */   public static void main(String[] args)
-/*     */   {
-/* 147 */     System.out.println("调用moveA_File方法的结果如下：");
-/* 148 */     String sourceFileName = "D:\\temp\\keytoolcmd.txt";
-/* 149 */     String targetFileName = "D:\\test\\temp\\keytoolcmd.txt.";
-/* 150 */     moveA_File(sourceFileName, targetFileName, true);
-/*     */ 
-/* 152 */     System.out.println("\n调用moveDir方法的结果如下：");
-/* 153 */     String sourceDirName = "D:\\temp\\aa";
-/* 154 */     String targetDirName = "F:\\abc";
-/* 155 */     moveDir(sourceDirName, targetDirName);
-/*     */ 
-/* 157 */     File f = new File("d:\\myHomework\\Work");
-/* 158 */     File[] fileList = f.listFiles();
-/* 159 */     for (int i = 0; i < fileList.length; i++)
-/* 160 */       fileList[i].renameTo(new File("d:\\myHomework\\Backup\\" + fileList[i].getName()));
-/*     */   }
-/*     */ 
-/*     */   public static void delAllFile(String path)
-/*     */   {
-/* 172 */     File file = new File(path);
-/* 173 */     if (!file.exists()) {
-/* 174 */       return;
-/*     */     }
-/* 176 */     if (!file.isDirectory()) {
-/* 177 */       return;
-/*     */     }
-/* 179 */     String[] tempList = file.list();
-/* 180 */     File temp = null;
-/* 181 */     for (int i = 0; i < tempList.length; i++) {
-/* 182 */       if (path.endsWith(File.separator))
-/* 183 */         temp = new File(path + tempList[i]);
-/*     */       else {
-/* 185 */         temp = new File(path + File.separator + tempList[i]);
-/*     */       }
-/* 187 */       if (temp.isFile()) {
-/* 188 */         temp.delete();
-/*     */       }
-/* 190 */       if (temp.isDirectory()) {
-/* 191 */         delAllFile(path + "/" + tempList[i]);
-/* 192 */         delFolder(path + "/" + tempList[i]);
-/*     */       }
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public static void delFile(String filePathAndName)
-/*     */   {
-/*     */     try
-/*     */     {
-/* 208 */       String filePath = filePathAndName;
-/* 209 */       filePath = filePath.toString();
-/* 210 */       File myDelFile = new File(filePath);
-/* 211 */       myDelFile.delete();
-/*     */     } catch (Exception e) {
-/* 213 */       System.out.println("删除文件操作出错");
-/* 214 */       e.printStackTrace();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public static boolean delFolder(String folderPath)
-/*     */   {
-/* 228 */     boolean isDel = false;
-/*     */     try {
-/* 230 */       delAllFile(folderPath);
-/*     */ 
-/* 232 */       String filePath = folderPath;
-/* 233 */       filePath = filePath.toString();
-/* 234 */       File myFilePath = new File(filePath);
-/* 235 */       isDel = myFilePath.delete();
-/*     */     } catch (Exception e) {
-/* 237 */       System.out.println("删除文件夹操作出错");
-/* 238 */       e.printStackTrace();
-/*     */     }
-/* 240 */     return isDel;
-/*     */   }
-/*     */ 
-/*     */   public static void copyFile(String oldPath, String newPath)
-/*     */   {
-/*     */     try
-/*     */     {
-/* 254 */       int bytesum = 0;
-/* 255 */       int byteread = 0;
-/* 256 */       File oldfile = new File(oldPath);
-/* 257 */       if (oldfile.exists()) {
-/* 258 */         InputStream inStream = new FileInputStream(oldPath);
-/* 259 */         FileOutputStream fs = new FileOutputStream(newPath);
-/* 260 */         byte[] buffer = new byte[1444];
-/*     */ 
-/* 262 */         while ((byteread = inStream.read(buffer)) != -1) {
-/* 263 */           bytesum += byteread;
-/*     */ 
-/* 265 */           fs.write(buffer, 0, byteread);
-/*     */         }
-/* 267 */         inStream.close();
-/*     */       }
-/*     */     } catch (Exception e) {
-/* 270 */       System.out.println("复制单个文件操作出错");
-/* 271 */       e.printStackTrace();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public static void copyFolder(String oldPath, String newPath)
-/*     */   {
-/*     */     try
-/*     */     {
-/* 286 */       File newFile = new File(newPath);
-/* 287 */       if (!newFile.exists()) {
-/* 288 */         new File(newPath).mkdirs();
-/*     */       }
-/* 290 */       File a = new File(oldPath);
-/* 291 */       String[] file = a.list();
-/* 292 */       File temp = null;
-/* 293 */       for (int i = 0; i < file.length; i++) {
-/* 294 */         if (oldPath.endsWith(File.separator))
-/* 295 */           temp = new File(oldPath + file[i]);
-/*     */         else {
-/* 297 */           temp = new File(oldPath + File.separator + file[i]);
-/*     */         }
-/* 299 */         if (temp.isFile()) {
-/* 300 */           FileInputStream input = new FileInputStream(temp);
-/* 301 */           FileOutputStream output = new FileOutputStream(newPath + "/" + temp.getName().toString());
-/*     */ 
-/* 303 */           byte[] b = new byte[5120];
-/*     */           int len;
-/* 305 */           while ((len = input.read(b)) != -1) {
-/* 306 */             output.write(b, 0, len);
-/*     */           }
-/* 308 */           output.flush();
-/* 309 */           output.close();
-/* 310 */           input.close();
-/*     */         }
-/* 312 */         if (temp.isDirectory())
-/* 313 */           copyFolder(oldPath + "/" + file[i], newPath + "/" + file[i]);
-/*     */       }
-/*     */     }
-/*     */     catch (Exception e) {
-/* 317 */       System.out.println("复制整个文件夹内容操作出错");
-/* 318 */       e.printStackTrace();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public static void moveFile(String oldPath, String newPath)
-/*     */   {
-/* 331 */     copyFile(oldPath, newPath);
-/* 332 */     delFile(oldPath);
-/*     */   }
-/*     */ 
-/*     */   public static void moveFolder(String oldPath, String newPath)
-/*     */   {
-/* 344 */     copyFolder(oldPath, newPath);
-/* 345 */     delFolder(oldPath);
-/*     */   }
-/*     */ 
-/*     */   public static boolean isWindowsOS()
-/*     */   {
-/* 352 */     boolean isWindowsOS = false;
-/* 353 */     String osName = System.getProperty("os.name");
-/* 354 */     if (osName.toLowerCase().indexOf("windows") > -1) {
-/* 355 */       isWindowsOS = true;
-/*     */     }
-/* 357 */     return isWindowsOS;
-/*     */   }
-/*     */ 
-/*     */   public static String readFileContent(String filePath) throws IOException
-/*     */   {
-/* 362 */     InputStream in = FileUtil.class.getClassLoader().getResourceAsStream(filePath);
-/*     */ 
-/* 364 */     if (in == null) {
-/* 365 */       return "";
-/*     */     }
-/* 367 */     String result = StringUtils.convertStreamToString(in);
-/*     */ 
-/* 369 */     return result;
-/*     */   }
-/*     */ }
+package com.ztesoft.common.util.file;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.common.util.file.FileUtil
- * JD-Core Version:    0.6.2
- */
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import com.ztesoft.common.util.StringUtils;
+
+public class FileUtil {
+	// 移动某个指定的文件，但移动成功后不会覆盖已存在的目标文件
+	public static boolean moveA_File(String sourceFileName,
+			String targetFileName) {
+		return FileUtil.moveA_File(sourceFileName, targetFileName, false);
+	}
+
+	// 移动某个指定的文件，但移动成功后可以根据isOverlay的值来决定是否覆盖已存在的目标文件
+	public static boolean moveA_File(String sourceFileName,
+			String targetFileName, boolean isOverlay) {
+		// 判断原文件是否存在
+		File sourceFile = new File(sourceFileName);
+		if (!sourceFile.exists()) {
+			System.out.println("移动文件失败：原文件" + sourceFileName + "不存在！");
+			return false;
+		} else if (!sourceFile.isFile()) {
+			System.out.println("移动文件失败：" + sourceFileName + "不是一个文件！");
+			return false;
+		}
+		File targetFile = new File(targetFileName);
+		if (targetFile.exists()) {// 判断目标文件是否存在
+			if (isOverlay) {// 如果目标文件存在，是否允许覆盖目标文件
+				// 删除已存在的目标文件，无论目标文件是目录还是单个文件
+				System.out.println("该文件已存在，准备删除它！");
+				if (!targetFile.delete()) {
+					System.out.println("文件移动失败，删除文件" + targetFileName + "失败！");
+					return false;
+				}
+			} else {
+				System.out.println("文件移动失败，文件" + targetFileName + "已存在！");
+				return false;
+			}
+		} else {
+			if (!targetFile.getParentFile().exists()) {
+				// 如果目标文件所在的目录不存在，则创建目录
+				System.out.println("该文件所在目录不存在，正在创建！");
+				if (!targetFile.getParentFile().mkdirs()) {
+					System.out.println("移动文件失败，创建文件所在的目录失败！");
+					return false;
+				}
+			}
+		}
+		// 移动原文件至目标文件
+		if (sourceFile.renameTo(targetFile)) {
+			System.out.println("移动文件" + sourceFileName + "到" + targetFileName
+					+ "成功！");
+			return true;
+		} else {
+			System.out.println("移动文件" + sourceFileName + "到" + targetFileName
+					+ "失败！");
+			return true;
+		}
+	}
+
+	public static boolean moveDir(String sourceDirName, String targetDirName) {
+		// 默认为不覆盖目标文件
+		return FileUtil.moveDir(sourceDirName, targetDirName, false);
+	}
+
+	// 移动某个指定的目录，但移动成功后可以根据isOverlay的值来决定是否覆盖当前已存在的目标目录
+	public static boolean moveDir(String sourceDirName, String targetDirName,
+			boolean isOverlay) {
+		// 判断原目录是否存在
+		File sourceDir = new File(sourceDirName);
+		if (!sourceDir.exists()) {
+			System.out.println("移动目录失败，原始目录" + sourceDirName + "不存在！");
+			return false;
+		} else if (!sourceDir.isDirectory()) {
+			System.out.println("移动目录失败，" + sourceDirName + "不是一个目录！");
+			return false;
+		}
+		// 如果目标文件夹名不以文件分隔符结尾，自动添加文件分隔符
+		if (!targetDirName.endsWith(File.separator)) {
+			targetDirName = targetDirName + File.separator;
+		}
+		File targetDir = new File(targetDirName);
+		// 如果目标文件夹存在，
+		if (targetDir.exists()) {
+			if (isOverlay) {
+				// 允许覆盖则删除已存在的目标目录
+				System.out.println("该目录已存在，准备删除它！");
+				if (!delFolder(targetDirName)) {
+					System.out.println("移动目录失败：删除目录" + targetDirName + "失败！");
+				}
+			} else {
+				System.out.println("移动目录失败：该目录" + targetDirName + "已存在！");
+				return false;
+			}
+		} else {
+			// 创建目标目录
+			System.out.println("该目录不存在，正在创建！");
+			if (!targetDir.mkdirs()) {
+				System.out.println("移动目录失败：创建该目录失败！");
+				return false;
+			}
+		}
+		boolean flag = true;
+		// 移动原目录下的文件和子目录到目标目录下
+		File[] files = sourceDir.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			// 移动子文件
+			if (files[i].isFile()) {
+				flag = FileUtil.moveA_File(files[i].getAbsolutePath(),
+						targetDirName + files[i].getName(), isOverlay);
+				if (!flag) {
+					break;
+				}
+			}
+			// 移动子目录
+			else if (files[i].isDirectory()) {
+				flag = FileUtil.moveDir(files[i].getAbsolutePath(),
+						targetDirName + files[i].getName(), isOverlay);
+				if (!flag) {
+					break;
+				}
+			}
+		}
+		if (!flag) {
+			System.out.println("目录" + sourceDirName + "移动到" + targetDirName
+					+ "失败！");
+			return false;
+		}
+		// 删除原目录
+		if (delFolder(sourceDirName)) {
+			System.out.println("目录" + sourceDirName + "移动到" + targetDirName
+					+ "成功！");
+			return true;
+		} else {
+			System.out.println("目录" + sourceDirName + "移动到" + targetDirName
+					+ "失败！");
+			return false;
+		}
+	}
+
+	public static void main(String[] args) {
+		// 移动文件，如果目标文件存在，则替换
+		System.out.println("调用moveA_File方法的结果如下：");
+		String sourceFileName = "D:\\temp\\keytoolcmd.txt";
+		String targetFileName = "D:\\test\\temp\\keytoolcmd.txt.";
+		FileUtil.moveA_File(sourceFileName, targetFileName, true);
+		// 移动目录，如果目标目录存在，则不覆盖
+		System.out.println("\n调用moveDir方法的结果如下：");
+		String sourceDirName = "D:\\temp\\aa";
+		String targetDirName = "F:\\abc";
+		FileUtil.moveDir(sourceDirName, targetDirName);
+
+		File f = new File("d:\\myHomework\\Work");
+		File fileList[] = f.listFiles();
+		for (int i = 0; i < fileList.length; i++) {
+			fileList[i].renameTo(new File("d:\\myHomework\\Backup\\"
+					+ fileList[i].getName()));
+		}
+	}
+
+	/**
+	 * 删除文件夹里面的所有文件
+	 * 
+	 * @param path
+	 *            String 文件夹路径 如 c:/fqf
+	 */
+	public static void delAllFile(String path) {
+		File file = new File(path);
+		if (!file.exists()) {
+			return;
+		}
+		if (!file.isDirectory()) {
+			return;
+		}
+		String[] tempList = file.list();
+		File temp = null;
+		for (int i = 0; i < tempList.length; i++) {
+			if (path.endsWith(File.separator)) {
+				temp = new File(path + tempList[i]);
+			} else {
+				temp = new File(path + File.separator + tempList[i]);
+			}
+			if (temp.isFile()) {
+				temp.delete();
+			}
+			if (temp.isDirectory()) {
+				delAllFile(path + "/" + tempList[i]);// 先删除文件夹里面的文件
+				delFolder(path + "/" + tempList[i]);// 再删除空文件夹
+			}
+		}
+	}
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param filePathAndName
+	 *            String 文件路径及名称 如c:/fqf.txt
+	 * @param fileContent
+	 *            String
+	 * @return boolean
+	 */
+	public static void delFile(String filePathAndName) {
+		try {
+			String filePath = filePathAndName;
+			filePath = filePath.toString();
+			File myDelFile = new File(filePath);
+			myDelFile.delete();
+		} catch (Exception e) {
+			System.out.println("删除文件操作出错");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 删除文件夹
+	 * 
+	 * @param filePathAndName
+	 *            String 文件夹路径及名称 如c:/fqf
+	 * @param fileContent
+	 *            String
+	 * @return boolean
+	 */
+	public static boolean delFolder(String folderPath) {
+		boolean isDel = false;
+		try {
+			delAllFile(folderPath); // 删除文件夹里面所有内容
+			// 删除空文件夹
+			String filePath = folderPath;
+			filePath = filePath.toString();
+			File myFilePath = new File(filePath);
+			isDel = myFilePath.delete();
+		} catch (Exception e) {
+			System.out.println("删除文件夹操作出错");
+			e.printStackTrace();
+		}
+		return isDel;
+	}
+
+	/**
+	 * 复制单个文件
+	 * 
+	 * @param oldPath
+	 *            String 原文件路径 如：c:/fqf.txt
+	 * @param newPath
+	 *            String 复制后路径 如：f:/fqf.txt
+	 * @return boolean
+	 */
+	public static void copyFile(String oldPath, String newPath) {
+		try {
+			int bytesum = 0;
+			int byteread = 0;
+			File oldfile = new File(oldPath);
+			if (oldfile.exists()) { // 文件存在时
+				InputStream inStream = new FileInputStream(oldPath); // 读入原文件
+				FileOutputStream fs = new FileOutputStream(newPath);
+				byte[] buffer = new byte[1444];
+				int length;
+				while ((byteread = inStream.read(buffer)) != -1) {
+					bytesum += byteread; // 字节数 文件大小
+					// System.out.println(bytesum);
+					fs.write(buffer, 0, byteread);
+				}
+				inStream.close();
+			}
+		} catch (Exception e) {
+			System.out.println("复制单个文件操作出错");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 复制整个文件夹内容
+	 * 
+	 * @param oldPath
+	 *            String 原文件路径 如：c:/fqf
+	 * @param newPath
+	 *            String 复制后路径 如：f:/fqf/ff
+	 * @return boolean
+	 */
+	public static void copyFolder(String oldPath, String newPath) {
+		try {
+			File newFile = new File(newPath);
+			if (!newFile.exists()) {
+				(new File(newPath)).mkdirs(); // 如果文件夹不存在 则建立新文件夹
+			}
+			File a = new File(oldPath);
+			String[] file = a.list();
+			File temp = null;
+			for (int i = 0; i < file.length; i++) {
+				if (oldPath.endsWith(File.separator)) {
+					temp = new File(oldPath + file[i]);
+				} else {
+					temp = new File(oldPath + File.separator + file[i]);
+				}
+				if (temp.isFile()) {
+					FileInputStream input = new FileInputStream(temp);
+					FileOutputStream output = new FileOutputStream(newPath
+							+ "/" + (temp.getName()).toString());
+					byte[] b = new byte[1024 * 5];
+					int len;
+					while ((len = input.read(b)) != -1) {
+						output.write(b, 0, len);
+					}
+					output.flush();
+					output.close();
+					input.close();
+				}
+				if (temp.isDirectory()) {// 如果是子文件夹
+					copyFolder(oldPath + "/" + file[i], newPath + "/" + file[i]);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("复制整个文件夹内容操作出错");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 移动文件到指定目录
+	 * 
+	 * @param oldPath
+	 *            String 如：c:/fqf.txt
+	 * @param newPath
+	 *            String 如：d:/fqf.txt
+	 */
+	public static void moveFile(String oldPath, String newPath) {
+		copyFile(oldPath, newPath);
+		delFile(oldPath);
+	}
+
+	/**
+	 * 移动目录到指定目录
+	 * 
+	 * @param oldPath
+	 *            String 如：c:/fqf.txt
+	 * @param newPath
+	 *            String 如：d:/fqf.txt
+	 */
+	public static void moveFolder(String oldPath, String newPath) {
+		copyFolder(oldPath, newPath);
+		delFolder(oldPath);
+	}
+
+	/*
+	 * @return true---是Windows操作系统
+	 */
+	public static boolean isWindowsOS() {
+		boolean isWindowsOS = false;
+		String osName = System.getProperty("os.name");
+		if (osName.toLowerCase().indexOf("windows") > -1) {
+			isWindowsOS = true;
+		}
+		return isWindowsOS;
+	}
+
+	public static String readFileContent(String filePath) throws IOException {
+
+		InputStream in = FileUtil.class.getClassLoader().getResourceAsStream(
+				filePath);
+		if (in == null) {
+			return "";
+		}
+		String result = StringUtils.convertStreamToString(in);
+
+		return result;
+	}
+}

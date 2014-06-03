@@ -1,43 +1,64 @@
-/*    */ package com.ztesoft.common.query.util;
-/*    */ 
-/*    */ import com.ztesoft.inf.framework.dao.SqlExe;
-/*    */ import java.util.HashMap;
-/*    */ 
-/*    */ public class DcSystemParamUtil
-/*    */ {
-/* 18 */   public static HashMap sysParamsCache = new HashMap();
-/*    */ 
-/*    */   public static String getSysParamByCache(String paramCode)
-/*    */   {
-/* 27 */     if (sysParamsCache.get(paramCode) != null) {
-/* 28 */       return sysParamsCache.get(paramCode).toString();
-/*    */     }
-/* 30 */     String paramVal = getParamValFromDb(paramCode);
-/* 31 */     setVariable(paramCode, paramVal);
-/* 32 */     return paramVal;
-/*    */   }
-/*    */ 
-/*    */   public static String getParamValFromDb(String paramCode)
-/*    */   {
-/* 43 */     String sql = "select param_val from dc_system_param where param_code ='" + paramCode + "'";
-/*    */ 
-/* 45 */     String paramVal = "";
-/*    */     try {
-/* 47 */       paramVal = new SqlExe().queryForString(sql);
-/* 48 */       setVariable(paramCode, paramVal);
-/*    */     }
-/*    */     catch (Exception e) {
-/*    */     }
-/* 52 */     return paramVal;
-/*    */   }
-/*    */ 
-/*    */   private static void setVariable(String key, String value)
-/*    */   {
-/* 62 */     sysParamsCache.put(key, value);
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.common.query.util.DcSystemParamUtil
- * JD-Core Version:    0.6.2
+/**
+ * 
  */
+package com.ztesoft.common.query.util;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.ztesoft.common.util.StringUtils;
+import com.ztesoft.inf.framework.dao.SqlExe;
+
+/**
+ * @author 许锐豪
+ * 
+ */
+public class DcSystemParamUtil {
+	// 用于缓存系统参数
+	public static HashMap sysParamsCache = new HashMap();
+
+	/**
+	 * 根据系统参数编码获取系统参数 该方法只能在BO里面调用 不经过框架
+	 * 
+	 * @param param_code
+	 * @return
+	 */
+	public static String getSysParamByCache(String paramCode) {
+		if (sysParamsCache.get(paramCode) != null) {
+			return sysParamsCache.get(paramCode).toString();
+		} else {// 如果没有，则到数据库里面查询
+			String paramVal = getParamValFromDb(paramCode);
+			setVariable(paramCode, paramVal);
+			return paramVal;
+		}
+	}
+
+	/**
+	 * 根据参数code查询数据库
+	 * 
+	 * @param paramCode
+	 * @return
+	 */
+	public static String getParamValFromDb(String paramCode) {
+		String sql = "select param_val from dc_system_param where param_code ='"
+				+ paramCode + "'";
+		String paramVal = "";
+		try {
+			paramVal =new  SqlExe().queryForString(sql);
+			setVariable(paramCode,paramVal);
+		} catch (Exception e) {
+
+		}
+		return paramVal;
+	}
+
+	/**
+	 * 设置缓存数据。
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	private static void setVariable(String key, String value) {
+		sysParamsCache.put(key, value);
+	}
+}

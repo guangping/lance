@@ -1,11 +1,22 @@
+/*
+ * Copyright (C) 2006 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 22. June 2006 by Mauro Talevi
+ */
 package com.ztesoft.inf.extend.xstream.io;
 
-public abstract interface ExtendedHierarchicalStreamWriter extends HierarchicalStreamWriter
-{
-  public abstract void startNode(String paramString, Class paramClass);
-}
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.ExtendedHierarchicalStreamWriter
- * JD-Core Version:    0.6.2
+/**
+ * @author Paul Hammant
  */
+public interface ExtendedHierarchicalStreamWriter extends
+		HierarchicalStreamWriter {
+
+	void startNode(String name, Class clazz);
+
+}

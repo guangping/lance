@@ -78,9 +78,9 @@ create table INF_COMM_CLIENT_OPERATION
 )
 ;
 comment on column INF_COMM_CLIENT_OPERATION.REQ_USER_ID
-  is 'ï¿½ï¿½ï¿½ï¿½inf_comm_client_operationï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½,ï¿½ï¿½ï¿½ï¿½ÎªÄ¬ï¿½ï¿½';
+  is '¹ØÁªinf_comm_client_operationÇëÇóÓÃ»§,¿ÕÔòÎªÄ¬ÈÏ';
 comment on column INF_COMM_CLIENT_OPERATION.DEAL_SUCCESS_FLAG
-  is 'ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½Ê¶';
+  is '´¦Àí³É¹¦±êÊ¶';
 alter table INF_COMM_CLIENT_OPERATION
   add primary key (OP_ID);
 
@@ -118,17 +118,17 @@ create table INF_COMM_CLIENT_REQUEST_USER
 )
 ;
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_ID
-  is 'ï¿½Ã»ï¿½id';
+  is 'ÓÃ»§id';
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_CODE
-  is 'ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½';
+  is 'ÓÃ»§±àÂë£¬ÇëÇóÊ±ºò';
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_NAME
-  is 'ï¿½Ã»ï¿½ï¿½ï¿½';
+  is 'ÓÃ»§Ãû';
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_PWD
-  is 'ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½';
+  is 'ÓÃ»§ÃÜÂë';
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_PARAM
-  is 'ï¿½ï¿½Ø²ï¿½ï¿½ï¿½';
+  is 'Ïà¹Ø²ÎÊý';
 comment on column INF_COMM_CLIENT_REQUEST_USER.USER_DESC
-  is 'ï¿½ï¿½ï¿½ï¿½';
+  is 'ÃèÊö';
 alter table INF_COMM_CLIENT_REQUEST_USER
   add primary key (USER_ID);
 
@@ -191,9 +191,9 @@ spool off
 
 
 insert into sequence_management (TABLE_CODE, FIELD_CODE, SEQUENCE_CODE, SEQUENCE_LENGTH, SEQUENCE_DESC)
-values ('INF_COMM_CLIENT_CALLLOG', 'LOG_ID', 'SEQ_INF_COMM_CLIENT_CALLLOG_ID', 15, 'Í¨ï¿½Ã½Ó¿Ú¿Í»ï¿½ï¿½Ëµï¿½ï¿½ï¿½');
+values ('INF_COMM_CLIENT_CALLLOG', 'LOG_ID', 'SEQ_INF_COMM_CLIENT_CALLLOG_ID', 15, 'Í¨ÓÃ½Ó¿Ú¿Í»§¶Ëµ÷ÓÃ');
 
----ÏµÍ³ï¿½ï¿½ï¿½ï¿½ï¿½
+---ÏµÍ³²ÎÊý±í
 create table DC_SYSTEM_PARAM
 (
   PARAM_CODE VARCHAR2(30) not null,

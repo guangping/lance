@@ -1,21 +1,40 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters.basic;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.converters.SingleValueConverter;
-/*    */ 
-/*    */ public abstract class AbstractSingleValueConverter
-/*    */   implements SingleValueConverter
-/*    */ {
-/*    */   public abstract boolean canConvert(Class paramClass);
-/*    */ 
-/*    */   public String toString(Object obj)
-/*    */   {
-/* 35 */     return obj == null ? null : obj.toString();
-/*    */   }
-/*    */ 
-/*    */   public abstract Object fromString(String paramString);
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.basic.AbstractSingleValueConverter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 15. February 2006 by Mauro Talevi
  */
+package com.ztesoft.inf.extend.xstream.converters.basic;
+
+import com.ztesoft.inf.extend.xstream.converters.SingleValueConverter;
+
+/**
+ * Base abstract implementation of
+ * {@link com.ztesoft.inf.extend.xstream.converters.SingleValueConverter}.
+ * <p/>
+ * <p>
+ * Subclasses should implement methods canConvert(Class) and fromString(String)
+ * for the conversion.
+ * </p>
+ * 
+ * @author Joe Walnes
+ * @author J&ouml;rg Schaible
+ * @author Mauro Talevi
+ * @see com.ztesoft.inf.extend.xstream.converters.SingleValueConverter
+ */
+public abstract class AbstractSingleValueConverter implements
+		SingleValueConverter {
+
+	public abstract boolean canConvert(Class type);
+
+	public String toString(Object obj) {
+		return obj == null ? null : obj.toString();
+	}
+
+	public abstract Object fromString(String str);
+
+}

@@ -1,20 +1,42 @@
+/*
+ * Copyright (C) 2004 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 06. March 2004 by Joe Walnes
+ */
 package com.ztesoft.inf.extend.xstream.converters;
 
 import com.ztesoft.inf.extend.xstream.io.path.PathTracker;
 import com.ztesoft.inf.extend.xstream.mapper.Mapper;
 
-public abstract interface MarshallingContext extends DataHolder
-{
-  public abstract void convertAnother(Object paramObject);
+public interface MarshallingContext extends DataHolder {
 
-  public abstract void convertAnother(Object paramObject, Converter paramConverter);
+	/**
+	 * Converts another object searching for the default converter
+	 * 
+	 * @param nextItem
+	 *            the next item to convert
+	 */
+	void convertAnother(Object nextItem);
 
-  public abstract PathTracker getPathTracker();
+	/**
+	 * Converts another object using the specified converter
+	 * 
+	 * @param nextItem
+	 *            the next item to convert
+	 * @param converter
+	 *            the Converter to use
+	 * @since 1.2
+	 */
+	void convertAnother(Object nextItem, Converter converter);
 
-  public abstract Mapper getMapper();
+	PathTracker getPathTracker();
+
+	Mapper getMapper();
+
 }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.MarshallingContext
- * JD-Core Version:    0.6.2
- */

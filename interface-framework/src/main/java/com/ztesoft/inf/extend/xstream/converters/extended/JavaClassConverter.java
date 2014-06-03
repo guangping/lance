@@ -1,72 +1,99 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters.extended;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.converters.ConversionException;
-/*    */ import com.ztesoft.inf.extend.xstream.converters.basic.AbstractSingleValueConverter;
-/*    */ 
-/*    */ public class JavaClassConverter extends AbstractSingleValueConverter
-/*    */ {
-/*    */   private ClassLoader classLoader;
-/*    */ 
-/*    */   @Deprecated
-/*    */   public JavaClassConverter()
-/*    */   {
-/* 35 */     this(Thread.currentThread().getContextClassLoader());
-/*    */   }
-/*    */ 
-/*    */   public JavaClassConverter(ClassLoader classLoader) {
-/* 39 */     this.classLoader = classLoader;
-/*    */   }
-/*    */ 
-/*    */   public boolean canConvert(Class clazz)
-/*    */   {
-/* 44 */     return Class.class.equals(clazz);
-/*    */   }
-/*    */ 
-/*    */   public String toString(Object obj)
-/*    */   {
-/* 49 */     return ((Class)obj).getName();
-/*    */   }
-/*    */ 
-/*    */   public Object fromString(String str)
-/*    */   {
-/*    */     try {
-/* 55 */       return loadClass(str);
-/*    */     } catch (ClassNotFoundException e) {
-/* 57 */       throw new ConversionException("Cannot load java class " + str, e);
-/*    */     }
-/*    */   }
-/*    */ 
-/*    */   private Class loadClass(String className) throws ClassNotFoundException {
-/* 62 */     Class resultingClass = primitiveClassForName(className);
-/* 63 */     if (resultingClass != null) {
-/* 64 */       return resultingClass;
-/*    */     }
-/*    */ 
-/* 67 */     for (int dimension = 0; className.charAt(dimension) == '['; dimension++);
-/* 69 */     if (dimension > 0)
-/*    */     {
-/*    */       ClassLoader classLoaderToUse;
-/*    */       ClassLoader classLoaderToUse;
-/* 71 */       if (className.charAt(dimension) == 'L') {
-/* 72 */         String componentTypeName = className.substring(dimension + 1, className.length() - 1);
-/*    */ 
-/* 74 */         classLoaderToUse = this.classLoader.loadClass(componentTypeName).getClassLoader();
-/*    */       }
-/*    */       else {
-/* 77 */         classLoaderToUse = null;
-/*    */       }
-/* 79 */       return Class.forName(className, false, classLoaderToUse);
-/*    */     }
-/* 81 */     return this.classLoader.loadClass(className);
-/*    */   }
-/*    */ 
-/*    */   private Class primitiveClassForName(String name)
-/*    */   {
-/* 88 */     return name.equals("double") ? Double.TYPE : name.equals("float") ? Float.TYPE : name.equals("long") ? Long.TYPE : name.equals("int") ? Integer.TYPE : name.equals("short") ? Short.TYPE : name.equals("char") ? Character.TYPE : name.equals("byte") ? Byte.TYPE : name.equals("boolean") ? Boolean.TYPE : name.equals("void") ? Void.TYPE : null;
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.extended.JavaClassConverter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2004, 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 04. April 2004 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.converters.extended;
+
+import com.ztesoft.inf.extend.xstream.converters.ConversionException;
+import com.ztesoft.inf.extend.xstream.converters.basic.AbstractSingleValueConverter;
+
+/**
+ * Converts a java.lang.Class to XML.
+ * 
+ * @author Aslak Helles&oslash;y
+ * @author Joe Walnes
+ * @author Matthew Sandoz
+ * @author J&ouml;rg Schaible
+ */
+public class JavaClassConverter extends AbstractSingleValueConverter {
+
+	private ClassLoader classLoader;
+
+	/**
+	 * @deprecated As of 1.1.1 - use other constructor and explicitly supply a
+	 *             ClassLoader.
+	 */
+	@Deprecated
+	public JavaClassConverter() {
+		this(Thread.currentThread().getContextClassLoader());
+	}
+
+	public JavaClassConverter(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+	}
+
+	@Override
+	public boolean canConvert(Class clazz) {
+		return Class.class.equals(clazz); // :)
+	}
+
+	@Override
+	public String toString(Object obj) {
+		return ((Class) obj).getName();
+	}
+
+	@Override
+	public Object fromString(String str) {
+		try {
+			return loadClass(str);
+		} catch (ClassNotFoundException e) {
+			throw new ConversionException("Cannot load java class " + str, e);
+		}
+	}
+
+	private Class loadClass(String className) throws ClassNotFoundException {
+		Class resultingClass = primitiveClassForName(className);
+		if (resultingClass != null) {
+			return resultingClass;
+		}
+		int dimension;
+		for (dimension = 0; className.charAt(dimension) == '['; ++dimension)
+			;
+		if (dimension > 0) {
+			final ClassLoader classLoaderToUse;
+			if (className.charAt(dimension) == 'L') {
+				String componentTypeName = className.substring(dimension + 1,
+						className.length() - 1);
+				classLoaderToUse = classLoader.loadClass(componentTypeName)
+						.getClassLoader();
+			} else {
+				classLoaderToUse = null;
+			}
+			return Class.forName(className, false, classLoaderToUse);
+		}
+		return classLoader.loadClass(className);
+	}
+
+	/**
+	 * Lookup table for primitive types.
+	 */
+	private Class primitiveClassForName(String name) {
+		return name.equals("void") ? Void.TYPE
+				: name.equals("boolean") ? Boolean.TYPE
+						: name.equals("byte") ? Byte.TYPE
+								: name.equals("char") ? Character.TYPE : name
+										.equals("short") ? Short.TYPE : name
+										.equals("int") ? Integer.TYPE : name
+										.equals("long") ? Long.TYPE : name
+										.equals("float") ? Float.TYPE : name
+										.equals("double") ? Double.TYPE : null;
+	}
+
+}

@@ -1,67 +1,76 @@
-/*    */ package com.ztesoft.inf.extend.xstream.core.util;
-/*    */ 
-/*    */ public class Pool
-/*    */ {
-/*    */   private final int initialPoolSize;
-/*    */   private final int maxPoolSize;
-/*    */   private final Factory factory;
-/*    */   private transient Object[] pool;
-/*    */   private transient int nextAvailable;
-/* 30 */   private transient Object mutex = new Object();
-/*    */ 
-/*    */   public Pool(int initialPoolSize, int maxPoolSize, Factory factory) {
-/* 33 */     this.initialPoolSize = initialPoolSize;
-/* 34 */     this.maxPoolSize = maxPoolSize;
-/* 35 */     this.factory = factory;
-/*    */   }
-/*    */ 
-/*    */   public Object fetchFromPool()
-/*    */   {
-/*    */     Object result;
-/* 40 */     synchronized (this.mutex) {
-/* 41 */       if (this.pool == null) {
-/* 42 */         this.pool = new Object[this.maxPoolSize];
-/* 43 */         for (this.nextAvailable = this.initialPoolSize; this.nextAvailable > 0; ) {
-/* 44 */           putInPool(this.factory.newInstance());
-/*    */         }
-/*    */       }
-/* 47 */       while (this.nextAvailable == this.maxPoolSize) {
-/*    */         try {
-/* 49 */           this.mutex.wait();
-/*    */         } catch (InterruptedException e) {
-/* 51 */           throw new RuntimeException("Interrupted whilst waiting for a free item in the pool : " + e.getMessage());
-/*    */         }
-/*    */       }
-/*    */ 
-/* 55 */       result = this.pool[(this.nextAvailable++)];
-/* 56 */       if (result == null) {
-/* 57 */         result = this.factory.newInstance();
-/* 58 */         putInPool(result);
-/* 59 */         this.nextAvailable += 1;
-/*    */       }
-/*    */     }
-/* 62 */     return result;
-/*    */   }
-/*    */ 
-/*    */   protected void putInPool(Object object) {
-/* 66 */     synchronized (this.mutex) {
-/* 67 */       this.pool[(--this.nextAvailable)] = object;
-/* 68 */       this.mutex.notify();
-/*    */     }
-/*    */   }
-/*    */ 
-/*    */   private Object readResolve() {
-/* 73 */     this.mutex = new Object();
-/* 74 */     return this;
-/*    */   }
-/*    */ 
-/*    */   public static abstract interface Factory
-/*    */   {
-/*    */     public abstract Object newInstance();
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.core.util.Pool
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (c) 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 10. May 2007 by Joerg Schaible
  */
+package com.ztesoft.inf.extend.xstream.core.util;
+
+/**
+ * A simple pool implementation.
+ * 
+ * @author J&ouml;rg Schaible
+ * @author Joe Walnes
+ */
+public class Pool {
+
+	public interface Factory {
+		public Object newInstance();
+	}
+
+	private final int initialPoolSize;
+	private final int maxPoolSize;
+	private final Factory factory;
+	private transient Object[] pool;
+	private transient int nextAvailable;
+	private transient Object mutex = new Object();
+
+	public Pool(int initialPoolSize, int maxPoolSize, Factory factory) {
+		this.initialPoolSize = initialPoolSize;
+		this.maxPoolSize = maxPoolSize;
+		this.factory = factory;
+	}
+
+	public Object fetchFromPool() {
+		Object result;
+		synchronized (mutex) {
+			if (pool == null) {
+				pool = new Object[maxPoolSize];
+				for (nextAvailable = initialPoolSize; nextAvailable > 0;) {
+					putInPool(factory.newInstance());
+				}
+			}
+			while (nextAvailable == maxPoolSize) {
+				try {
+					mutex.wait();
+				} catch (InterruptedException e) {
+					throw new RuntimeException("Interrupted whilst waiting "
+							+ "for a free item in the pool : " + e.getMessage());
+				}
+			}
+			result = pool[nextAvailable++];
+			if (result == null) {
+				result = factory.newInstance();
+				putInPool(result);
+				++nextAvailable;
+			}
+		}
+		return result;
+	}
+
+	protected void putInPool(Object object) {
+		synchronized (mutex) {
+			pool[--nextAvailable] = object;
+			mutex.notify();
+		}
+	}
+
+	private Object readResolve() {
+		mutex = new Object();
+		return this;
+	}
+}

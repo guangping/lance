@@ -1,70 +1,81 @@
-/*    */ package com.ztesoft.inf.extend.xstream.core.util;
-/*    */ 
-/*    */ public final class FastStack
-/*    */ {
-/*    */   private Object[] stack;
-/*    */   private int pointer;
-/*    */ 
-/*    */   public FastStack(int initialCapacity)
-/*    */   {
-/* 26 */     this.stack = new Object[initialCapacity];
-/*    */   }
-/*    */ 
-/*    */   public Object push(Object value) {
-/* 30 */     if (this.pointer + 1 >= this.stack.length) {
-/* 31 */       resizeStack(this.stack.length * 2);
-/*    */     }
-/* 33 */     this.stack[(this.pointer++)] = value;
-/* 34 */     return value;
-/*    */   }
-/*    */ 
-/*    */   public void popSilently() {
-/* 38 */     this.stack[(--this.pointer)] = null;
-/*    */   }
-/*    */ 
-/*    */   public Object pop() {
-/* 42 */     Object result = this.stack[(--this.pointer)];
-/* 43 */     this.stack[this.pointer] = null;
-/* 44 */     return result;
-/*    */   }
-/*    */ 
-/*    */   public Object peek() {
-/* 48 */     return this.pointer == 0 ? null : this.stack[(this.pointer - 1)];
-/*    */   }
-/*    */ 
-/*    */   public int size() {
-/* 52 */     return this.pointer;
-/*    */   }
-/*    */ 
-/*    */   public boolean hasStuff() {
-/* 56 */     return this.pointer > 0;
-/*    */   }
-/*    */ 
-/*    */   public Object get(int i) {
-/* 60 */     return this.stack[i];
-/*    */   }
-/*    */ 
-/*    */   private void resizeStack(int newCapacity) {
-/* 64 */     Object[] newStack = new Object[newCapacity];
-/* 65 */     System.arraycopy(this.stack, 0, newStack, 0, Math.min(this.pointer, newCapacity));
-/* 66 */     this.stack = newStack;
-/*    */   }
-/*    */ 
-/*    */   public String toString()
-/*    */   {
-/* 71 */     StringBuffer result = new StringBuffer("[");
-/* 72 */     for (int i = 0; i < this.pointer; i++) {
-/* 73 */       if (i > 0) {
-/* 74 */         result.append(", ");
-/*    */       }
-/* 76 */       result.append(this.stack[i]);
-/*    */     }
-/* 78 */     result.append(']');
-/* 79 */     return result.toString();
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.core.util.FastStack
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2004, 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 02. September 2004 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.core.util;
+
+/**
+ * An array-based stack implementation.
+ * 
+ * @author Joe Walnes
+ * @author J&ouml;rg Schaible
+ */
+public final class FastStack {
+
+	private Object[] stack;
+	private int pointer;
+
+	public FastStack(int initialCapacity) {
+		stack = new Object[initialCapacity];
+	}
+
+	public Object push(Object value) {
+		if (pointer + 1 >= stack.length) {
+			resizeStack(stack.length * 2);
+		}
+		stack[pointer++] = value;
+		return value;
+	}
+
+	public void popSilently() {
+		stack[--pointer] = null;
+	}
+
+	public Object pop() {
+		final Object result = stack[--pointer];
+		stack[pointer] = null;
+		return result;
+	}
+
+	public Object peek() {
+		return pointer == 0 ? null : stack[pointer - 1];
+	}
+
+	public int size() {
+		return pointer;
+	}
+
+	public boolean hasStuff() {
+		return pointer > 0;
+	}
+
+	public Object get(int i) {
+		return stack[i];
+	}
+
+	private void resizeStack(int newCapacity) {
+		Object[] newStack = new Object[newCapacity];
+		System.arraycopy(stack, 0, newStack, 0, Math.min(pointer, newCapacity));
+		stack = newStack;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer result = new StringBuffer("[");
+		for (int i = 0; i < pointer; i++) {
+			if (i > 0) {
+				result.append(", ");
+			}
+			result.append(stack[i]);
+		}
+		result.append(']');
+		return result.toString();
+	}
+}

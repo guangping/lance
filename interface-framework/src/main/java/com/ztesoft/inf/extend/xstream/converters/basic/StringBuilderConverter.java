@@ -1,19 +1,29 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters.basic;
-/*    */ 
-/*    */ public class StringBuilderConverter extends AbstractSingleValueConverter
-/*    */ {
-/*    */   public Object fromString(String str)
-/*    */   {
-/* 22 */     return new StringBuilder(str);
-/*    */   }
-/*    */ 
-/*    */   public boolean canConvert(Class type)
-/*    */   {
-/* 27 */     return type.equals(StringBuilder.class);
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.basic.StringBuilderConverter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2008 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 04. January 2008 by Joerg Schaible
  */
+package com.ztesoft.inf.extend.xstream.converters.basic;
+
+/**
+ * Converts the contents of a StringBuilder to XML.
+ * 
+ * @author J&ouml;rg Schaible
+ */
+public class StringBuilderConverter extends AbstractSingleValueConverter {
+
+	@Override
+	public Object fromString(String str) {
+		return new StringBuilder(str);
+	}
+
+	@Override
+	public boolean canConvert(Class type) {
+		return type.equals(StringBuilder.class);
+	}
+}

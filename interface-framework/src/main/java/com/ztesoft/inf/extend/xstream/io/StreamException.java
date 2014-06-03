@@ -1,22 +1,26 @@
-/*    */ package com.ztesoft.inf.extend.xstream.io;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.XStreamException;
-/*    */ 
-/*    */ public class StreamException extends XStreamException
-/*    */ {
-/*    */   private static final long serialVersionUID = 1L;
-/*    */ 
-/*    */   public StreamException(Throwable e)
-/*    */   {
-/* 20 */     super(e);
-/*    */   }
-/*    */ 
-/*    */   public StreamException(String message) {
-/* 24 */     super(message);
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.StreamException
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2004, 2006 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 07. March 2004 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.io;
+
+import com.ztesoft.inf.extend.xstream.XStreamException;
+
+public class StreamException extends XStreamException {
+	private static final long serialVersionUID = 1L;
+
+	public StreamException(Throwable e) {
+		super(e);
+	}
+
+	public StreamException(String message) {
+		super(message);
+	}
+}

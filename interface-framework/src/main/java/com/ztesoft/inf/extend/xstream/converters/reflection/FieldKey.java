@@ -1,77 +1,90 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters.reflection;
-/*    */ 
-/*    */ public class FieldKey
-/*    */ {
-/*    */   private final String fieldName;
-/*    */   private final Class declaringClass;
-/*    */   private final int depth;
-/*    */   private final int order;
-/*    */ 
-/*    */   public FieldKey(String fieldName, Class declaringClass, int order)
-/*    */   {
-/* 26 */     if ((fieldName == null) || (declaringClass == null)) {
-/* 27 */       throw new IllegalArgumentException("fieldName or declaringClass is null");
-/*    */     }
-/*    */ 
-/* 30 */     this.fieldName = fieldName;
-/* 31 */     this.declaringClass = declaringClass;
-/* 32 */     this.order = order;
-/* 33 */     Class c = declaringClass;
-/* 34 */     int i = 0;
-/* 35 */     while (c.getSuperclass() != null) {
-/* 36 */       i++;
-/* 37 */       c = c.getSuperclass();
-/*    */     }
-/* 39 */     this.depth = i;
-/*    */   }
-/*    */ 
-/*    */   public String getFieldName() {
-/* 43 */     return this.fieldName;
-/*    */   }
-/*    */ 
-/*    */   public Class getDeclaringClass() {
-/* 47 */     return this.declaringClass;
-/*    */   }
-/*    */ 
-/*    */   public int getDepth() {
-/* 51 */     return this.depth;
-/*    */   }
-/*    */ 
-/*    */   public int getOrder() {
-/* 55 */     return this.order;
-/*    */   }
-/*    */ 
-/*    */   public boolean equals(Object o)
-/*    */   {
-/* 60 */     if (this == o)
-/* 61 */       return true;
-/* 62 */     if (!(o instanceof FieldKey)) {
-/* 63 */       return false;
-/*    */     }
-/* 65 */     FieldKey fieldKey = (FieldKey)o;
-/*    */ 
-/* 67 */     if (!this.declaringClass.equals(fieldKey.declaringClass))
-/* 68 */       return false;
-/* 69 */     if (!this.fieldName.equals(fieldKey.fieldName)) {
-/* 70 */       return false;
-/*    */     }
-/* 72 */     return true;
-/*    */   }
-/*    */ 
-/*    */   public int hashCode()
-/*    */   {
-/* 78 */     int result = this.fieldName.hashCode();
-/* 79 */     result = 29 * result + this.declaringClass.hashCode();
-/* 80 */     return result;
-/*    */   }
-/*    */ 
-/*    */   public String toString()
-/*    */   {
-/* 85 */     return "FieldKey{order=" + this.order + ", writer=" + this.depth + ", declaringClass=" + this.declaringClass + ", fieldName='" + this.fieldName + "'" + "}";
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.reflection.FieldKey
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 10. April 2007 by Guilherme Silveira
  */
+package com.ztesoft.inf.extend.xstream.converters.reflection;
+
+/**
+ * A field key.
+ * 
+ * @author Guilherme Silveira
+ * @author J&ouml;rg Schaible
+ */
+public class FieldKey {
+	final private String fieldName;
+	final private Class declaringClass;
+	final private int depth;
+	final private int order;
+
+	public FieldKey(String fieldName, Class declaringClass, int order) {
+		if (fieldName == null || declaringClass == null) {
+			throw new IllegalArgumentException(
+					"fieldName or declaringClass is null");
+		}
+		this.fieldName = fieldName;
+		this.declaringClass = declaringClass;
+		this.order = order;
+		Class c = declaringClass;
+		int i = 0;
+		while (c.getSuperclass() != null) {
+			i++;
+			c = c.getSuperclass();
+		}
+		depth = i;
+	}
+
+	public String getFieldName() {
+		return this.fieldName;
+	}
+
+	public Class getDeclaringClass() {
+		return this.declaringClass;
+	}
+
+	public int getDepth() {
+		return this.depth;
+	}
+
+	public int getOrder() {
+		return this.order;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof FieldKey))
+			return false;
+
+		final FieldKey fieldKey = (FieldKey) o;
+
+		if (!declaringClass.equals(fieldKey.declaringClass))
+			return false;
+		if (!fieldName.equals(fieldKey.fieldName))
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result;
+		result = fieldName.hashCode();
+		result = 29 * result + declaringClass.hashCode();
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "FieldKey{" + "order=" + order + ", writer=" + depth
+				+ ", declaringClass=" + declaringClass + ", fieldName='"
+				+ fieldName + "'" + "}";
+	}
+
+}

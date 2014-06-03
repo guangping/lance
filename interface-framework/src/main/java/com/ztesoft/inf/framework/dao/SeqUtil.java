@@ -1,103 +1,119 @@
-/*     */ package com.ztesoft.inf.framework.dao;
-/*     */ 
-/*     */ import com.powerise.ibss.framework.FrameException;
-/*     */ import com.ztesoft.common.util.DateFormatUtils;
-/*     */ import com.ztesoft.ibss.common.util.StringUtils;
-/*     */ import java.sql.Date;
-/*     */ import java.sql.SQLException;
-/*     */ import java.text.DecimalFormat;
-/*     */ import java.text.NumberFormat;
-/*     */ 
-/*     */ public class SeqUtil
-/*     */ {
-/*  16 */   private SqlExe sqlExe = new SqlExe();
-/*     */ 
-/*     */   public String getNextSequence(String tableCode, String fieldCode)
-/*     */   {
-/*  25 */     String result = null;
-/*  26 */     String GET_SEQUENCE_CODE = "SELECT sequence_code FROM sequence_management  WHERE table_code=? AND field_code=?";
-/*     */     try
-/*     */     {
-/*  29 */       String sequenceCode = this.sqlExe.queryForString(GET_SEQUENCE_CODE, new String[] { tableCode, fieldCode });
-/*  30 */       return next(sequenceCode);
-/*     */     } catch (FrameException e) {
-/*  32 */       e.printStackTrace();
-/*     */     } catch (SQLException e) {
-/*  34 */       e.printStackTrace();
-/*     */     }
-/*  36 */     return result;
-/*     */   }
-/*     */ 
-/*     */   public String getNextSequenceFormat(String tableCode, String fieldCode, int seqNum)
-/*     */   {
-/*  49 */     String result = null;
-/*  50 */     String GET_SEQUENCE_CODE = "SELECT sequence_code FROM sequence_management  WHERE table_code=? AND field_code=?";
-/*     */     try
-/*     */     {
-/*  53 */       String sequenceCode = this.sqlExe.queryForString(GET_SEQUENCE_CODE, new String[] { tableCode, fieldCode });
-/*  54 */       String GET_SEQUENCE = "select LPAD( " + sequenceCode + ".nextval," + seqNum + ",'0') seq_value FROM dual";
-/*  55 */       result = this.sqlExe.queryForString(GET_SEQUENCE);
-/*     */     } catch (FrameException e) {
-/*  57 */       e.printStackTrace();
-/*     */     } catch (SQLException e) {
-/*  59 */       e.printStackTrace();
-/*     */     }
-/*  61 */     return result;
-/*     */   }
-/*     */ 
-/*     */   public synchronized String next(String sequenceCode)
-/*     */   {
-/*  66 */     String GET_SEQUENCE = "SELECT " + sequenceCode + ".nextval seq_value FROM dual";
-/*  67 */     String result = null;
-/*     */     try {
-/*  69 */       result = this.sqlExe.queryForString(GET_SEQUENCE);
-/*     */     } catch (FrameException e) {
-/*  71 */       e.printStackTrace();
-/*     */     } catch (SQLException e) {
-/*  73 */       e.printStackTrace();
-/*     */     }
-/*  75 */     return result;
-/*     */   }
-/*     */ 
-/*     */   public String getTimeSequence(String seq_name)
-/*     */   {
-/*  84 */     String currentTime = DateFormatUtils.getFormatedDate();
-/*  85 */     NumberFormat format = new DecimalFormat("0000000000");
-/*     */     try {
-/*  87 */       String rval = next(seq_name);
-/*  88 */       if (StringUtils.isNotEmpty(rval))
-/*  89 */         currentTime = currentTime + format.format(new Long(rval).longValue());
-/*     */     }
-/*     */     catch (Exception e) {
-/*  92 */       currentTime = DateFormatUtils.formatDate(new Date(System.currentTimeMillis()), "yyyyMMddHHmmss");
-/*  93 */       e.printStackTrace();
-/*     */     }
-/*  95 */     return currentTime;
-/*     */   }
-/*     */   public String getSequenceLen(String strSeqName, String strSeqType, int intSeqLen) {
-/*  98 */     String sql = "";
-/*  99 */     if (strSeqType.trim().equals("0"))
-/* 100 */       sql = "SELECT LPAD(getseq('" + strSeqName + "')," + intSeqLen + ",'0') SEQ FROM DUAL";
-/* 101 */     else if (strSeqType.trim().equals("1"))
-/* 102 */       sql = "SELECT to_char2(getdate(),'yyyymmdd')||LPAD(getseq('" + strSeqName + "')," + intSeqLen + "-8,'0')  seq  FROM DUAL";
-/* 103 */     else if (strSeqType.trim().equals("2"))
-/* 104 */       sql = "select to_char2(getdate(),'yyyymmddhh24miss')||LPAD(getseq('" + strSeqName + "')," + intSeqLen + "-14,'0') seq from dual ";
-/*     */     else {
-/* 106 */       sql = "select getseq('" + strSeqName + "') from dual";
-/*     */     }
-/* 108 */     String ret = null;
-/*     */     try {
-/* 110 */       ret = this.sqlExe.queryForString(sql);
-/*     */     } catch (FrameException e) {
-/* 112 */       e.printStackTrace();
-/*     */     } catch (SQLException e) {
-/* 114 */       e.printStackTrace();
-/*     */     }
-/* 116 */     return ret;
-/*     */   }
-/*     */ }
+package com.ztesoft.inf.framework.dao;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.framework.dao.SeqUtil
- * JD-Core Version:    0.6.2
+import java.sql.Date;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
+import com.powerise.ibss.framework.FrameException;
+import com.ztesoft.common.util.StringUtils;
+import com.ztesoft.ibss.common.util.CrmConstants;
+import com.ztesoft.ibss.common.util.DateFormatUtils;
+
+/**
+ * @author ReasonYea
  */
+public class SeqUtil  {
+	private SqlExe sqlExe = new SqlExe();
+	/**
+	 * 根据表名和字段名获取序列
+	 *
+	 * @param tableCode
+	 * @param fieldCode
+	 * @return
+	 */
+	public String getNextSequence(String tableCode,String fieldCode) {
+		String result=null;
+		String GET_SEQUENCE_CODE = "SELECT sequence_code FROM sequence_management "
+				+ " WHERE table_code=? AND field_code=?";
+		try {
+			String sequenceCode = sqlExe.queryForString(GET_SEQUENCE_CODE, new String[]{tableCode,fieldCode});
+			return next(sequenceCode);
+		} catch (FrameException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+        /**
+         * 根据表名和字段名获取序列,序列格式为“YYYYMMDD"+流水号长度
+         *
+         * @param tableCode
+         * @param fieldCode
+         * @param seqNum
+         * @return
+         */
+        public String getNextSequenceFormat(String tableCode,String fieldCode,int seqNum) {
+
+        	String result=null;
+    		String GET_SEQUENCE_CODE = "SELECT sequence_code FROM sequence_management "
+    				+ " WHERE table_code=? AND field_code=?";
+    		try {
+    			String sequenceCode = sqlExe.queryForString(GET_SEQUENCE_CODE, new String[]{tableCode,fieldCode});
+    			String GET_SEQUENCE =  "select LPAD( "+sequenceCode+ ".nextval,"+ seqNum + ",'0') seq_value FROM dual";
+    			result = sqlExe.queryForString(GET_SEQUENCE);
+    		} catch (FrameException e) {
+    			e.printStackTrace();
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    		}
+    		return result;
+        }
+
+
+	public synchronized String next(String sequenceCode) {
+		String GET_SEQUENCE = "SELECT "+sequenceCode+ ".nextval seq_value FROM dual";
+		String result=null;
+		try {
+			result = sqlExe.queryForString(GET_SEQUENCE);
+		} catch (FrameException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
+    /**
+    * @param 序列名称
+    * return 返回当前时间+序列值
+    */
+    public String getTimeSequence(String seq_name){
+        String currentTime= DateFormatUtils.getFormatedDate();
+        NumberFormat format = new DecimalFormat("0000000000");
+        try{
+           String rval = next(seq_name);
+           if(StringUtils.isNotEmpty(rval)){
+               currentTime+=format.format(new Long(rval).longValue());
+           }
+        }catch (Exception e){
+            currentTime= DateFormatUtils.formatDate(new Date(System.currentTimeMillis()), CrmConstants.DATE_TIME_FORMAT_14);
+            e.printStackTrace();
+        }
+        return currentTime;
+    }
+	    public String getSequenceLen(String strSeqName,String strSeqType,int intSeqLen){
+	    	String sql="";
+			if(strSeqType.trim().equals("0")){		//按长度取序列值
+				sql = "SELECT LPAD(getseq('"+strSeqName+"'),"+intSeqLen+",'0') SEQ FROM DUAL";
+			}else if(strSeqType.trim().equals("1")){   //在前面加8位年月日
+				sql="SELECT to_char2(getdate(),'yyyymmdd')||LPAD(getseq('"+strSeqName+"'),"+intSeqLen+"-8,'0')  seq  FROM DUAL";
+			}else if(strSeqType.trim().equals("2")){   //在前面加14位年月日时分秒
+				sql="select to_char2(getdate(),'yyyymmddhh24miss')||LPAD(getseq('"+strSeqName+"'),"+intSeqLen+"-14,'0') seq from dual ";
+			}else{		//直接取序列
+				sql="select getseq('"+strSeqName+"') from dual";
+			}
+			String ret=null;
+			try {
+				ret = sqlExe.queryForString(sql);
+			} catch (FrameException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return ret;
+	    }
+}

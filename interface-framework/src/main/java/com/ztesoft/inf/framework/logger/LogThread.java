@@ -1,113 +1,185 @@
-/*     */ package com.ztesoft.inf.framework.logger;
-/*     */ 
-/*     */ import com.ztesoft.inf.framework.commons.TransactionalBeanManager;
-/*     */ import java.io.PrintStream;
-/*     */ import java.util.Queue;
-/*     */ import java.util.concurrent.ConcurrentLinkedQueue;
-/*     */ import org.apache.log4j.Logger;
-/*     */ import org.springframework.dao.DataAccessException;
-/*     */ 
-/*     */ public class LogThread extends Thread
-/*     */ {
-/*     */   public static final int TIME_OUT = 5000;
-/*     */   private static final int MAX_QUEUE_SIZE = 500;
-/*  17 */   private static final Logger logger = Logger.getLogger(LogThread.class);
-/*     */ 
-/*  19 */   private static Queue<AppLogContext> logQueue = new ConcurrentLinkedQueue();
-/*     */ 
-/*  21 */   private static volatile boolean shutdownRequested = false;
-/*     */ 
-/*  23 */   public static volatile boolean START_UP = false;
-/*     */ 
-/*     */   public void run()
-/*     */   {
-/*     */     try
-/*     */     {
-/*  36 */       while (!shutdownRequested)
-/*  37 */         logToDB(getLog());
-/*     */     }
-/*     */     finally {
-/*  40 */       doShutdown();
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public static void addLogQueue(AppLogContext obj)
-/*     */   {
-/*  54 */     logQueue.add(obj);
-/*     */   }
-/*     */ 
-/*     */   private static AppLogContext getLog()
-/*     */   {
-/*  60 */     while (logQueue.isEmpty()) {
-/*     */       try {
-/*  62 */         sleep(1000L);
-/*     */       } catch (InterruptedException e) {
-/*  64 */         e.printStackTrace();
-/*     */       }
-/*     */     }
-/*  67 */     AppLogContext obj = (AppLogContext)logQueue.poll();
-/*     */ 
-/*  69 */     return obj;
-/*     */   }
-/*     */ 
-/*     */   private static void logToDB(AppLogContext obj)
-/*     */   {
-/*     */     try {
-/*  75 */       if (obj == null) {
-/*  76 */         return;
-/*     */       }
-/*  78 */       AppLogContext appLogContext = (AppLogContext)TransactionalBeanManager.createTransactional(AppLogContext.class);
-/*  79 */       appLogContext.setAppLogger(obj.getAppLogger());
-/*  80 */       appLogContext.setLogObj(obj.getLogObj());
-/*  81 */       appLogContext.logToDB();
-/*     */     } catch (DataAccessException e) {
-/*  83 */       e.printStackTrace();
-/*  84 */       logger.error(e);
-/*     */     } catch (InterruptedException e) {
-/*  86 */       e.printStackTrace();
-/*  87 */       logger.error(e);
-/*     */     } catch (Exception e) {
-/*  89 */       e.printStackTrace();
-/*  90 */       logger.error(e);
-/*     */     }
-/*     */   }
-/*     */ 
-/*     */   public boolean isShutdownRequested()
-/*     */   {
-/* 159 */     return shutdownRequested;
-/*     */   }
-/*     */ 
-/*     */   public void shutdown()
-/*     */   {
-/* 165 */     shutdownRequested = true;
-/*     */   }
-/*     */ 
-/*     */   public static synchronized boolean isStartUP()
-/*     */   {
-/* 170 */     return START_UP;
-/*     */   }
-/*     */ 
-/*     */   public static synchronized void startUP() {
-/* 174 */     if (START_UP)
-/* 175 */       return;
-/* 176 */     START_UP = true;
-/* 177 */     LogThread logThread = new LogThread();
-/* 178 */     logThread.setPriority(1);
-/* 179 */     logThread.start();
-/*     */   }
-/*     */ 
-/*     */   private void doShutdown() {
-/* 183 */     System.out.println(getName() + " is ShutDowned!");
-/*     */   }
-/*     */ 
-/*     */   static
-/*     */   {
-/*  26 */     if (!isStartUP())
-/*  27 */       startUP();
-/*     */   }
-/*     */ }
+package com.ztesoft.inf.framework.logger;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.framework.logger.LogThread
- * JD-Core Version:    0.6.2
- */
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+
+import com.ztesoft.inf.framework.commons.TransactionalBeanManager;
+
+public class LogThread extends Thread {
+
+	public static final int TIME_OUT = 5 * 1000;
+	
+	private static final int MAX_QUEUE_SIZE =500;
+
+	private static final Logger logger = Logger.getLogger(LogThread.class);
+
+	private static  Queue<AppLogContext> logQueue = new ConcurrentLinkedQueue<AppLogContext>();
+
+	private volatile static boolean shutdownRequested = false;
+
+	public volatile static boolean START_UP = false;
+
+	static {
+		if (!LogThread.isStartUP()) {
+			LogThread.startUP();
+		}
+	}
+	private LogThread() {
+	}
+
+	@Override
+	public void run() {
+		try {
+			while (!shutdownRequested) {
+				logToDB(getLog());
+			}
+		} finally {
+			doShutdown();
+		}
+	}
+
+	public static void addLogQueue(AppLogContext obj) {
+		//System.out.println(" MAX_QUEUE_SIZE = " + logQueue.size());
+//		if (logQueue.size() >= MAX_QUEUE_SIZE) {
+//			final AppLogContext logObj = obj;
+//			new Thread(new Runnable() {
+//				public void run() {
+//					logToDB(logObj);
+//				}
+//			}).start();
+//		} else {
+			logQueue.add(obj);
+//		}
+	}
+
+
+	private static AppLogContext getLog() {
+		while (logQueue.isEmpty()) {
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		AppLogContext obj = logQueue.poll();
+		//System.out.println(" AF getLog QUEUE_SIZE = " + logQueue.size());
+		return obj;
+	}
+
+
+	private static void logToDB(AppLogContext obj) {
+		try {
+			if(obj==null) {
+				return;
+			}
+			AppLogContext appLogContext = TransactionalBeanManager.createTransactional(AppLogContext.class);
+			appLogContext.setAppLogger(obj.getAppLogger());
+			appLogContext.setLogObj(obj.getLogObj());
+			appLogContext.logToDB();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			logger.error(e);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			logger.error(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+		}
+	}
+	/**
+	 * 队列中日志数量超过阀值后进行写表操作
+	 * 
+	 * *//*
+	private synchronized static  void  logToDB(boolean forced){
+		//没有达到最大数量不写rizh
+		if (!forced&&logQueue.size() <= MAX_QUEUE_SIZE) {
+			return ;
+		} 
+		boolean useXa = false;
+		boolean commit = false;
+		UserTransaction usTran = null;
+		try {	
+			if (useXa) {
+				usTran = SysSet.getUserTransaction();
+				SysSet.tpBegin(usTran);
+			}
+			for(int i=0;i<=MAX_QUEUE_SIZE;i++){
+				AppLogContext appLogContext=getLog();
+				try{
+					if(appLogContext==null){
+						continue;
+					}
+					appLogContext.logToDB();//异常catch掉避免因为某一条日志信息导致所有的日志不能提交数据库
+				}catch (Throwable e) {
+				}
+			}
+			commit = true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} catch (Throwable e) {
+			logger.error(e.getMessage());
+		} finally {
+			try {
+				if (commit) {
+					if (useXa)
+						SysSet.tpCommit(usTran);
+					else
+						ConnectionContext.getContext().allCommit();
+				} else {
+					if (useXa)
+						SysSet.tpRollback(usTran);
+					else
+						ConnectionContext.getContext().allRollback();
+				}
+				if (usTran != null) {
+					logger.debug("关闭UserTransaction");
+					usTran = null;
+				}
+			} catch (Exception e) {
+				logger.error("关闭数据库连接时，出现异常" + LogHelper.getStackMsg(e));
+			}finally{
+				try {
+					ConnectionContext.getContext().allCloseConnection();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	*/
+	
+	
+	
+
+	public boolean isShutdownRequested() {
+		return shutdownRequested;
+	}
+
+	public void shutdown() {
+//		logToDB(true);
+		
+		shutdownRequested = true;
+//		this.interrupt();
+	}
+
+	public synchronized static boolean isStartUP() {
+		return START_UP;
+	}
+
+	public synchronized static void startUP() {
+		if (START_UP)
+			return;
+		START_UP = true;
+		LogThread logThread = new LogThread();
+		logThread.setPriority(Thread.MIN_PRIORITY);
+		logThread.start();
+	}
+
+	private void doShutdown() {	
+		System.out.println(this.getName() + " is ShutDowned!");
+	}
+}

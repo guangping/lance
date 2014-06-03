@@ -1,77 +1,99 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.XStreamException;
-/*    */ import com.ztesoft.inf.extend.xstream.core.util.OrderRetainingMap;
-/*    */ import java.util.Iterator;
-/*    */ import java.util.Map;
-/*    */ import java.util.Set;
-/*    */ 
-/*    */ public class ConversionException extends XStreamException
-/*    */   implements ErrorWriter
-/*    */ {
-/*    */   private static final long serialVersionUID = 1L;
-/*    */   private static final String SEPARATOR = "\n-------------------------------";
-/* 40 */   private Map stuff = new OrderRetainingMap();
-/*    */ 
-/*    */   public ConversionException(String msg, Throwable cause) {
-/* 43 */     super(msg, cause);
-/* 44 */     if (msg != null) {
-/* 45 */       add("message", msg);
-/*    */     }
-/* 47 */     if (cause != null) {
-/* 48 */       add("cause-exception", cause.getClass().getName());
-/* 49 */       add("cause-message", (cause instanceof ConversionException) ? ((ConversionException)cause).getShortMessage() : cause.getMessage());
-/*    */     }
-/*    */   }
-/*    */ 
-/*    */   public ConversionException(String msg)
-/*    */   {
-/* 56 */     super(msg);
-/*    */   }
-/*    */ 
-/*    */   public ConversionException(Throwable cause) {
-/* 60 */     this(cause.getMessage(), cause);
-/*    */   }
-/*    */ 
-/*    */   public String get(String errorKey) {
-/* 64 */     return (String)this.stuff.get(errorKey);
-/*    */   }
-/*    */ 
-/*    */   public void add(String name, String information) {
-/* 68 */     this.stuff.put(name, information);
-/*    */   }
-/*    */ 
-/*    */   public Iterator keys() {
-/* 72 */     return this.stuff.keySet().iterator();
-/*    */   }
-/*    */ 
-/*    */   public String getMessage()
-/*    */   {
-/* 77 */     StringBuffer result = new StringBuffer();
-/* 78 */     if (super.getMessage() != null) {
-/* 79 */       result.append(super.getMessage());
-/*    */     }
-/* 81 */     if (!result.toString().endsWith("\n-------------------------------")) {
-/* 82 */       result.append("\n---- Debugging information ----");
-/*    */     }
-/* 84 */     for (Iterator iterator = keys(); iterator.hasNext(); ) {
-/* 85 */       String k = (String)iterator.next();
-/* 86 */       String v = get(k);
-/* 87 */       result.append('\n').append(k);
-/* 88 */       result.append("                    ".substring(Math.min(20, k.length())));
-/*    */ 
-/* 90 */       result.append(": ").append(v);
-/*    */     }
-/* 92 */     result.append("\n-------------------------------");
-/* 93 */     return result.toString();
-/*    */   }
-/*    */ 
-/*    */   public String getShortMessage() {
-/* 97 */     return super.getMessage();
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.ConversionException
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2003, 2004, 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007, 2008 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 26. September 2003 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.converters;
+
+import com.ztesoft.inf.extend.xstream.XStreamException;
+import com.ztesoft.inf.extend.xstream.core.util.OrderRetainingMap;
+
+import java.util.Iterator;
+import java.util.Map;
+
+/**
+ * Thrown by {@link Converter} implementations when they cannot convert an
+ * object to/from textual data.
+ * 
+ * When this exception is thrown it can be passed around to things that accept
+ * an {@link ErrorWriter}, allowing them to add diagnostics to the stack trace.
+ * 
+ * @author Joe Walnes
+ * @author J&ouml;rg Schaible
+ * 
+ * @see ErrorWriter
+ */
+public class ConversionException extends XStreamException implements
+		ErrorWriter {
+
+	/**
+   * 
+   */
+	private static final long serialVersionUID = 1L;
+	private static final String SEPARATOR = "\n-------------------------------";
+	private Map stuff = new OrderRetainingMap();
+
+	public ConversionException(String msg, Throwable cause) {
+		super(msg, cause);
+		if (msg != null) {
+			add("message", msg);
+		}
+		if (cause != null) {
+			add("cause-exception", cause.getClass().getName());
+			add("cause-message",
+					cause instanceof ConversionException ? ((ConversionException) cause)
+							.getShortMessage() : cause.getMessage());
+		}
+	}
+
+	public ConversionException(String msg) {
+		super(msg);
+	}
+
+	public ConversionException(Throwable cause) {
+		this(cause.getMessage(), cause);
+	}
+
+	public String get(String errorKey) {
+		return (String) stuff.get(errorKey);
+	}
+
+	public void add(String name, String information) {
+		stuff.put(name, information);
+	}
+
+	public Iterator keys() {
+		return stuff.keySet().iterator();
+	}
+
+	@Override
+	public String getMessage() {
+		StringBuffer result = new StringBuffer();
+		if (super.getMessage() != null) {
+			result.append(super.getMessage());
+		}
+		if (!result.toString().endsWith(SEPARATOR)) {
+			result.append("\n---- Debugging information ----");
+		}
+		for (Iterator iterator = keys(); iterator.hasNext();) {
+			String k = (String) iterator.next();
+			String v = get(k);
+			result.append('\n').append(k);
+			result.append("                    ".substring(Math.min(20,
+					k.length())));
+			result.append(": ").append(v);
+		}
+		result.append(SEPARATOR);
+		return result.toString();
+	}
+
+	public String getShortMessage() {
+		return super.getMessage();
+	}
+}

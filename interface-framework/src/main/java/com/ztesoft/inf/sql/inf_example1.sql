@@ -5,27 +5,27 @@ select a.*,a.rowid from inf_comm_client_request a where req_id='INF_AddCust_REQ'
 select a.*,a.rowid from inf_comm_client_response a where  rsp_id='INF_AddCust_RSP';
 
 
----1锟斤拷锟矫接口凤拷锟斤拷锟矫伙拷,锟斤拷锟斤拷一锟轿硷拷锟斤拷 
+---1配置接口访问用户,配置一次即可 
 
 insert into inf_comm_client_operation (OP_ID, OP_CODE, EP_ID, REQ_ID, RSP_ID, OP_DESC, LOG_LEVEL, CLOSE_FLAG, REQ_USER_ID, DEAL_SUCCESS_FLAG)
-values ('1', 'INF_AddCust', '1', 'INF_AddCust_REQ', 'INF_AddCust_RSP', '锟斤拷锟斤拷锟酵伙拷', '', 'F', '1', '');
+values ('1', 'INF_AddCust', '1', 'INF_AddCust_REQ', 'INF_AddCust_RSP', '新增客户', '', 'F', '1', '');
 
 
 
 
 
----2锟斤拷锟矫接口凤拷锟绞碉拷址,一锟斤拷锟斤拷锟斤拷,锟皆猴拷锟斤拷**************** 锟斤拷址锟斤拷锟斤拷殖锟斤拷锟斤拷锟斤拷锟斤拷
+---2配置接口访问地址,一次配置,以后复用**************** 地址根据现场情况配置
 insert into inf_comm_client_endpoint (EP_ID, EP_ADDRESS, EP_DESC, TIMEOUT, EP_TYPE)
-values ('1', 'http://10.45.47.190:7010/CrmWeb/services/exchangeSOAP', 'EOP锟接匡拷', 30, 'HttpClient');
+values ('1', 'http://10.45.47.190:7010/CrmWeb/services/exchangeSOAP', 'EOP接口', 30, 'HttpClient');
 
 
-----3锟接匡拷锟斤拷锟斤拷
+----3接口配置
 insert into inf_comm_client_operation (OP_ID, OP_CODE, EP_ID, REQ_ID, RSP_ID, OP_DESC, LOG_LEVEL, CLOSE_FLAG, REQ_USER_ID, DEAL_SUCCESS_FLAG)
-values ('1', 'INF_AddCust', '1', 'INF_AddCust_REQ', 'INF_AddCust_RSP', '锟斤拷锟斤拷锟酵伙拷', '', 'F', '1', '');
+values ('1', 'INF_AddCust', '1', 'INF_AddCust_REQ', 'INF_AddCust_RSP', '新增客户', '', 'F', '1', '');
 
 
 
----4 锟斤拷锟斤拷锟斤拷,锟斤拷锟斤拷锟铰憋拷锟斤拷锟斤拷blob锟街讹拷
+---4 请求报文,用以下报文贴到blob字段
 
 insert into inf_comm_client_request (REQ_ID, GVAR_ID, REQ_TPL, CLASS_PATH, QNAME_ENCODE, QNAME, OPER_CLASSNAME, OPER_METHOD)
 values ('INF_AddCust_REQ', '', '<BLOB>', '', '', '', '', '');
@@ -46,7 +46,7 @@ values ('INF_AddCust_REQ', '', '<BLOB>', '', '', '', '', '');
 </ContractRoot>
 
 
------5 锟斤拷锟截憋拷锟斤拷,锟斤拷锟斤拷锟铰憋拷锟斤拷锟斤拷blob锟街讹拷**********锟斤拷锟截憋拷锟侥伙拷没锟斤拷锟斤拷
+-----5 返回报文,用以下报文贴到blob字段**********返回报文还没测试
 insert into inf_comm_client_response (RSP_ID, CDATA_PATH, TRANS_TPL, XML_MAPPER, TRANS_FAULT, RSP_CLASSPATH)
 values ('INF_AddCust_RSP', '', '<BLOB>', '', '', '');
 

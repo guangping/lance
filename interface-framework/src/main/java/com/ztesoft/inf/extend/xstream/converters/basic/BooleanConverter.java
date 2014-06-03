@@ -1,52 +1,70 @@
-/*    */ package com.ztesoft.inf.extend.xstream.converters.basic;
-/*    */ 
-/*    */ public class BooleanConverter extends AbstractSingleValueConverter
-/*    */ {
-/* 22 */   public static final BooleanConverter TRUE_FALSE = new BooleanConverter("true", "false", false);
-/*    */ 
-/* 25 */   public static final BooleanConverter YES_NO = new BooleanConverter("yes", "no", false);
-/*    */ 
-/* 28 */   public static final BooleanConverter BINARY = new BooleanConverter("1", "0", true);
-/*    */   private final String positive;
-/*    */   private final String negative;
-/*    */   private final boolean caseSensitive;
-/*    */ 
-/*    */   public BooleanConverter(String positive, String negative, boolean caseSensitive)
-/*    */   {
-/* 37 */     this.positive = positive;
-/* 38 */     this.negative = negative;
-/* 39 */     this.caseSensitive = caseSensitive;
-/*    */   }
-/*    */ 
-/*    */   public BooleanConverter() {
-/* 43 */     this("true", "false", false);
-/*    */   }
-/*    */ 
-/*    */   public boolean shouldConvert(Class type, Object value) {
-/* 47 */     return true;
-/*    */   }
-/*    */ 
-/*    */   public boolean canConvert(Class type)
-/*    */   {
-/* 52 */     return (type.equals(Boolean.TYPE)) || (type.equals(Boolean.class));
-/*    */   }
-/*    */ 
-/*    */   public Object fromString(String str)
-/*    */   {
-/* 57 */     if (this.caseSensitive) {
-/* 58 */       return this.positive.equals(str) ? Boolean.TRUE : Boolean.FALSE;
-/*    */     }
-/* 60 */     return this.positive.equalsIgnoreCase(str) ? Boolean.TRUE : Boolean.FALSE;
-/*    */   }
-/*    */ 
-/*    */   public String toString(Object obj)
-/*    */   {
-/* 67 */     Boolean value = (Boolean)obj;
-/* 68 */     return value.booleanValue() ? this.positive : obj == null ? null : this.negative;
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.basic.BooleanConverter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2003, 2004 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 26. September 2003 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.converters.basic;
+
+/**
+ * Converts a boolean primitive or java.lang.Boolean wrapper to a String.
+ * 
+ * @author Joe Walnes
+ * @author David Blevins
+ */
+public class BooleanConverter extends AbstractSingleValueConverter {
+
+	public static final BooleanConverter TRUE_FALSE = new BooleanConverter(
+			"true", "false", false);
+
+	public static final BooleanConverter YES_NO = new BooleanConverter("yes",
+			"no", false);
+
+	public static final BooleanConverter BINARY = new BooleanConverter("1",
+			"0", true);
+
+	private final String positive;
+	private final String negative;
+	private final boolean caseSensitive;
+
+	public BooleanConverter(final String positive, final String negative,
+			final boolean caseSensitive) {
+		this.positive = positive;
+		this.negative = negative;
+		this.caseSensitive = caseSensitive;
+	}
+
+	public BooleanConverter() {
+		this("true", "false", false);
+	}
+
+	public boolean shouldConvert(final Class type, final Object value) {
+		return true;
+	}
+
+	@Override
+	public boolean canConvert(final Class type) {
+		return type.equals(boolean.class) || type.equals(Boolean.class);
+	}
+
+	@Override
+	public Object fromString(final String str) {
+		if (caseSensitive) {
+			return positive.equals(str) ? Boolean.TRUE : Boolean.FALSE;
+		} else {
+			return positive.equalsIgnoreCase(str) ? Boolean.TRUE
+					: Boolean.FALSE;
+		}
+	}
+
+	@Override
+	public String toString(final Object obj) {
+		final Boolean value = (Boolean) obj;
+		return obj == null ? null : value.booleanValue() ? positive : negative;
+	}
+}

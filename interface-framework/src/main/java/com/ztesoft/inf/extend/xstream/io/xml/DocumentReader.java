@@ -1,13 +1,31 @@
+/*
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 18. October 2007 by Joerg Schaible
+ */
 package com.ztesoft.inf.extend.xstream.io.xml;
 
 import com.ztesoft.inf.extend.xstream.io.HierarchicalStreamReader;
 
-public abstract interface DocumentReader extends HierarchicalStreamReader
-{
-  public abstract Object getCurrent();
-}
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.xml.DocumentReader
- * JD-Core Version:    0.6.2
+/**
+ * A generic interface for all {@link HierarchicalStreamReader} implementations
+ * reading a DOM.
+ * 
+ * @author J&ouml;rg Schaible
+ * @since 1.2.1
  */
+public interface DocumentReader extends HierarchicalStreamReader {
+
+	/**
+	 * Retrieve the current processed node of the DOM.
+	 * 
+	 * @return the current node
+	 * @since 1.2.1
+	 */
+	public Object getCurrent();
+}

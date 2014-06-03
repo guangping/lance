@@ -1,67 +1,118 @@
-/*     */ package com.ztesoft.inf.extend.xstream.converters.basic;
-/*     */ 
-/*     */ import com.ztesoft.inf.extend.xstream.converters.ConversionException;
-/*     */ import com.ztesoft.inf.extend.xstream.core.util.ThreadSafeSimpleDateFormat;
-/*     */ import java.text.ParseException;
-/*     */ import java.util.Date;
-/*     */ 
-/*     */ public class DateConverter extends AbstractSingleValueConverter
-/*     */ {
-/*     */   private final ThreadSafeSimpleDateFormat defaultFormat;
-/*     */   private final ThreadSafeSimpleDateFormat[] acceptableFormats;
-/*     */ 
-/*     */   public DateConverter()
-/*     */   {
-/*  37 */     this(false);
-/*     */   }
-/*     */ 
-/*     */   public DateConverter(boolean lenient)
-/*     */   {
-/*  49 */     this("yyyy-MM-dd HH:mm:ss.S z", new String[] { "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss z", "yyyy-MM-dd HH:mm:ssa" }, lenient);
-/*     */   }
-/*     */ 
-/*     */   public DateConverter(String defaultFormat, String[] acceptableFormats)
-/*     */   {
-/*  65 */     this(defaultFormat, acceptableFormats, false);
-/*     */   }
-/*     */ 
-/*     */   public DateConverter(String defaultFormat, String[] acceptableFormats, boolean lenient)
-/*     */   {
-/*  82 */     this.defaultFormat = new ThreadSafeSimpleDateFormat(defaultFormat, 4, 20, lenient);
-/*     */ 
-/*  84 */     this.acceptableFormats = new ThreadSafeSimpleDateFormat[acceptableFormats.length];
-/*  85 */     for (int i = 0; i < acceptableFormats.length; i++)
-/*  86 */       this.acceptableFormats[i] = new ThreadSafeSimpleDateFormat(acceptableFormats[i], 1, 20, lenient);
-/*     */   }
-/*     */ 
-/*     */   public boolean canConvert(Class type)
-/*     */   {
-/*  93 */     return type.equals(Date.class);
-/*     */   }
-/*     */ 
-/*     */   public Object fromString(String str)
-/*     */   {
-/*     */     try {
-/*  99 */       return this.defaultFormat.parse(str);
-/*     */     } catch (ParseException e) {
-/* 101 */       for (int i = 0; i < this.acceptableFormats.length; i++)
-/*     */         try {
-/* 103 */           return this.acceptableFormats[i].parse(str);
-/*     */         }
-/*     */         catch (ParseException e2)
-/*     */         {
-/*     */         }
-/*     */     }
-/* 109 */     throw new ConversionException("Cannot parse date " + str);
-/*     */   }
-/*     */ 
-/*     */   public String toString(Object obj)
-/*     */   {
-/* 115 */     return this.defaultFormat.format((Date)obj);
-/*     */   }
-/*     */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.basic.DateConverter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2003, 2004 Joe Walnes.
+ * Copyright (C) 2006, 2007, 2008 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 26. September 2003 by Joe Walnes
  */
+package com.ztesoft.inf.extend.xstream.converters.basic;
+
+import com.ztesoft.inf.extend.xstream.converters.ConversionException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.ztesoft.inf.extend.xstream.core.util.ThreadSafeSimpleDateFormat;
+
+/**
+ * Converts a java.util.Date to a String as a date format, retaining precision
+ * down to milliseconds.
+ * 
+ * @author Joe Walnes
+ * @author J&ouml;rg Schaible
+ */
+public class DateConverter extends AbstractSingleValueConverter {
+
+	private final ThreadSafeSimpleDateFormat defaultFormat;
+	private final ThreadSafeSimpleDateFormat[] acceptableFormats;
+
+	/**
+	 * Construct a DateConverter with standard formats and lenient set off.
+	 */
+	public DateConverter() {
+		this(false);
+	}
+
+	/**
+	 * Construct a DateConverter with standard formats.
+	 * 
+	 * @param lenient
+	 *            the lenient setting of
+	 *            {@link SimpleDateFormat#setLenient(boolean)}
+	 * @since 1.3
+	 */
+	public DateConverter(boolean lenient) {
+		this("yyyy-MM-dd HH:mm:ss.S z", new String[] {
+				"yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssz",
+				"yyyy-MM-dd HH:mm:ss z", // JDK 1.3 needs both versions
+				"yyyy-MM-dd HH:mm:ssa" }, // backwards compatibility
+				lenient);
+	}
+
+	/**
+	 * Construct a DateConverter with lenient set off.
+	 * 
+	 * @param defaultFormat
+	 *            the default format
+	 * @param acceptableFormats
+	 *            fallback formats
+	 */
+	public DateConverter(String defaultFormat, String[] acceptableFormats) {
+		this(defaultFormat, acceptableFormats, false);
+	}
+
+	/**
+	 * Construct a DateConverter.
+	 * 
+	 * @param defaultFormat
+	 *            the default format
+	 * @param acceptableFormats
+	 *            fallback formats
+	 * @param lenient
+	 *            the lenient setting of
+	 *            {@link SimpleDateFormat#setLenient(boolean)}
+	 * @since 1.3
+	 */
+	public DateConverter(String defaultFormat, String[] acceptableFormats,
+			boolean lenient) {
+		this.defaultFormat = new ThreadSafeSimpleDateFormat(defaultFormat, 4,
+				20, lenient);
+		this.acceptableFormats = new ThreadSafeSimpleDateFormat[acceptableFormats.length];
+		for (int i = 0; i < acceptableFormats.length; i++) {
+			this.acceptableFormats[i] = new ThreadSafeSimpleDateFormat(
+					acceptableFormats[i], 1, 20, lenient);
+		}
+	}
+
+	@Override
+	public boolean canConvert(Class type) {
+		return type.equals(Date.class);
+	}
+
+	@Override
+	public Object fromString(String str) {
+		try {
+			return defaultFormat.parse(str);
+		} catch (ParseException e) {
+			for (int i = 0; i < acceptableFormats.length; i++) {
+				try {
+					return acceptableFormats[i].parse(str);
+				} catch (ParseException e2) {
+					// no worries, let's try the next format.
+				}
+			}
+			// no dateFormats left to try
+			throw new ConversionException("Cannot parse date " + str);
+		}
+	}
+
+	@Override
+	public String toString(Object obj) {
+		return defaultFormat.format((Date) obj);
+	}
+
+}

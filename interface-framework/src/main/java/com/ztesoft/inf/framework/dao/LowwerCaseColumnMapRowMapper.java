@@ -1,36 +1,32 @@
-/*    */ package com.ztesoft.inf.framework.dao;
-/*    */ 
-/*    */ import com.ztesoft.ibss.common.dao.DAOUtils;
-/*    */ import java.sql.ResultSet;
-/*    */ import java.sql.SQLException;
-/*    */ import java.sql.Timestamp;
-/*    */ import org.springframework.jdbc.core.ColumnMapRowMapper;
-/*    */ 
-/*    */ public class LowwerCaseColumnMapRowMapper extends ColumnMapRowMapper
-/*    */ {
-/*    */   private boolean useStrValue;
-/*    */ 
-/*    */   public LowwerCaseColumnMapRowMapper(boolean useStrValue)
-/*    */   {
-/* 15 */     this.useStrValue = useStrValue;
-/*    */   }
-/*    */   protected String getColumnKey(String columnName) {
-/* 18 */     return columnName.toLowerCase();
-/*    */   }
-/*    */   protected Object getColumnValue(ResultSet rs, int index) throws SQLException {
-/* 21 */     Object obj = super.getColumnValue(rs, index);
-/* 22 */     if (!this.useStrValue)
-/* 23 */       return obj;
-/* 24 */     if ((obj instanceof Timestamp))
-/* 25 */       obj = DAOUtils.getFormatedDateTime((Timestamp)obj);
-/*    */     else {
-/* 27 */       obj = rs.getString(index);
-/*    */     }
-/* 29 */     return obj;
-/*    */   }
-/*    */ }
+package com.ztesoft.inf.framework.dao;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.framework.dao.LowwerCaseColumnMapRowMapper
- * JD-Core Version:    0.6.2
- */
+import com.ztesoft.ibss.common.dao.DAOUtils;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+
+public class LowwerCaseColumnMapRowMapper extends ColumnMapRowMapper {
+
+	private boolean useStrValue;
+
+	public LowwerCaseColumnMapRowMapper(boolean useStrValue) {
+		this.useStrValue = useStrValue;
+	}
+	protected String getColumnKey(String columnName) {
+		return columnName.toLowerCase();
+	}
+	protected Object getColumnValue(ResultSet rs, int index) throws SQLException {
+		Object obj = super.getColumnValue(rs, index);
+		if (!useStrValue)
+			return obj;
+		if (obj instanceof Timestamp) {
+			obj = DAOUtils.getFormatedDateTime((Timestamp) obj);
+		} else {
+			obj = rs.getString(index);
+		}
+		return obj;
+	}
+}
+

@@ -1,101 +1,257 @@
+/*
+ * Copyright (C) 2005, 2006 Joe Walnes.
+ * Copyright (C) 2006, 2007, 2008 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 22. January 2005 by Joe Walnes
+ */
 package com.ztesoft.inf.extend.xstream.mapper;
 
 import com.ztesoft.inf.extend.xstream.converters.Converter;
 import com.ztesoft.inf.extend.xstream.converters.SingleValueConverter;
 
-public abstract interface Mapper
-{
-  public abstract String serializedClass(Class paramClass);
+public interface Mapper {
 
-  public abstract Class realClass(String paramString);
+	/**
+	 * Place holder type used for null values.
+	 */
+	class Null {
+	}
 
-  public abstract String serializedMember(Class paramClass, String paramString);
+	/**
+	 * How a class name should be represented in its serialized form.
+	 */
+	String serializedClass(Class type);
 
-  public abstract String realMember(Class paramClass, String paramString);
+	/**
+	 * How a serialized class representation should be mapped back to a real
+	 * class.
+	 */
+	Class realClass(String elementName);
 
-  public abstract boolean isImmutableValueType(Class paramClass);
+	/**
+	 * How a class member should be represented in its serialized form.
+	 */
+	String serializedMember(Class type, String memberName);
 
-  public abstract Class defaultImplementationOf(Class paramClass);
+	/**
+	 * How a serialized member representation should be mapped back to a real
+	 * member.
+	 */
+	String realMember(Class type, String serialized);
 
-  @Deprecated
-  public abstract String attributeForImplementationClass();
+	/**
+	 * Whether this type is a simple immutable value (int, boolean, String, URL,
+	 * etc. Immutable types will be repeatedly written in the serialized stream,
+	 * instead of using object references.
+	 */
+	boolean isImmutableValueType(Class type);
 
-  @Deprecated
-  public abstract String attributeForClassDefiningField();
+	Class defaultImplementationOf(Class type);
 
-  @Deprecated
-  public abstract String attributeForReadResolveField();
+	/**
+	 * @deprecated since 1.2, use aliasForAttribute instead.
+	 */
+	@Deprecated
+	String attributeForImplementationClass();
 
-  @Deprecated
-  public abstract String attributeForEnumType();
+	/**
+	 * @deprecated since 1.2, use aliasForAttribute instead.
+	 */
+	@Deprecated
+	String attributeForClassDefiningField();
 
-  public abstract String aliasForAttribute(String paramString);
+	/**
+	 * @deprecated since 1.2, use aliasForAttribute instead.
+	 */
+	@Deprecated
+	String attributeForReadResolveField();
 
-  public abstract String attributeForAlias(String paramString);
+	/**
+	 * @deprecated since 1.2, use aliasForAttribute instead.
+	 */
+	@Deprecated
+	String attributeForEnumType();
 
-  public abstract String aliasForSystemAttribute(String paramString);
+	/**
+	 * Get the alias for an attribute's name.
+	 * 
+	 * @param attribute
+	 *            the attribute
+	 * @return the alias
+	 * @since 1.2
+	 */
+	String aliasForAttribute(String attribute);
 
-  public abstract String getFieldNameForItemTypeAndName(Class paramClass1, Class paramClass2, String paramString);
+	/**
+	 * Get the attribute's name for an alias.
+	 * 
+	 * @param alias
+	 *            the alias
+	 * @return the attribute's name
+	 * @since 1.2
+	 */
+	String attributeForAlias(String alias);
 
-  public abstract Class getItemTypeForItemFieldName(Class paramClass, String paramString);
+	/**
+	 * Get the alias for a system attribute's name.
+	 * 
+	 * @param attribute
+	 *            the system attribute
+	 * @return the alias
+	 * @since 1.3.1
+	 */
+	String aliasForSystemAttribute(String attribute);
 
-  public abstract ImplicitCollectionMapping getImplicitCollectionDefForFieldName(Class paramClass, String paramString);
+	/**
+	 * Get the name of the field that acts as the default collection for an
+	 * object, or return null if there is none.
+	 * 
+	 * @param definedIn
+	 *            owning type
+	 * @param itemType
+	 *            item type
+	 * @param itemFieldName
+	 *            optional item element name
+	 */
+	String getFieldNameForItemTypeAndName(Class definedIn, Class itemType,
+			String itemFieldName);
 
-  public abstract boolean shouldSerializeMember(Class paramClass, String paramString);
+	Class getItemTypeForItemFieldName(Class definedIn, String itemFieldName);
 
-  @Deprecated
-  public abstract SingleValueConverter getConverterFromItemType(String paramString, Class paramClass);
+	ImplicitCollectionMapping getImplicitCollectionDefForFieldName(
+			Class itemType, String fieldName);
 
-  @Deprecated
-  public abstract SingleValueConverter getConverterFromItemType(Class paramClass);
+	/**
+	 * Determine whether a specific member should be serialized.
+	 * 
+	 * @since 1.1.3
+	 */
+	boolean shouldSerializeMember(Class definedIn, String fieldName);
 
-  @Deprecated
-  public abstract SingleValueConverter getConverterFromAttribute(String paramString);
+	interface ImplicitCollectionMapping {
 
-  public abstract Converter getLocalConverter(Class paramClass, String paramString);
+		String getFieldName();
 
-  public abstract Mapper lookupMapperOfType(Class paramClass);
+		String getItemFieldName();
 
-  public abstract SingleValueConverter getConverterFromItemType(String paramString, Class paramClass1, Class paramClass2);
+		Class getItemType();
+	}
 
-  @Deprecated
-  public abstract String aliasForAttribute(Class paramClass, String paramString);
+	/**
+	 * @deprecated since 1.3, use
+	 *             {@link #getConverterFromItemType(String, Class, Class)}
+	 */
+	@Deprecated
+	SingleValueConverter getConverterFromItemType(String fieldName, Class type);
 
-  @Deprecated
-  public abstract String attributeForAlias(Class paramClass, String paramString);
+	/**
+	 * @deprecated since 1.3, use
+	 *             {@link #getConverterFromItemType(String, Class, Class)}
+	 */
+	@Deprecated
+	SingleValueConverter getConverterFromItemType(Class type);
 
-  @Deprecated
-  public abstract SingleValueConverter getConverterFromAttribute(Class paramClass, String paramString);
+	/**
+	 * @deprecated since 1.3, use
+	 *             {@link #getConverterFromAttribute(Class, String, Class)}
+	 */
+	@Deprecated
+	SingleValueConverter getConverterFromAttribute(String name);
 
-  public abstract SingleValueConverter getConverterFromAttribute(Class paramClass1, String paramString, Class paramClass2);
+	Converter getLocalConverter(Class definedIn, String fieldName);
 
-  public abstract Class realClassByPath(String paramString);
+	Mapper lookupMapperOfType(Class type);
 
-  public abstract String getColFieldNameByPath(String paramString);
+	/**
+	 * Returns a single value converter to be used in a specific field.
+	 * 
+	 * @param fieldName
+	 *            the field name
+	 * @param type
+	 *            the field type
+	 * @param definedIn
+	 *            the type which defines this field
+	 * @return a SingleValueConverter or null if there no such converter should
+	 *         be used for this field.
+	 * @since 1.2.2
+	 */
+	SingleValueConverter getConverterFromItemType(String fieldName, Class type,
+			Class definedIn);
 
-  public abstract String getAliasNameByPath(String paramString);
+	/**
+	 * Returns an alias for a single field defined in an specific type.
+	 * 
+	 * @param definedIn
+	 *            the type where the field was defined
+	 * @param fieldName
+	 *            the field name
+	 * @return the alias for this field or its own name if no alias was defined
+	 * @since 1.2.2
+	 * @deprecated since 1.3, use combination of
+	 *             {@link #serializedMember(Class, String)} and
+	 *             {@link #getConverterFromItemType(String, Class, Class)}
+	 */
+	@Deprecated
+	String aliasForAttribute(Class definedIn, String fieldName);
 
-  public abstract String getImplicitCollectionItemNameByPath(String paramString);
+	/**
+	 * Returns the field name for an aliased attribute.
+	 * 
+	 * @param definedIn
+	 *            the type where the field was defined
+	 * @param alias
+	 *            the alias
+	 * @return the original attribute name
+	 * @since 1.2.2
+	 * @deprecated since 1.3, use combination of
+	 *             {@link #realMember(Class, String)} and
+	 *             {@link #getConverterFromItemType(String, Class, Class)}
+	 */
+	@Deprecated
+	String attributeForAlias(Class definedIn, String alias);
 
-  public abstract String genMapNodeNameByPath(String paramString);
+	/**
+	 * Returns which converter to use for an specific attribute in a type.
+	 * 
+	 * @param definedIn
+	 *            the field's parent
+	 * @param attribute
+	 *            the attribute name
+	 * @deprecated since 1.3.1, use
+	 *             {@link #getConverterFromAttribute(Class, String, Class)}
+	 */
+	@Deprecated
+	SingleValueConverter getConverterFromAttribute(Class definedIn,
+			String attribute);
 
-  public abstract boolean globalImplicitCollection();
+	/**
+	 * Returns which converter to use for an specific attribute in a type.
+	 * 
+	 * @param definedIn
+	 *            the field's parent
+	 * @param attribute
+	 *            the attribute name
+	 * @param type
+	 *            the type the converter should create
+	 * @since 1.3.1
+	 */
+	SingleValueConverter getConverterFromAttribute(Class definedIn,
+			String attribute, Class type);
 
-  public static abstract interface ImplicitCollectionMapping
-  {
-    public abstract String getFieldName();
+	Class realClassByPath(String path);
 
-    public abstract String getItemFieldName();
+	String getColFieldNameByPath(String path);
 
-    public abstract Class getItemType();
-  }
+	String getAliasNameByPath(String path);
 
-  public static class Null
-  {
-  }
+	String getImplicitCollectionItemNameByPath(String path);
+
+	String genMapNodeNameByPath(String path);
+
+	boolean globalImplicitCollection();
 }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.mapper.Mapper
- * JD-Core Version:    0.6.2
- */

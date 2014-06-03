@@ -1,34 +1,45 @@
-/*    */ package com.ztesoft.inf.extend.xstream.core.util;
-/*    */ 
-/*    */ import java.util.HashMap;
-/*    */ import java.util.Map;
-/*    */ 
-/*    */ public final class Primitives
-/*    */ {
-/* 23 */   private static final Map BOX = new HashMap();
-/* 24 */   private static final Map UNBOX = new HashMap();
-/*    */ 
-/*    */   public static Class box(Class type)
-/*    */   {
-/* 39 */     return (Class)BOX.get(type);
-/*    */   }
-/*    */ 
-/*    */   public static Class unbox(Class type) {
-/* 43 */     return (Class)UNBOX.get(type);
-/*    */   }
-/*    */ 
-/*    */   static
-/*    */   {
-/* 27 */     Class[][] boxing = { { Byte.TYPE, Byte.class }, { Character.TYPE, Character.class }, { Short.TYPE, Short.class }, { Integer.TYPE, Integer.class }, { Long.TYPE, Long.class }, { Float.TYPE, Float.class }, { Double.TYPE, Double.class }, { Boolean.TYPE, Boolean.class }, { Void.TYPE, Void.class } };
-/*    */ 
-/* 32 */     for (int i = 0; i < boxing.length; i++) {
-/* 33 */       BOX.put(boxing[i][0], boxing[i][1]);
-/* 34 */       UNBOX.put(boxing[i][1], boxing[i][0]);
-/*    */     }
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.core.util.Primitives
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (c) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 11. October 2006 by Joerg Schaible
  */
+package com.ztesoft.inf.extend.xstream.core.util;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Utility class for primitives.
+ * 
+ * @author J&ouml;rg Schaible
+ * @since 1.2.1
+ */
+public final class Primitives {
+	private final static Map BOX = new HashMap();
+	private final static Map UNBOX = new HashMap();
+
+	static {
+		final Class[][] boxing = new Class[][] { { byte.class, Byte.class },
+				{ char.class, Character.class }, { short.class, Short.class },
+				{ int.class, Integer.class }, { long.class, Long.class },
+				{ float.class, Float.class }, { double.class, Double.class },
+				{ boolean.class, Boolean.class }, { void.class, Void.class }, };
+		for (int i = 0; i < boxing.length; i++) {
+			BOX.put(boxing[i][0], boxing[i][1]);
+			UNBOX.put(boxing[i][1], boxing[i][0]);
+		}
+	}
+
+	static public Class box(final Class type) {
+		return (Class) BOX.get(type);
+	}
+
+	static public Class unbox(final Class type) {
+		return (Class) UNBOX.get(type);
+	}
+}

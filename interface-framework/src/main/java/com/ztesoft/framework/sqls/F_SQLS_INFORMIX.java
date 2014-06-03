@@ -1,43 +1,46 @@
-/*    */ package com.ztesoft.framework.sqls;
-/*    */ 
-/*    */ import com.ztesoft.common.util.PlatService;
-/*    */ import java.util.Map;
-/*    */ 
-/*    */ public class F_SQLS_INFORMIX extends Sqls
-/*    */ {
-/* 44 */   String mySQL = "select * from dual";
-/*    */ 
-/* 47 */   String qrySqlRow = "select first ? *  from (select my_table.*  from ( @# )  my_table )   ";
-/*    */ 
-/*    */   public static Sqls getInstance()
-/*    */   {
-/* 41 */     return SingletonHolder.sqlsManager;
-/*    */   }
-/*    */ 
-/*    */   public F_SQLS_INFORMIX()
-/*    */   {
-/* 51 */     SqlUtil.initSqls(F_SQLS_INFORMIX.class, this, this.sqls);
-/*    */   }
-/*    */ 
-/*    */   static class SingletonHolder
-/*    */   {
-/* 16 */     static Sqls sqlsManager = new F_SQLS_INFORMIX();
-/*    */ 
-/*    */     static {
-/*    */       try { Map mysqls = sqlsManager.sqls;
-/*    */ 
-/* 31 */         Sqls f_sql_local = (Sqls)PlatService.getPlatClass(sqlsManager.getClass());
-/* 32 */         Class f_sql_local_class = f_sql_local.getClass();
-/* 33 */         SqlUtil.initSqls(f_sql_local_class, f_sql_local, mysqls);
-/*    */       }
-/*    */       catch (Exception ex)
-/*    */       {
-/*    */       }
-/*    */     }
-/*    */   }
-/*    */ }
+package com.ztesoft.framework.sqls;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.framework.sqls.F_SQLS_INFORMIX
- * JD-Core Version:    0.6.2
- */
+import java.util.Map;
+
+
+public class F_SQLS_INFORMIX extends Sqls{
+	static class SingletonHolder {
+		static Sqls sqlsManager = new F_SQLS_INFORMIX();
+		static {
+			try {
+				Map<String, String> mysqls = sqlsManager.sqls;
+				// 以_Hn(省份标示)或_LOCAL结尾
+				// String system_tag =
+				// StrTools.isEmptyDefault(DcSystemParamUtil.getSysParamByCache("SYSTEM_TAG"),"LOCAL");
+				// Class f_sql_local_class =
+				// Class.forName(sqlsManager.getClass().getName() + "_" +
+				// system_tag);
+//				Class f_sql_local_class = Class.forName(sqlsManager.getClass()
+//						.getName());
+//				Sqls f_sql_local = (Sqls) f_sql_local_class.newInstance();
+				
+				
+			/*	Sqls f_sql_local = (Sqls)PlatService.getPlatClass(sqlsManager.getClass());
+				Class f_sql_local_class=f_sql_local.getClass();
+				SqlUtil.initSqls(f_sql_local_class, f_sql_local, mysqls);*/
+			} catch (Exception ex) {
+				// throw new RuntimeException(ex);
+			}
+		}	
+	}
+
+	public static  Sqls getInstance() {
+		return SingletonHolder.sqlsManager;
+	}
+	
+	String mySQL = "select * from dual";
+
+	// WAIT TO BE MODIFY cheng
+	String qrySqlRow = "select first ? *  from (select my_table.*  from ( @# )  my_table )   ";
+		
+	//相关的SQL放置到集合map中
+	public F_SQLS_INFORMIX() {
+		SqlUtil.initSqls(F_SQLS_INFORMIX.class, this , sqls) ;
+	}
+	
+}

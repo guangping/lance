@@ -1,50 +1,71 @@
-/*    */ package com.ztesoft.config;
-/*    */ 
-/*    */ import java.io.InputStream;
-/*    */ import java.util.Properties;
-/*    */ 
-/*    */ public class ConfigFileHelper
-/*    */ {
-/*    */   private static final String params_properties = "config/inf.properties";
-/*    */   private static final String log4j_properties = "log4j.properties";
-/*    */   private static final String Resources_Informix_properties = "Resources_Informix.properties";
-/*    */   private static final String Resources_ORA_properties = "Resources_ORA.properties";
-/*    */ 
-/*    */   private static InputStream getFileInputStream(String fileName)
-/*    */     throws Exception
-/*    */   {
-/* 29 */     return ConfigFileHelper.class.getClassLoader().getResourceAsStream(fileName);
-/*    */   }
-/*    */ 
-/*    */   public static Properties getConfigFileProperties(String fileName)
-/*    */     throws Exception
-/*    */   {
-/* 35 */     InputStream is = getFileInputStream(fileName);
-/* 36 */     Properties configFile = new Properties();
-/* 37 */     configFile.load(is);
-/* 38 */     is.close();
-/*    */ 
-/* 40 */     return configFile;
-/*    */   }
-/*    */ 
-/*    */   public static Properties getInfParamConfigFile() throws Exception {
-/* 44 */     return getConfigFileProperties("config/inf.properties");
-/*    */   }
-/*    */ 
-/*    */   public static Properties getLog4JConfigFile() throws Exception {
-/* 48 */     return getConfigFileProperties("log4j.properties");
-/*    */   }
-/*    */ 
-/*    */   public static Properties getInformixDBConfigFile() throws Exception {
-/* 52 */     return getConfigFileProperties("Resources_Informix.properties");
-/*    */   }
-/*    */ 
-/*    */   public static Properties getOracleDBConfigFile() throws Exception {
-/* 56 */     return getConfigFileProperties("Resources_ORA.properties");
-/*    */   }
-/*    */ }
+package com.ztesoft.config;
 
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.config.ConfigFileHelper
- * JD-Core Version:    0.6.2
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+
+/**
+ * 
+ * 配置文件助手类
+ * 
+ * @author easonwu 2010-01-10
+ * 
  */
+
+public class ConfigFileHelper {
+	private ConfigFileHelper() {
+
+	}
+
+	private static final String params_properties = "inf.properties";
+
+	private static final String log4j_properties = "log4j.properties";
+
+	private static final String Resources_Informix_properties = "Resources_Informix.properties";
+
+	private static final String Resources_ORA_properties = "Resources_ORA.properties";
+
+	private static InputStream getFileInputStream(String fileName)
+			throws Exception {
+		File file = new File(System.getProperty("CONFIG")+fileName);
+		InputStream stream = null;
+		if(file.exists()){
+			FileInputStream fileIS  = new FileInputStream(file);
+			stream = fileIS;
+		}
+		if(null == stream){
+			if("inf.properties".equals(fileName)){
+				fileName = "config/"+fileName;
+			}
+			stream = ConfigFileHelper.class.getClassLoader().getResourceAsStream(fileName);
+		}
+		return stream;
+	}
+
+	public static Properties getConfigFileProperties(String fileName)
+			throws Exception {
+		InputStream is = getFileInputStream(fileName);
+		Properties configFile = new Properties();
+		configFile.load(is);
+		is.close();
+
+		return configFile;
+	}
+
+	public static Properties getInfParamConfigFile() throws Exception {
+		return getConfigFileProperties(params_properties);
+	}
+
+	public static Properties getLog4JConfigFile() throws Exception {
+		return getConfigFileProperties(log4j_properties);
+	}
+
+	public static Properties getInformixDBConfigFile() throws Exception {
+		return getConfigFileProperties(Resources_Informix_properties);
+	}
+
+	public static Properties getOracleDBConfigFile() throws Exception {
+		return getConfigFileProperties(Resources_ORA_properties);
+	}
+}

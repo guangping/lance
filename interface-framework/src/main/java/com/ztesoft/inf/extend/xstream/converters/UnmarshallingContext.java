@@ -1,26 +1,35 @@
+/*
+ * Copyright (C) 2004, 2005 Joe Walnes.
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 06. March 2004 by Joe Walnes
+ */
 package com.ztesoft.inf.extend.xstream.converters;
 
 import com.ztesoft.inf.extend.xstream.io.path.PathTracker;
 import com.ztesoft.inf.extend.xstream.mapper.Mapper;
 
-public abstract interface UnmarshallingContext extends DataHolder
-{
-  public abstract Object convertAnother(Object paramObject, Class paramClass);
+public interface UnmarshallingContext extends DataHolder {
 
-  public abstract Object convertAnother(Object paramObject, Class paramClass, Converter paramConverter);
+	Object convertAnother(Object current, Class type);
 
-  public abstract Object currentObject();
+	/**
+	 * @since 1.2
+	 */
+	Object convertAnother(Object current, Class type, Converter converter);
 
-  public abstract Class getRequiredType();
+	Object currentObject();
 
-  public abstract PathTracker getPathTracker();
+	Class getRequiredType();
 
-  public abstract void addCompletionCallback(Runnable paramRunnable, int paramInt);
+	PathTracker getPathTracker();
 
-  public abstract Mapper getMapper();
+	void addCompletionCallback(Runnable work, int priority);
+
+	Mapper getMapper();
 }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.converters.UnmarshallingContext
- * JD-Core Version:    0.6.2
- */

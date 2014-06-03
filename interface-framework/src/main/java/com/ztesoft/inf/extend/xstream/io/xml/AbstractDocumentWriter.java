@@ -1,62 +1,106 @@
-/*    */ package com.ztesoft.inf.extend.xstream.io.xml;
-/*    */ 
-/*    */ import com.ztesoft.inf.extend.xstream.core.util.FastStack;
-/*    */ import java.util.ArrayList;
-/*    */ import java.util.List;
-/*    */ 
-/*    */ public abstract class AbstractDocumentWriter extends AbstractXmlWriter
-/*    */   implements DocumentWriter
-/*    */ {
-/* 33 */   private final List result = new ArrayList();
-/* 34 */   private final FastStack nodeStack = new FastStack(16);
-/*    */ 
-/*    */   public AbstractDocumentWriter(Object container, XmlFriendlyReplacer replacer)
-/*    */   {
-/* 48 */     super(replacer);
-/* 49 */     if (container != null) {
-/* 50 */       this.nodeStack.push(container);
-/* 51 */       this.result.add(container);
-/*    */     }
-/*    */   }
-/*    */ 
-/*    */   public final void startNode(String name) {
-/* 56 */     Object node = createNode(name);
-/* 57 */     this.nodeStack.push(node);
-/*    */   }
-/*    */ 
-/*    */   protected abstract Object createNode(String paramString);
-/*    */ 
-/*    */   public final void endNode()
-/*    */   {
-/* 73 */     endNodeInternally();
-/* 74 */     Object node = this.nodeStack.pop();
-/* 75 */     if (this.nodeStack.size() == 0)
-/* 76 */       this.result.add(node);
-/*    */   }
-/*    */ 
-/*    */   public void endNodeInternally()
-/*    */   {
-/*    */   }
-/*    */ 
-/*    */   protected final Object getCurrent()
-/*    */   {
-/* 92 */     return this.nodeStack.peek();
-/*    */   }
-/*    */ 
-/*    */   public List getTopLevelNodes() {
-/* 96 */     return this.result;
-/*    */   }
-/*    */ 
-/*    */   public void flush()
-/*    */   {
-/*    */   }
-/*    */ 
-/*    */   public void close()
-/*    */   {
-/*    */   }
-/*    */ }
-
-/* Location:           C:\Users\guangping\Desktop\inf_server-0.0.1-20140414.050308-5.jar
- * Qualified Name:     com.ztesoft.inf.extend.xstream.io.xml.AbstractDocumentWriter
- * JD-Core Version:    0.6.2
+/*
+ * Copyright (C) 2006, 2007 XStream Committers.
+ * All rights reserved.
+ *
+ * The software in this package is published under the terms of the BSD
+ * style license a copy of which has been included with this distribution in
+ * the LICENSE.txt file.
+ * 
+ * Created on 18. October 2007 by Joerg Schaible
  */
+package com.ztesoft.inf.extend.xstream.io.xml;
+
+import com.ztesoft.inf.extend.xstream.core.util.FastStack;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A generic
+ * {@link com.ztesoft.inf.extend.xstream.io.HierarchicalStreamWriter} for
+ * DOM writer implementations. The implementation manages a list of top level
+ * DOM nodes. Every time the last node is closed on the node stack, the next
+ * started node is added to the list. This list can be retrieved using the
+ * {@link DocumentWriter#getTopLevelNodes()} method.
+ * 
+ * @author Laurent Bihanic
+ * @author J&ouml;rg Schaible
+ * @since 1.2.1
+ */
+public abstract class AbstractDocumentWriter extends AbstractXmlWriter
+		implements DocumentWriter {
+
+	private final List result = new ArrayList();
+	private final FastStack nodeStack = new FastStack(16);
+
+	/**
+	 * Constructs an AbstractDocumentWriter.
+	 * 
+	 * @param container
+	 *            the top level container for the nodes to create (may be
+	 *            <code>null</code>)
+	 * @param replacer
+	 *            the object that creates XML-friendly names
+	 * @since 1.2.1
+	 */
+	public AbstractDocumentWriter(final Object container,
+			final XmlFriendlyReplacer replacer) {
+		super(replacer);
+		if (container != null) {
+			nodeStack.push(container);
+			result.add(container);
+		}
+	}
+
+	public final void startNode(final String name) {
+		final Object node = createNode(name);
+		nodeStack.push(node);
+	}
+
+	/**
+	 * Create a node. The provided node name is not yet XML friendly. If
+	 * {@link #getCurrent()} returns <code>null</code> the node is a top level
+	 * node.
+	 * 
+	 * @param name
+	 *            the node name
+	 * @return the new node
+	 * @since 1.2.1
+	 */
+	protected abstract Object createNode(String name);
+
+	public final void endNode() {
+		endNodeInternally();
+		final Object node = nodeStack.pop();
+		if (nodeStack.size() == 0) {
+			result.add(node);
+		}
+	}
+
+	/**
+	 * Called when a node ends. Hook for derived implementations.
+	 * 
+	 * @since 1.2.1
+	 */
+	public void endNodeInternally() {
+	}
+
+	/**
+	 * @since 1.2.1
+	 */
+	protected final Object getCurrent() {
+		return nodeStack.peek();
+	}
+
+	public List getTopLevelNodes() {
+		return result;
+	}
+
+	public void flush() {
+		// don't need to do anything
+	}
+
+	public void close() {
+		// don't need to do anything
+	}
+}
