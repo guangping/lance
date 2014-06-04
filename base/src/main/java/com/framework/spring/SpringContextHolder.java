@@ -44,5 +44,7 @@ public class SpringContextHolder implements ApplicationContextAware {
             throw new IllegalStateException("applicaitonContext未注入,请在spring配置文件中定义SpringContextHolder");
     }
 
-
+    public static ConfigurableApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 }
