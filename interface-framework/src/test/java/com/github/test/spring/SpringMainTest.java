@@ -1,7 +1,7 @@
 package com.github.test.spring;
 
-import com.basic.database.IDaoSupport;
-import com.basic.spring.SpringContextHolder;
+import com.framework.database.IBaseDAO;
+import com.framework.spring.SpringContextHolder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.testng.annotations.BeforeClass;
@@ -30,7 +30,7 @@ public class SpringMainTest {
 
     @Test
     public void runConnection(){
-        IDaoSupport daoSupport=SpringContextHolder.getBean("jdbcDaoSupport");
+        IBaseDAO daoSupport= SpringContextHolder.getBean("jdbcDaoSupport");
         System.out.println("数据操作对象:"+daoSupport);
     }
 
