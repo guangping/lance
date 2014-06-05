@@ -139,7 +139,7 @@ public class CommClientBO {
 
 	public ClientRequestUser getRequestUser(String userId)
 			throws FrameException {
-		Map map = null;
+		/*Map map = null;
 		try {
 			map = sqlExec.queryForMap(SELECT_REQUEST_USER, userId);
 		} catch (Exception e) {
@@ -147,7 +147,9 @@ public class CommClientBO {
 		}
 		if (map == null)
 			return new ClientRequestUser();
-		return new ClientRequestUser(map);
+		return new ClientRequestUser(map);*/
+
+        return new ClientRequestUser();
 	}
 
 	public void logCall(final List args) throws Exception {

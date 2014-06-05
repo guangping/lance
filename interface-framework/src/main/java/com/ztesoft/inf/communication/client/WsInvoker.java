@@ -53,16 +53,12 @@ public class WsInvoker extends Invoker {
 
 		String reqString = generateRequestString(context);
 		context.setRequestString(reqString);
-		System.out.println(reqString);
-		SOAPEnvelope req = new SOAPEnvelope(new ByteArrayInputStream(reqString
-				.trim().getBytes("UTF-8")));
+		SOAPEnvelope req = new SOAPEnvelope(new ByteArrayInputStream(reqString.trim().getBytes("UTF-8")));
 		context.setRequestSOAP(req);
 
 		SOAPEnvelope rsp;
 		Call call = new Call(new Service());
 		call.setTargetEndpointAddress(endpoint);
-		// call.setTargetEndpointAddress("http://136.5.8.83:9100/CrmWeb/services/exchangeSOAP?wsdl");
-
 		Map param = (Map) context.getParameters();
 		if (StringUtils.equals("T", (String) param.get("ws_isNet"))) {
 			call.setOperationName((String) param.get("ws_method"));
@@ -107,8 +103,6 @@ public class WsInvoker extends Invoker {
 		Document resultDoc = rsp.getAsDocument();
 		String resultStr = DomUtils.DocumentToString(resultDoc);
 		context.setResponeString(resultStr);
-
-		 System.out.println(resultStr);
 		try {
 			if (!StringUtils.isEmpty(cdataPath)) {
 				CachedNamespaceContext nsCtx = new CachedNamespaceContext();

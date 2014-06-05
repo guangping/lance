@@ -62,7 +62,6 @@ public class CommCaller {
 	 */
 	public Object invoke(String operationCode, Object params,
 			String endpointAddress) {
-//		new ParamsConfig().initParams("");
 		Invoker invoker = getInvoker(operationCode);
 
 		if (invoker == null) {

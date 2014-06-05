@@ -35,7 +35,7 @@ public class ConfigFileHelper {
 			stream = fileIS;
 		}
 		if(null == stream){
-			if("inf.properties".equals(fileName)){
+			if("config/inf.properties".equals(fileName)){
 				fileName = "config/"+fileName;
 			}
 			stream = ConfigFileHelper.class.getClassLoader().getResourceAsStream(fileName);

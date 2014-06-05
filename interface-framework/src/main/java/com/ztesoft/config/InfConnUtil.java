@@ -5,7 +5,10 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import com.framework.spring.SpringContextHolder;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
 /**
  * 接口数据源工具类，支持直连和数据源连接
  * @author ReasonYea
@@ -15,22 +18,12 @@ public class InfConnUtil {
 	/**
 	 * 接口使用的数据源连接
 	 */
-	private static final String INF_DATASOURCE="infdb";
+	private static final String INF_DATASOURCE="dataSource";
 	private static ApplicationContext applicationContext;
 	private static InfConnUtil InfConnUtil = null;
-	private static DataSource db = null;
-
 	static{
 		if (InfConnUtil == null) {
 			InfConnUtil = new InfConnUtil();
-			
-		/*	if(SpringContextHolder.isConfig()){//web 容器启动
-				applicationContext=SpringContextHolder.getApplicationContext();
-			}else{//main函数启动
-				String springXml = ParamsConfig.getInstance().getParamValue("SpringXml");
-				applicationContext = new ClassPathXmlApplicationContext(springXml);
-			}*/
-			
 		}
 	}
 
@@ -50,10 +43,8 @@ public class InfConnUtil {
 	 */
 	private static Connection getDatasourceConn(){
 		try {
-			if (db == null) {
-				db = applicationContext.getBean(INF_DATASOURCE, DataSource.class);
-			}
-			return db.getConnection();
+            DataSource dataSource=SpringContextHolder.getBean(INF_DATASOURCE);
+            return dataSource.getConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

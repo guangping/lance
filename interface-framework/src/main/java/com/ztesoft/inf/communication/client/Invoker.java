@@ -165,13 +165,15 @@ public abstract class Invoker {
 	}
 
 	protected String generateRequestString(InvokeContext context) {
-
 		Object params = context.getParameters();
 		StringWriter out = new StringWriter();
-
 		try {
 			Map root = new HashMap();
-			BeanUtils.copyProperties(root, params);
+            if(params instanceof Map){
+                root=(Map)params;
+            }else {
+                BeanUtils.copyProperties(root, params);
+            }
 
 			if (globalVars != null) {
 				root.put("_global", globalVars);
@@ -184,7 +186,6 @@ public abstract class Invoker {
 
 			String reqString = out.toString();
 			context.setRequestString(reqString);
-
 		} catch (Exception e) {
 			throw new CodedException("9001", "根据模板["
 					+ context.getOperationCode() + "]组装请求报文出错.", e);
