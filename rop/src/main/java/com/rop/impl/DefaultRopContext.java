@@ -103,6 +103,10 @@ public class DefaultRopContext implements RopContext {
         }
         String[] beanNames = context.getBeanNamesForType(Object.class);
         for (final String beanName : beanNames) {
+            /*扫描注入优化*/
+            if(beanName.indexOf("OpenService")>-1){
+                continue;
+            }
             Class<?> handlerType = context.getType(beanName);
             //只对标注 ServiceMethodBean的Bean进行扫描
             if(AnnotationUtils.findAnnotation(handlerType,ServiceMethodBean.class) != null){
