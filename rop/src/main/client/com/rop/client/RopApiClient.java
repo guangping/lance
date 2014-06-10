@@ -19,7 +19,7 @@ public interface RopApiClient {
      * @return
      * @throws ApiException
      */
-    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> class1) throws ApiException;
+    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> clazz) throws ApiException;
     /**
      * 执行TOP隐私API请求。
      * @param <T>
@@ -28,6 +28,6 @@ public interface RopApiClient {
      * @return
      * @throws ApiException
      */
-    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> class1, String session) throws ApiException ;
+    public <T extends RopResponse> T execute(RopRequest<T> request,Class<T> clazz, String session) throws ApiException ;
 
 }

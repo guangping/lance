@@ -1,5 +1,7 @@
 package com.rop.http;
 
+import com.rop.Constants;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +27,7 @@ public class HttpResponse {
         if ((this.is != null) && ("gzip".equals(con.getContentEncoding()))) {
             this.is = new GZIPInputStream(this.is);
         }
-        this.reader = new BufferedReader(new InputStreamReader(this.is, "UTF-8"));
+        this.reader = new BufferedReader(new InputStreamReader(this.is, Constants.UTF8));
     }
 
     public String getResponseHeader(String name) {
