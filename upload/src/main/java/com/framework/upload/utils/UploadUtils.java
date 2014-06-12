@@ -121,4 +121,39 @@ public class UploadUtils {
 
         return null;
     }
+
+
+    public static CommonResult update(File file, ConnectionConfig config) {
+        if (null == file || null == config) {
+            throw new RuntimeException("Upload file or ConnectionConfig is null!");
+        }
+
+        if (config.getProtocol().equals(Protocol.FTP)) {
+            IUpload upload = new FtpUploadConnImpl(config);
+            return upload.upload(file);
+        }
+
+        if (config.getProtocol().equals(Protocol.SFTP)) {
+            IUpload upload = new SFtpUploadConnImpl(config);
+            return upload.upload(file);
+        }
+        return new CommonResult();
+    }
+
+    public static CommonResult update(File file, ConnectionConfig config,List<String> dirs) {
+        if (null == file || null == config) {
+            throw new RuntimeException("Upload file or ConnectionConfig is null!");
+        }
+
+        if (config.getProtocol().equals(Protocol.FTP)) {
+            IUpload upload = new FtpUploadConnImpl(config);
+            return upload.upload(file,dirs);
+        }
+
+        if (config.getProtocol().equals(Protocol.SFTP)) {
+            IUpload upload = new SFtpUploadConnImpl(config);
+            return upload.upload(file,dirs);
+        }
+        return new CommonResult();
+    }
 }
