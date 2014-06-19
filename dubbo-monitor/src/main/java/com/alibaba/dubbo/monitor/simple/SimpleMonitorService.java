@@ -124,7 +124,7 @@ public class SimpleMonitorService implements MonitorService {
                             Thread.sleep(5000); // 失败延迟
                         } catch (Throwable t2) {
                         }
-                    }
+                    }                                                                     ;
                 }
             }
         });
@@ -156,7 +156,10 @@ public class SimpleMonitorService implements MonitorService {
             logger.warn(t.getMessage(), t);
         }
     }
-    
+
+    /*
+    *根据需要调用日志可存库
+    * */
     private void write() throws Exception {
         URL statistics = queue.take();
         if (POISON_PROTOCOL.equals(statistics.getProtocol())) {
