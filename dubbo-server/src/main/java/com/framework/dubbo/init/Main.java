@@ -38,6 +38,7 @@ public class Main {
     private static final String DUBBO_PROTOCOL_PORT="dubbo.protocol.port";
     private static final String DUBBO_SPRING_CONFIG="dubbo.spring.config";
     private static final String DUBBO_CONTAINER = "dubbo.container";
+    private static final String DUBBO_REGISTRY_ADDRESS="dubbo.registry.address";
 
     public static final String SHUTDOWN_HOOK_KEY = "dubbo.shutdown.hook";
 
@@ -57,10 +58,12 @@ public class Main {
             File file = new File(System.getProperty("CONFIG")+DUBBO_FILE);
             FileInputStream fileIS = new FileInputStream(file);
             ps.load(fileIS);
+
             //设置dubbo服务端口
             System.setProperty(DUBBO_PROTOCOL_PORT, ps.getProperty(DUBBO_PROTOCOL_PORT));
             System.setProperty(DUBBO_SPRING_CONFIG, ps.getProperty(DUBBO_SPRING_CONFIG));
             System.setProperty(DUBBO_CONTAINER,ps.getProperty(DUBBO_CONTAINER));
+            System.setProperty(DUBBO_REGISTRY_ADDRESS,ps.getProperty(DUBBO_REGISTRY_ADDRESS));
             fileIS.close();
         }catch (IOException e){
             logger.debug("加载dubbo配置文件"+DUBBO_FILE+"出错!");
