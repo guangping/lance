@@ -14,7 +14,7 @@
 
     <!-- 注册中心服务类 -->
     <dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService"/>
-    <dubbo:reference id="monitorService" interface="com.alibaba.dubbo.monitor.MonitorService"/>
+   <!-- <dubbo:reference id="monitorService" interface="com.alibaba.dubbo.monitor.MonitorService"/>-->
     <dubbo:consumer check="false"/>
     <dubbo:monitor/>
     <dubbo:provider timeout="${dubbo.timeout}"/>
