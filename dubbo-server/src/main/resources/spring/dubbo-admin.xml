@@ -10,7 +10,7 @@
 
     <dubbo:application name="${dubbo.application.name}"/>
     <dubbo:registry address="${dubbo.registry.address}" check="false" file="false"/>
-    <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}"/>
+    <dubbo:protocol threads="100" name="dubbo" port="${dubbo.protocol.port}"/>
 
     <!-- 注册中心服务类 -->
     <dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService"/>
