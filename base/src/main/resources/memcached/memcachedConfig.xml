@@ -29,7 +29,7 @@
     </bean>
 
     <bean id="xmCache" class="com.framework.cache.memcached.XmCache"/>
-    <bean id="cacheConfig" class="com.framework.cache.config.CacheConfig">
-        <property name="cahceType" value="${uab.memcached.cachetype}"/>
+    <bean id="cacheFactory" class="com.framework.cache.CacheFactory">
+        <property name="instance" ref="xmCache"/>
     </bean>
 </beans>
