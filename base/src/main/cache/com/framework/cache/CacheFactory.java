@@ -1,9 +1,6 @@
 package com.framework.cache;
 
 
-import com.framework.cache.config.CacheConfig;
-import com.framework.spring.SpringContextHolder;
-
 /**
  * Cache 工厂
  *
@@ -11,21 +8,17 @@ import com.framework.spring.SpringContextHolder;
  */
 public class CacheFactory {
 
-    private CacheFactory() {
+    private INetCache instance = DefaultCache.getInstance();
+
+    public CacheFactory() {
     }
 
 
-    public static INetCache getDefaultCache() {
-        CacheConfig config = SpringContextHolder.getBean("cacheConfig");
-        if (null != config) {
-            if (config.getCahceType().equals(CacheConfig.DEFAULT_CACHE_TYPE)) {
-                return DefaultCache.getInstance();
-            }
-            if (config.getCahceType().endsWith(CacheConfig.DEFAULT_MEMCACHED_CACHE_TYPE)) {
-                INetCache netCache = SpringContextHolder.getBean("xmCache");
-                return netCache;
-            }
-        }
-        return null;
+    public INetCache getDefaultCache() {
+        return instance;
+    }
+
+    public void setInstance(INetCache instance) {
+        this.instance = instance;
     }
 }

@@ -14,6 +14,7 @@
         <property name="locations">
             <list>
                 <value>file:${CONFIG}jdbc.properties</value>
+                <value>file:${CONFIG}CacheConfig.properties</value>
             </list>
         </property>
     </bean>
@@ -37,7 +38,7 @@
         <property name="maxWait" value="60000"/>
 
         <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
 
         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
         <property name="minEvictableIdleTimeMillis" value="300000"/>
