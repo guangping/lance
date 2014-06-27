@@ -22,7 +22,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Service
+//@Service
 public @interface ServiceMethodBean {
 
     String value() default "";
