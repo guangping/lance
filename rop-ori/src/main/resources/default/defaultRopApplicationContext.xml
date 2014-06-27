@@ -9,25 +9,25 @@
     <!-- 启动Rop框架 -->
     <rop:annotation-driven
             id="router"
-            session-manager="sampleSessionManager"
+            session-manager="defaultSessionManager"
             app-secret-manager="appSecretManager"
             service-access-controller="serviceAccessController"
             formatting-conversion-service="conversionService"
             ext-error-base-names="i18n/rop/error"
             service-timeout-seconds="10"
-            thread-ferry-class="com.rop.sample.SampleThreadFerry"
+            thread-ferry-class="com.rop.impl.DumbThreadFerry"
             invoke-times-controller="invokeTimesController"
-            upload-file-max-size="10"
-            upload-file-types="png,gif"
+            upload-file-max-size="10240"
+            upload-file-types="png,gif,jpg,jepg,txt,doc,docx,ppt,pptx"
             core-pool-size="200"
             max-pool-size="500"
             queue-capacity="50"
             keep-alive-seconds="300"
             sign-enable="true"/>
 
-    <bean id="sampleSessionManager" class="com.rop.session.DefaultSessionManager" />
+    <bean id="defaultSessionManager" class="com.rop.session.DefaultSessionManager" />
     <bean id="invokeTimesController" class="com.rop.security.DefaultInvokeTimesController"/>
-    <bean id="appSecretManager" class="com.rop.security.FileBaseAppSecretManager"/>
+    <bean id="appSecretManager" class="com.rop.security.DefaultAppSecretManager"/>
     <bean id="serviceAccessController" class="com.rop.impl.DefaultServiceAccessController"/>
 
     <!--设置自定义的类型转换服务，注册自定义的类型转换器-->
@@ -35,7 +35,6 @@
         <property name="converters">
             <set>
                 <!--将xxxx-yyyyyyy格式的电话转换为内部的Telephone对象-->
-                <bean class="com.rop.converter.TelephoneConverter"/>
                 <bean class="com.rop.converter.DateConverter"/>
             </set>
         </property>
@@ -55,5 +54,10 @@
 
     <!--自定义method,appKey等这些系统级参数的参数名-->
     <rop:sysparams format-param-name="messageFormat"/>
+
+    <!--数据操作配置
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>    -->
 
 </beans>

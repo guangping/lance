@@ -4,6 +4,9 @@
  */
 package com.rop;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <pre>
  *    抽象拦截器，实现类仅需覆盖特定的方法即可。
@@ -13,6 +16,7 @@ package com.rop;
  * @version 1.0
  */
 public abstract class AbstractInterceptor implements Interceptor {
+    protected Logger logger= LoggerFactory.getLogger(getClass());
 
     public void beforeService(RopRequestContext ropRequestContext) {
     }

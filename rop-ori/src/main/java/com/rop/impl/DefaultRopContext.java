@@ -17,7 +17,6 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.core.annotation .AnnotationUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -100,7 +99,7 @@ public class DefaultRopContext implements RopContext {
      */
     private void registerFromContext(final ApplicationContext context) throws BeansException {
         if (logger.isDebugEnabled()) {
-            logger.debug("对Spring上下文中的Bean进行扫描，查找ROP服务方法: " + context);
+            logger.debug("对Spring上下文中的Bean进行扫描,查找ROP服务方法:" + context);
         }
         String[] beanNames = context.getBeanNamesForType(Object.class);
         for (final String beanName : beanNames) {

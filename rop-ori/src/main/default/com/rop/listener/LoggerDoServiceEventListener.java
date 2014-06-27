@@ -29,6 +29,10 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         if(ropRequestContext != null){
             ropRequestContext.getAppKey();
             ropRequestContext.getMethod();
+            ropRequestContext.getVersion();
+            ropRequestContext.getIp();
+            ropRequestContext.getServiceBeginTime();
+            ropRequestContext.getServiceEndTime();
             Map<String,String> allParams = ropRequestContext.getAllParams();
             String message = MessageMarshallerUtils.asUrlString(allParams);
             System.out.println("message("+ropEvent.getServiceEndTime()+")"+message);
