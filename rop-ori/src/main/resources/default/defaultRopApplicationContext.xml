@@ -14,7 +14,7 @@
             service-access-controller="serviceAccessController"
             formatting-conversion-service="conversionService"
             ext-error-base-names="i18n/rop/error"
-            service-timeout-seconds="10"
+            service-timeout-seconds="30"
             thread-ferry-class="com.rop.impl.DumbThreadFerry"
             invoke-times-controller="invokeTimesController"
             upload-file-max-size="10240"

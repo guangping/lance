@@ -5,7 +5,6 @@
 package com.rop.annotation;
 
 import com.rop.ServiceMethodDefinition;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
