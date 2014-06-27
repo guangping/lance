@@ -95,7 +95,6 @@ public class DefaultRopContext implements RopContext {
      * 扫描Spring容器中的Bean，查找有标注{@link ServiceMethod}注解的服务方法，将它们注册到{@link RopContext}中缓存起来。
      *
      * @throws org.springframework.beans.BeansException
-     *
      */
     private void registerFromContext(final ApplicationContext context) throws BeansException {
         if (logger.isDebugEnabled()) {
@@ -103,15 +102,19 @@ public class DefaultRopContext implements RopContext {
         }
         String[] beanNames = context.getBeanNamesForType(Object.class);
         for (final String beanName : beanNames) {
+            /*查找rop注册服务优化*/
+            if (beanName.indexOf("OpenService") == -1) {
+                continue;
+            }
             Class<?> handlerType = context.getType(beanName);
             //只对标注 ServiceMethodBean的Bean进行扫描
-            if(AnnotationUtils.findAnnotation(handlerType,ServiceMethodBean.class) != null){
+            if (AnnotationUtils.findAnnotation(handlerType, ServiceMethodBean.class) != null) {
                 ReflectionUtils.doWithMethods(handlerType, new ReflectionUtils.MethodCallback() {
                             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
                                 ReflectionUtils.makeAccessible(method);
 
-                                ServiceMethod serviceMethod = AnnotationUtils.findAnnotation(method,ServiceMethod.class);
-                                ServiceMethodBean serviceMethodBean =AnnotationUtils.findAnnotation(method.getDeclaringClass(),ServiceMethodBean.class);
+                                ServiceMethod serviceMethod = AnnotationUtils.findAnnotation(method, ServiceMethod.class);
+                                ServiceMethodBean serviceMethodBean = AnnotationUtils.findAnnotation(method.getDeclaringClass(), ServiceMethodBean.class);
 
                                 ServiceMethodDefinition definition = null;
                                 if (serviceMethodBean != null) {
