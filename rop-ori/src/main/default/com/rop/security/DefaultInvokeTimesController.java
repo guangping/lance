@@ -22,22 +22,22 @@ public class DefaultInvokeTimesController implements InvokeTimesController {
 
     @Override
     public boolean isUserInvokeLimitExceed(String appKey, Session session) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isSessionInvokeLimitExceed(String appKey, String sessionId) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAppInvokeLimitExceed(String appKey) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAppInvokeFrequencyExceed(String appKey) {
-        return false;
+        return true;
     }
 }
 
