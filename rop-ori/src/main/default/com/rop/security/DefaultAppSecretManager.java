@@ -1,5 +1,8 @@
 package com.rop.security;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: guangping
@@ -7,13 +10,21 @@ package com.rop.security;
  * To change this template use File | Settings | File Templates.
  */
 public class DefaultAppSecretManager implements AppSecretManager {
+    private static Map<String, String> appKeySecretMap = new HashMap<String, String>();
+
+    static {
+        appKeySecretMap.put("00001", "123");
+        appKeySecretMap.put("00002","123");
+        appKeySecretMap.put("00003","123");
+    }
+
     @Override
     public String getSecret(String appKey) {
-        return "123";
+        return appKeySecretMap.get(appKey);
     }
 
     @Override
     public boolean isValidAppKey(String appKey) {
-        return true;
+        return getSecret(appKey) != null;
     }
 }

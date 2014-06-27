@@ -27,5 +27,7 @@ public abstract class AbstractRopRequest implements RopRequest {
     public final void setRopRequestContext(RopRequestContext ropRequestContext) {
         this.ropRequestContext = ropRequestContext;
     }
+
+
 }
 

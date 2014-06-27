@@ -4,11 +4,11 @@
  */
 package com.rop.params.request;
 
-import com.rop.AbstractRopRequest;
 import com.rop.annotation.IgnoreSign;
+import com.rop.params.base.BaseRopRequest;
+import com.rop.params.response.LogonResponse;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 /**
  * <pre>
@@ -18,14 +18,12 @@ import javax.validation.constraints.Pattern;
  * @author 陈雄华
  * @version 1.0
  */
-public class LogonRequest extends AbstractRopRequest {
+public class LogonRequest extends BaseRopRequest<LogonResponse> {
 
     @NotNull
-    @Pattern(regexp = "\\w{4,30}")
     private String userName;
 
     @IgnoreSign
-    @Pattern(regexp = "\\w{6,30}")
     private String password;
 
     public String getUserName() {
@@ -42,6 +40,11 @@ public class LogonRequest extends AbstractRopRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String getApiMethodName() {
+        return "user.getSession";
     }
 }
 

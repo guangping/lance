@@ -5,6 +5,7 @@
 package com.rop.params.response;
 
 
+import com.rop.params.base.BaseRopResponse;
 
 /**
  * <pre>
@@ -14,7 +15,7 @@ package com.rop.params.response;
  * @author 陈雄华
  * @version 1.0
  */
-public class LogonResponse {
+public class LogonResponse extends BaseRopResponse {
 
 
     private String sessionId;
