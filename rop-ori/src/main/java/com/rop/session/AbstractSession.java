@@ -7,7 +7,6 @@ package com.rop.session;
 import com.rop.CommonConstant;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

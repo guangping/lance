@@ -1,8 +1,5 @@
 package com.rop.session;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *认证结果，如果认证成功，则设置{@link Session}，否则设置{@link #errorCode},{@link #errorCode}必须
  * 在ROP的国际化文件中定义。

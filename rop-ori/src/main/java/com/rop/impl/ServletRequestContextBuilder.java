@@ -9,7 +9,6 @@ import com.rop.annotation.HttpAction;
 import com.rop.config.SystemParameterNames;
 import com.rop.security.MainErrorType;
 import com.rop.security.MainErrors;
-import com.rop.session.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

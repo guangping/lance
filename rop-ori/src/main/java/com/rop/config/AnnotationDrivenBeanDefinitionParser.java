@@ -4,7 +4,6 @@
  */
 package com.rop.config;
 
-import com.rop.RopException;
 import com.rop.ThreadFerry;
 import com.rop.impl.AnnotationServletServiceRouterFactoryBean;
 import com.rop.impl.DefaultServiceAccessController;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.format.support.FormattingConversionServiceFactoryBean;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
