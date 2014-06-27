@@ -3,7 +3,7 @@
  */
 package com.rop;
 
-import org.springframework.util.StringUtils;
+import com.rop.utils.RopUtils;
 
 /**
  * 支持的响应的格式类型
@@ -13,7 +13,7 @@ public enum MessageFormat {
     xml, json, stream;
 
     public static MessageFormat getFormat(String value) {
-        if (!StringUtils.hasText(value)) {
+        if (!RopUtils.hasText(value)) {
             return xml;
         } else {
             try {
@@ -25,7 +25,7 @@ public enum MessageFormat {
     }
 
     public static boolean isValidFormat(String value) {
-        if (!StringUtils.hasText(value)) {
+        if (!RopUtils.hasText(value)) {
             return true;
         }else{
             try {
