@@ -6,7 +6,7 @@ package com.rop.params.request;
 
 import com.rop.annotation.IgnoreSign;
 import com.rop.params.base.BaseRopRequest;
-import com.rop.params.response.LogonResponse;
+import com.rop.params.response.SessionResponse;
 
 import javax.validation.constraints.NotNull;
 
@@ -18,8 +18,7 @@ import javax.validation.constraints.NotNull;
  * @author 陈雄华
  * @version 1.0
  */
-public class LogonRequest extends BaseRopRequest<LogonResponse> {
-
+public class SessionRequest extends BaseRopRequest<SessionResponse> {
     @NotNull
     private String userName;
 
@@ -41,6 +40,7 @@ public class LogonRequest extends BaseRopRequest<LogonResponse> {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
     @Override
     public String getApiMethodName() {

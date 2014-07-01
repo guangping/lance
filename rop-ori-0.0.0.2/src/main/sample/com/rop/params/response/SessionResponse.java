@@ -15,7 +15,7 @@ import com.rop.params.base.BaseRopResponse;
  * @author 陈雄华
  * @version 1.0
  */
-public class LogonResponse extends BaseRopResponse {
+public class SessionResponse extends BaseRopResponse {
 
 
     private String sessionId;
