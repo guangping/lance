@@ -1,15 +1,12 @@
-/**
- * 版权声明：中图一购网络科技有限公司 版权所有 违者必究 2012 
- * 日    期：12-6-2
- */
 package com.rop.listener;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rop.RopRequestContext;
 import com.rop.event.AfterDoServiceEvent;
 import com.rop.event.RopEventListener;
-import com.rop.marshaller.MessageMarshallerUtils;
+import com.rop.pojo.RopLogger;
 
-import java.util.Map;
+import java.util.Date;
 
 /**
  * <pre>
@@ -18,24 +15,26 @@ import java.util.Map;
  *
  * @author 陈雄华
  * @version 1.0
- *
- *记录调用日志
+ *          <p/>
+ *          记录调用日志
  */
 public class LoggerDoServiceEventListener implements RopEventListener<AfterDoServiceEvent> {
 
     @Override
     public void onRopEvent(AfterDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
-        if(ropRequestContext != null){
-            ropRequestContext.getAppKey();
-            ropRequestContext.getMethod();
-            ropRequestContext.getVersion();
-            ropRequestContext.getIp();
-            ropRequestContext.getServiceBeginTime();
-            ropRequestContext.getServiceEndTime();
-            Map<String,String> allParams = ropRequestContext.getAllParams();
-            String message = MessageMarshallerUtils.asUrlString(allParams);
-            System.out.println("message("+ropEvent.getServiceEndTime()+")"+message);
+        if (ropRequestContext != null) {
+            RopLogger logger = new RopLogger();
+            logger.setAppKey(ropRequestContext.getAppKey());
+            logger.setMethod(ropRequestContext.getMethod());
+            logger.setIp(ropRequestContext.getIp());
+            logger.setServiceBeginTime(new Date(ropRequestContext.getServiceBeginTime()));
+            logger.setServiceEndTime(new Date(ropRequestContext.getServiceEndTime()));
+            logger.setVersion(ropRequestContext.getVersion());
+            logger.setRequestContent(JSONObject.toJSONString(ropRequestContext.getAllParams()));
+            logger.setResponseContent(JSONObject.toJSONString(ropRequestContext.getRopResponse()));
+            logger.setSessionId(ropRequestContext.getSessionId());
+            System.out.println("调用日志:" + JSONObject.toJSONString(logger));
         }
     }
 
