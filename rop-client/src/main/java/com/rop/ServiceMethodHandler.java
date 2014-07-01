@@ -26,7 +26,7 @@ public class ServiceMethodHandler {
     private ServiceMethodDefinition serviceMethodDefinition;
 
     //处理方法的请求对象类
-    private Class<? extends RopRequest> requestType = RopRequest.class;
+    private Class<? extends RopRequest> requestType =null ;//RopRequest.class;
 
     //无需签名的字段列表
     private List<String> ignoreSignFieldNames;
@@ -66,8 +66,7 @@ public class ServiceMethodHandler {
 
 
     public boolean isHandlerMethodWithParameter() {
-        return this.getHandlerMethod().isVarArgs();
-        //return this.requestType != null;
+        return this.requestType != null;
     }
 
     public void setIgnoreSignFieldNames(List<String> ignoreSignFieldNames) {

@@ -37,6 +37,8 @@ public class HttpUtils {
                     con.setDoInput(true);
                     con.setDoOutput(true);
                     con.setRequestMethod("POST");
+                    con.setRequestProperty("connection", "Keep-Alive");
+                    con.setRequestProperty("Charsert", "UTF-8");
                     con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
                     String postParam = encodeParameters(form);
@@ -127,6 +129,8 @@ public class HttpUtils {
                     con.setDoInput(true);
                     con.setDoOutput(true);
                     con.setRequestMethod("GET");
+                    con.setRequestProperty("connection", "Keep-Alive");
+                    con.setRequestProperty("Charsert", "UTF-8");
                     if (HttpURLConnection.HTTP_OK == con.getResponseCode()) {
                         rval = getMsg(con.getInputStream());
                         retrySign=false;
