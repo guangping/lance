@@ -34,7 +34,6 @@
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <!--将xxxx-yyyyyyy格式的电话转换为内部的Telephone对象-->
                 <bean class="com.rop.converter.DateConverter"/>
             </set>
         </property>
