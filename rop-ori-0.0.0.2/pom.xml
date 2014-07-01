@@ -146,7 +146,7 @@
 
                         <configuration>
                             <sources>
-                                <source>src/main/java</source>
+                              <!---->  <source>src/main/core</source>
                                 <source>src/main/default</source>
                                 <source>src/main/client</source>
                                <!----> <source>src/main/sample</source>
