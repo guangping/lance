@@ -66,7 +66,8 @@ public class ServiceMethodHandler {
 
 
     public boolean isHandlerMethodWithParameter() {
-        return this.requestType != null;
+        return this.getHandlerMethod().isVarArgs();
+        //return this.requestType != null;
     }
 
     public void setIgnoreSignFieldNames(List<String> ignoreSignFieldNames) {
