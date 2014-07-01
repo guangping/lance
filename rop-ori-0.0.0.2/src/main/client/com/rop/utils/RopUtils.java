@@ -6,9 +6,16 @@ package com.rop.utils;
 
 import com.rop.Constants;
 import com.rop.RopException;
+import com.rop.RopRequest;
+import com.rop.annotation.IgnoreSign;
+import com.rop.annotation.Temporary;
+import com.rop.config.SystemParameterNames;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.*;
@@ -164,6 +171,124 @@ public class RopUtils {
 
     public static boolean hasLength(CharSequence str) {
         return (str != null && str.length() > 0);
+    }
+
+
+    public static <A extends Annotation> A findAnnotation(Class<?> clazz, Class<A> annotationType) {
+        A annotation = clazz.getAnnotation(annotationType);
+        if (annotation != null) {
+            return annotation;
+        }
+        for (Class<?> ifc : clazz.getInterfaces()) {
+            annotation = findAnnotation(ifc, annotationType);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+        if (!Annotation.class.isAssignableFrom(clazz)) {
+            for (Annotation ann : clazz.getAnnotations()) {
+                annotation = findAnnotation(ann.annotationType(), annotationType);
+                if (annotation != null) {
+                    return annotation;
+                }
+            }
+        }
+        Class<?> superClass = clazz.getSuperclass();
+        if (superClass == null || superClass == Object.class) {
+            return null;
+        }
+        return findAnnotation(superClass, annotationType);
+    }
+
+    public static void doWithFields(Class<?> clazz, FieldCallback fc) throws IllegalArgumentException {
+        Class<?> targetClass = clazz;
+        do {
+            Field[] fields = targetClass.getDeclaredFields();
+            for (Field field : fields) {
+                try {
+                    fc.doWith(field);
+                } catch (IllegalAccessException ex) {
+                    throw new IllegalStateException(
+                            "Shouldn't be illegal to access field '" + field.getName() + "': " + ex);
+                }
+            }
+            targetClass = targetClass.getSuperclass();
+        }
+        while (targetClass != null && targetClass != Object.class);
+    }
+
+    public interface FieldCallback {
+
+        void doWith(Field field) throws IllegalArgumentException, IllegalAccessException;
+    }
+
+    public interface FieldFilter {
+
+        boolean matches(Field field);
+    }
+
+    public static void makeAccessible(Field field) {
+        if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
+                Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+            field.setAccessible(true);
+        }
+    }
+
+    /*
+    *获取忽略签名的参数
+    * */
+    public static List<String> getIgnoreSignFieldNames(Class<? extends RopRequest> requestType) {
+        final ArrayList<String> igoreSignFieldNames = new ArrayList<String>(1);
+        igoreSignFieldNames.add(SystemParameterNames.getSign());
+        if (requestType != null) {
+            RopUtils.doWithFields(requestType, new RopUtils.FieldCallback() {
+                        public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+                            igoreSignFieldNames.add(field.getName());
+                        }
+                    },
+                    new RopUtils.FieldFilter() {
+                        public boolean matches(Field field) {
+
+                            //属性类标注了@IgnoreSign
+                            IgnoreSign typeIgnore = RopUtils.findAnnotation(field.getType(), IgnoreSign.class);
+
+                            //属性定义处标注了@IgnoreSign
+                            IgnoreSign varIgnoreSign = field.getAnnotation(IgnoreSign.class);
+
+                            //属性定义处标注了@Temporary
+                            Temporary varTemporary = field.getAnnotation(Temporary.class);
+
+                            return typeIgnore != null || varIgnoreSign != null || varTemporary != null;
+                        }
+                    }
+            );
+        }
+        return igoreSignFieldNames;
+    }
+
+    public static void doWithFields(Class<?> clazz, FieldCallback fc, FieldFilter ff)
+            throws IllegalArgumentException {
+
+        // Keep backing up the inheritance hierarchy.
+        Class<?> targetClass = clazz;
+        do {
+            Field[] fields = targetClass.getDeclaredFields();
+            for (Field field : fields) {
+                // Skip static and final fields.
+                if (ff != null && !ff.matches(field)) {
+                    continue;
+                }
+                try {
+                    fc.doWith(field);
+                }
+                catch (IllegalAccessException ex) {
+                    throw new IllegalStateException(
+                            "Shouldn't be illegal to access field '" + field.getName() + "': " + ex);
+                }
+            }
+            targetClass = targetClass.getSuperclass();
+        }
+        while (targetClass != null && targetClass != Object.class);
     }
 }
 

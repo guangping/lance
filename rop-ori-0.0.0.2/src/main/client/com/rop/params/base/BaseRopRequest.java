@@ -1,7 +1,6 @@
 package com.rop.params.base;
 
 import com.rop.AbstractRopRequest;
-import com.rop.RopRequest;
 import com.rop.RopResponse;
 
 /**
