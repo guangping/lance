@@ -2,8 +2,8 @@ package com.rop.sys;
 
 import com.rop.client.CompositeResponse;
 import com.rop.client.DefaultRopClient;
-import com.rop.params.request.LogonRequest;
-import com.rop.params.response.LogonResponse;
+import com.rop.params.request.SessionRequest;
+import com.rop.params.response.SessionResponse;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -24,16 +24,16 @@ public class SysTest {
 
     @Test
     public void createSession() {
-        LogonRequest ropRequest = new LogonRequest();
+        SessionRequest ropRequest = new SessionRequest();
         ropRequest.setUserName("tomson");
         ropRequest.setPassword("123");
         CompositeResponse response = ropClient.buildClientRequest()
-                .post(ropRequest, LogonResponse.class, "user.getSession", "1.0");
+                .post(ropRequest, SessionResponse.class, "user.getSession", "1.0");
         assertNotNull(response);
         assertTrue(response.isSuccessful());
         assertNotNull(response.getSuccessResponse());
-        assertTrue(response.getSuccessResponse() instanceof LogonResponse);
-        assertEquals(((LogonResponse) response.getSuccessResponse()).getSessionId(), "mockSessionId1");
-        ropClient.setSessionId(((LogonResponse) response.getSuccessResponse()).getSessionId());
+        assertTrue(response.getSuccessResponse() instanceof SessionResponse);
+        assertEquals(((SessionResponse) response.getSuccessResponse()).getSessionId(), "mockSessionId1");
+        ropClient.setSessionId(((SessionResponse) response.getSuccessResponse()).getSessionId());
     }
 }
