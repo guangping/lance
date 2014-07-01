@@ -40,8 +40,8 @@ public class AnnotationServiceMethodAdapter implements ServiceMethodAdapter {
             RopRequestContext ropRequestContext = ropRequest.getRopRequestContext();
             //分析上下文中的错误
             ServiceMethodHandler serviceMethodHandler = ropRequestContext.getServiceMethodHandler();
-            if (logger.isDebugEnabled()) {
-                logger.debug("执行" + serviceMethodHandler.getHandler().getClass() +
+            if (logger.isInfoEnabled()) {
+                logger.info("执行" + serviceMethodHandler.getHandler().getClass() +
                         "." + serviceMethodHandler.getHandlerMethod().getName());
             }
             /*反射执行方法*/
