@@ -6,6 +6,7 @@ import com.rop.params.request.LoginRequest;
 import com.rop.params.request.SessionRequest;
 import com.rop.params.response.LoginResponse;
 import com.rop.params.response.SessionResponse;
+import com.rop.service.SessionOpenService;
 import com.rop.utils.HttpUtils;
 import org.testng.annotations.Test;
 
@@ -26,7 +27,7 @@ public class SysHttpTest {
         SessionRequest ropRequest = new SessionRequest();
         ropRequest.setUserName("tomson");
         ropRequest.setPassword("123");
-        // CommonResponse response=ropClient.buildClientRequest().g(ropRequest,SessionResponse.class);
+        // CommonResponse response=ropClient.buildClientRequest().get(ropRequest, SessionResponse.class);
         //CommonResponse response=ropClient.buildClientRequest().get(ropRequest,SessionResponse.class,"2.0");
 
         CommonResponse response = ropClient.buildClientRequest().get(SessionResponse.class, "user.getSession1", "1.0");
@@ -57,5 +58,11 @@ public class SysHttpTest {
     @Test
     public void test() {
         System.out.println(HttpUtils.get("http://localhost:8080/router"));
+    }
+
+    @Test
+    public void method(){
+        SessionOpenService sessionOpenService=new SessionOpenService();
+        System.out.println("书册:"+0x00000080);
     }
 }
