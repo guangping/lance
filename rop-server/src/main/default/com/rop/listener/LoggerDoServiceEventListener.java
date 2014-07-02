@@ -6,6 +6,7 @@ import com.rop.database.IBaseDAO;
 import com.rop.event.AfterDoServiceEvent;
 import com.rop.event.RopEventListener;
 import com.rop.pojo.RopLogger;
+import com.rop.spring.SpringRopContextHolder;
 
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
     @Override
     public void onRopEvent(AfterDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
+        ropDefaultDAO= SpringRopContextHolder.getBean("ropDefaultDAO");
         if (ropRequestContext != null) {
             RopLogger logger = new RopLogger();
             logger.setAppKey(ropRequestContext.getAppKey());
@@ -38,7 +40,6 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
             logger.setResponseContent(JSONObject.toJSONString(ropRequestContext.getRopResponse()));
             logger.setSessionId(ropRequestContext.getSessionId());
             ropDefaultDAO.insert("rop_log",logger);
-           // System.out.println("调用日志:" + JSONObject.toJSONString(logger));
         }
     }
 
@@ -47,8 +48,5 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         return 0;
     }
 
-    public void setRopDefaultDAO(IBaseDAO ropDefaultDAO) {
-        this.ropDefaultDAO = ropDefaultDAO;
-    }
 }
 

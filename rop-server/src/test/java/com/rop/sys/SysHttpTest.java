@@ -30,7 +30,7 @@ public class SysHttpTest {
         // CommonResponse response=ropClient.buildClientRequest().get(ropRequest, SessionResponse.class);
         //CommonResponse response=ropClient.buildClientRequest().get(ropRequest,SessionResponse.class,"2.0");
 
-        CommonResponse response = ropClient.buildClientRequest().get(SessionResponse.class, "user.getSession1", "1.0");
+        CommonResponse response = ropClient.buildClientRequest().get(SessionResponse.class, "user.getSession3", "1.0");
 
         System.out.println("response:" + response);
     }
