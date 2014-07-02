@@ -54,6 +54,9 @@
         <!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计
         <property name="filters" value="stat"/>  -->
     </bean>
+
+
+    <!--以下是数据操作必备配置-->
     <bean id="namedParameterJdbcTemplateRop"
           class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
