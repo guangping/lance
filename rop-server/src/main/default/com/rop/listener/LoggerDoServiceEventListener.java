@@ -2,6 +2,7 @@ package com.rop.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rop.RopRequestContext;
+import com.rop.database.IBaseDAO;
 import com.rop.event.AfterDoServiceEvent;
 import com.rop.event.RopEventListener;
 import com.rop.pojo.RopLogger;
@@ -20,6 +21,8 @@ import java.util.Date;
  */
 public class LoggerDoServiceEventListener implements RopEventListener<AfterDoServiceEvent> {
 
+    private IBaseDAO ropDefaultDAO;
+
     @Override
     public void onRopEvent(AfterDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
@@ -34,13 +37,18 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
             logger.setRequestContent(JSONObject.toJSONString(ropRequestContext.getAllParams()));
             logger.setResponseContent(JSONObject.toJSONString(ropRequestContext.getRopResponse()));
             logger.setSessionId(ropRequestContext.getSessionId());
-            System.out.println("调用日志:" + JSONObject.toJSONString(logger));
+            ropDefaultDAO.insert("rop_log",logger);
+           // System.out.println("调用日志:" + JSONObject.toJSONString(logger));
         }
     }
 
     @Override
     public int getOrder() {
         return 0;
+    }
+
+    public void setRopDefaultDAO(IBaseDAO ropDefaultDAO) {
+        this.ropDefaultDAO = ropDefaultDAO;
     }
 }
 

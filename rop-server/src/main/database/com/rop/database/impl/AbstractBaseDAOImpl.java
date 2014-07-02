@@ -21,6 +21,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -36,7 +37,9 @@ import java.util.regex.Pattern;
 public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+
     protected JdbcTemplate jdbcTemplateRop;
+
 
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplateRop;
 
@@ -372,13 +375,12 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         }
     }
 
-
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplateRop = jdbcTemplate;
+    public void setJdbcTemplateRop(JdbcTemplate jdbcTemplateRop) {
+        this.jdbcTemplateRop = jdbcTemplateRop;
     }
 
-    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplateRop = namedParameterJdbcTemplate;
+    public void setNamedParameterJdbcTemplateRop(NamedParameterJdbcTemplate namedParameterJdbcTemplateRop) {
+        this.namedParameterJdbcTemplateRop = namedParameterJdbcTemplateRop;
     }
 
     /**

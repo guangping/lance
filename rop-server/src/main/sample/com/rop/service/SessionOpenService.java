@@ -30,7 +30,7 @@ public class SessionOpenService {
         return response;
     }
 
-    @ServiceMethod(method = "user.getSession", version = "1.0", needInSession = NeedInSessionType.NO)
+    @ServiceMethod(method = "user.getSession", version = "1.0", needInSession = NeedInSessionType.NO,title ="获取session")
     SessionResponse getSession(SessionRequest request) {
         SessionResponse response=new SessionResponse();
         response.setResult(true);
@@ -41,7 +41,7 @@ public class SessionOpenService {
         return response;
     }
 
-    @ServiceMethod(method = "user.login", version = "1.0", needInSession = NeedInSessionType.YES)
+    @ServiceMethod(method = "user.login", version = "1.0", needInSession = NeedInSessionType.YES,title = "登陆方法")
     LoginResponse login(LoginRequest request) {
         LoginResponse response=new LoginResponse();
         response.setResult(true);

@@ -7,6 +7,8 @@ package com.rop.impl;
 import com.rop.*;
 import com.rop.annotation.*;
 import com.rop.config.SystemParameterNames;
+import com.rop.database.IBaseDAO;
+import com.rop.pojo.RopService;
 import com.rop.request.UploadFile;
 import com.rop.session.SessionManager;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -175,20 +178,39 @@ public class DefaultRopContext implements RopContext {
         if (logger.isInfoEnabled()) {
             logger.info("共注册了" + serviceHandlerMap.size() + "个服务方法");
         }
-        initService();
+        new Thread(new InitRopService(context)).start();
     }
 
+    private class InitRopService implements Runnable {
+        private ApplicationContext context;
 
-    //初始化服务记录
-    private void initService(){
-        boolean sign=Boolean.valueOf(System.getProperty("rop.init.service"));
-        if(sign){
-            Collection<ServiceMethodHandler> collection=serviceHandlerMap.values();
-            for(ServiceMethodHandler handler:collection){
-                handler.getServiceMethodDefinition();
+        public InitRopService(ApplicationContext context) {
+            this.context = context;
+        }
+
+        public void run() {
+            boolean sign = Boolean.valueOf(System.getProperty("rop.init.service"));
+            if (sign) {
+                IBaseDAO ropDefaultDAO = (IBaseDAO) context.getBean("ropDefaultDAO");
+                Collection<ServiceMethodHandler> collection = serviceHandlerMap.values();
+                List<RopService> list = new ArrayList<RopService>();
+                RopService service=null;
+                for (ServiceMethodHandler handler : collection) {
+                    service=new RopService();
+                    service.setMethod(handler.getServiceMethodDefinition().getMethod());
+                    service.setVersion(handler.getServiceMethodDefinition().getVersion());
+                    service.setMethodGroupTitle(handler.getServiceMethodDefinition().getMethodGroupTitle());
+                    service.setMethodTitle(handler.getServiceMethodDefinition().getMethodTitle());
+                    service.setObsoleted(String.valueOf(handler.getServiceMethodDefinition().isObsoleted()));
+                    service.setNeedInSession(String.valueOf(handler.getServiceMethodDefinition().isNeedInSession()));
+                    service.setMethodGroup(handler.getServiceMethodDefinition().getMethodGroup());
+                    list.add(service);
+                }
+                ropDefaultDAO.batchInsert("rop_service", list);
             }
         }
     }
+
 
     private ServiceMethodDefinition buildServiceMethodDefinition(ServiceMethod serviceMethod) {
         ServiceMethodDefinition definition = new ServiceMethodDefinition();
