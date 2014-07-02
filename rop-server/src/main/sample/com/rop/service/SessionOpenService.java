@@ -27,6 +27,12 @@ public class SessionOpenService {
         response.setMsg("success");
         response.setSessionId(UUID.randomUUID().toString());
 
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return response;
     }
 
