@@ -28,6 +28,16 @@ public class RopLogger implements Serializable {
 
     private String responseContent;
 
+    private String sessionId;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     public String getMethod() {
         return method;
     }

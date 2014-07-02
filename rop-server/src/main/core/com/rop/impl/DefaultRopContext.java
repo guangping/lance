@@ -175,6 +175,19 @@ public class DefaultRopContext implements RopContext {
         if (logger.isInfoEnabled()) {
             logger.info("共注册了" + serviceHandlerMap.size() + "个服务方法");
         }
+        initService();
+    }
+
+
+    //初始化服务记录
+    private void initService(){
+        boolean sign=Boolean.valueOf(System.getProperty("rop.init.service"));
+        if(sign){
+            Collection<ServiceMethodHandler> collection=serviceHandlerMap.values();
+            for(ServiceMethodHandler handler:collection){
+                handler.getServiceMethodDefinition();
+            }
+        }
     }
 
     private ServiceMethodDefinition buildServiceMethodDefinition(ServiceMethod serviceMethod) {

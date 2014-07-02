@@ -19,7 +19,7 @@ import java.util.UUID;
 @ServiceMethodBean(version = "1.0")
 public class SessionOpenService {
 
-    @ServiceMethod(method = "user.getSession1", version = "1.0", needInSession = NeedInSessionType.NO)
+    @ServiceMethod(method = "user.getSession1", version = "1.0", needInSession = NeedInSessionType.NO,title = "无参获取session")
     SessionResponse getSession() {
         SessionResponse response=new SessionResponse();
         response.setResult(true);
