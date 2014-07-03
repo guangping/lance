@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 
 /**
- * cache
+ * memcache实现
  */
 public class XmCache implements INetCache {
 

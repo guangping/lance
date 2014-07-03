@@ -10,8 +10,6 @@ public class CacheFactory {
 
     private INetCache instance = DefaultCache.getInstance();
 
-    public CacheFactory() {
-    }
 
 
     public INetCache getDefaultCache() {
