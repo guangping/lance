@@ -43,6 +43,19 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         }
     }
 
+    private class SaveLogger implements Runnable{
+        private  RopLogger logger=null;
+
+        private SaveLogger(RopLogger logger) {
+            this.logger = logger;
+        }
+
+        @Override
+        public void run() {
+
+        }
+    }
+
     @Override
     public int getOrder() {
         return 0;
