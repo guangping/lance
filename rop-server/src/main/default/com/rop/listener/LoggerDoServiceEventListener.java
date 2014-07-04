@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -31,17 +28,15 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
     private static Logger log = LoggerFactory.getLogger(LoggerDoServiceEventListener.class);
 
     private Queue<RopLogger> queue = null;
-    private ThreadPoolExecutor threadPoolExecutor;
     private Timer timer = null;
 
     {
         queue = new LinkedBlockingQueue<RopLogger>();
         log.debug("日志队列的大小:{}", queue.size());
-        threadPoolExecutor = new ThreadPoolExecutor(200, Integer.MAX_VALUE, 5 * 60, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
         timer = new Timer(true);
-
-        timer.schedule(new RunnableLogger(), 30000, 1000);
-
+        for(int i=0;i<10;i++){
+            timer.schedule(new RunnableLogger(), 30000, 1000);
+        }
     }
 
 
@@ -75,7 +70,7 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
 
     private class RunnableLogger extends TimerTask {
         private IBaseDAO ropDefaultDAO;
-        private int Max = 500;
+        private int Max = 1000;
 
         private RunnableLogger() {
 
@@ -84,7 +79,7 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         @Override
         public void run() {
             ropDefaultDAO = SpringRopContextHolder.getBean("ropDefaultDAO");
-            if (queue.size()>0 && queue.size() <= Max) Max = queue.size();
+            if (queue.size() > 0 && queue.size() <= Max) Max = queue.size();
             List<RopLogger> list = new ArrayList<RopLogger>();
             RopLogger ropLogger = null;
             if (queue.size() > 0) {
