@@ -74,7 +74,7 @@ public class SysHttpTest {
     @Test
     public void sync(){
         ExecutorService executorService= Executors.newFixedThreadPool(10);
-        for(int i=0;i<10;i++){
+        for(int i=0;i<100;i++){
             executorService.submit(new TestSession());
         }
 
