@@ -1,0 +1,11 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<clickstream>
+    <!-- there can only be one logger -->
+    <logger class="com.action.analysis.log.TouchLogger"/>
+
+    <!-- there can be zero or more bot-hosts -->
+    <bot-host name="someBotHost"/>
+
+    <!-- there can be zero or more bot-agents -->
+    <bot-agent name="someBotAgent"/>
+</clickstream>
