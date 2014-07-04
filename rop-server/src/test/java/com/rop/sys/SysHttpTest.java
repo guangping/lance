@@ -1,5 +1,6 @@
 package com.rop.sys;
 
+import com.alibaba.fastjson.JSONObject;
 import com.rop.client.CommonResponse;
 import com.rop.client.DefaultRopHttpClient;
 import com.rop.params.request.LoginRequest;
@@ -9,6 +10,10 @@ import com.rop.params.response.SessionResponse;
 import com.rop.service.SessionOpenService;
 import com.rop.utils.HttpUtils;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,7 +47,7 @@ public class SysHttpTest {
         ropRequest.setPassword("123");
         CommonResponse response = ropClient.buildClientRequest().post(ropRequest, SessionResponse.class);
 
-        System.out.println("response:" + response);
+        System.out.println("response:" + JSONObject.toJSONString(response));
     }
 
     @Test
@@ -65,4 +70,36 @@ public class SysHttpTest {
         SessionOpenService sessionOpenService=new SessionOpenService();
         System.out.println("书册:"+0x00000080);
     }
+
+    @Test
+    public void sync(){
+        ExecutorService executorService= Executors.newFixedThreadPool(10);
+        for(int i=0;i<10;i++){
+            executorService.submit(new TestSession());
+        }
+
+        while (true){}
+    }
+
+    private class TestSession implements Runnable{
+
+        @Override
+        public void run() {
+           for(int i=0;i<5000;i++){
+               SessionRequest ropRequest = new SessionRequest();
+               ropRequest.setUserName("tomson");
+               ropRequest.setPassword("123");
+               CommonResponse response = ropClient.buildClientRequest().post(ropRequest, SessionResponse.class);
+
+               // System.out.println(Thread.currentThread().getName()+":"+ JSONObject.toJSONString(response));
+           }
+        }
+    }
+
+    @Test
+    public void runTime(){
+
+    }
+
+
 }

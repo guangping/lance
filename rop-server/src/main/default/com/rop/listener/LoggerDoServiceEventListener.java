@@ -7,8 +7,14 @@ import com.rop.event.AfterDoServiceEvent;
 import com.rop.event.RopEventListener;
 import com.rop.pojo.RopLogger;
 import com.rop.spring.SpringRopContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -22,12 +28,27 @@ import java.util.Date;
  */
 public class LoggerDoServiceEventListener implements RopEventListener<AfterDoServiceEvent> {
 
-    private IBaseDAO ropDefaultDAO;
+    private static Logger log = LoggerFactory.getLogger(LoggerDoServiceEventListener.class);
+
+    private Queue<RopLogger> queue = null;
+    private ThreadPoolExecutor threadPoolExecutor;
+    private Timer timer = null;
+
+    {
+        queue = new LinkedBlockingQueue<RopLogger>();
+        log.debug("日志队列的大小:{}", queue.size());
+        threadPoolExecutor = new ThreadPoolExecutor(200, Integer.MAX_VALUE, 5 * 60, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
+        timer = new Timer(true);
+
+        timer.schedule(new RunnableLogger(), 30000, 1000);
+
+    }
+
 
     @Override
     public void onRopEvent(AfterDoServiceEvent ropEvent) {
         RopRequestContext ropRequestContext = ropEvent.getRopRequestContext();
-        ropDefaultDAO= SpringRopContextHolder.getBean("ropDefaultDAO");
+
         if (ropRequestContext != null) {
             RopLogger logger = new RopLogger();
             logger.setAppKey(ropRequestContext.getAppKey());
@@ -39,22 +60,62 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
             logger.setRequestContent(JSONObject.toJSONString(ropRequestContext.getAllParams()));
             logger.setResponseContent(JSONObject.toJSONString(ropRequestContext.getRopResponse()));
             logger.setSessionId(ropRequestContext.getSessionId());
-            ropDefaultDAO.insert("rop_log",logger);
+            /*
+            * 记录调用日志
+            * */
+            queue.offer(logger);
+            /*
+            *记录调用次数(总调用次数、某个方法的调用次数)
+            * **/
+
+
         }
     }
 
-    private class SaveLogger implements Runnable{
-        private  RopLogger logger=null;
 
-        private SaveLogger(RopLogger logger) {
-            this.logger = logger;
+    private class RunnableLogger extends TimerTask {
+        private IBaseDAO ropDefaultDAO;
+        private int Max = 500;
+
+        private RunnableLogger() {
+
         }
 
         @Override
         public void run() {
+            ropDefaultDAO = SpringRopContextHolder.getBean("ropDefaultDAO");
+            if (queue.size()>0 && queue.size() <= Max) Max = queue.size();
+            List<RopLogger> list = new ArrayList<RopLogger>();
+            RopLogger ropLogger = null;
+            if (queue.size() > 0) {
+                for (int i = 0; i < Max; i++) {
+                    ropLogger = queue.poll();
+                    if (null != ropLogger) {
+                        list.add(ropLogger);
+                    }
+                }
+                if (list.size() > 0) {
+                    ropDefaultDAO.batchInsert("rop_log", list);
+                }
 
+            }
         }
     }
+
+   /* private class RunnableLogger extends TimerTask {
+        private List<RopLogger> list = null;
+        private IBaseDAO ropDefaultDAO;
+
+        private RunnableLogger(List<RopLogger> list) {
+            this.list = list;
+            ropDefaultDAO = SpringRopContextHolder.getBean("ropDefaultDAO");
+        }
+
+        @Override
+        public void run() {
+            ropDefaultDAO.batchInsert("rop_log", list);
+        }
+    }*/
 
     @Override
     public int getOrder() {
