@@ -97,20 +97,6 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         }
     }
 
-   /* private class RunnableLogger extends TimerTask {
-        private List<RopLogger> list = null;
-        private IBaseDAO ropDefaultDAO;
-
-        private RunnableLogger(List<RopLogger> list) {
-            this.list = list;
-            ropDefaultDAO = SpringRopContextHolder.getBean("ropDefaultDAO");
-        }
-
-        @Override
-        public void run() {
-            ropDefaultDAO.batchInsert("rop_log", list);
-        }
-    }*/
 
     @Override
     public int getOrder() {
