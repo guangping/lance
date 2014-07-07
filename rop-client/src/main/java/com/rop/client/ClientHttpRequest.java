@@ -38,7 +38,7 @@ public interface ClientHttpRequest {
      * @param <T>
      * @return
      */
-    <T> CommonResponse  post(BaseRopRequest ropRequest,Class<T> ropResponseClass);
+    <T> CommonResponse  execute(BaseRopRequest ropRequest,Class<T> ropResponseClass);
 
     /**
      * 直接使用 ropRequest发送请求
@@ -48,7 +48,7 @@ public interface ClientHttpRequest {
      * @param <T>
      * @return
      */
-    <T> CommonResponse post(BaseRopRequest ropRequest, Class<T> ropResponseClass, String version);
+    <T> CommonResponse execute(BaseRopRequest ropRequest, Class<T> ropResponseClass, String version);
 
     /**
      * 直接使用 ropRequest发送请求
@@ -59,27 +59,27 @@ public interface ClientHttpRequest {
      * @param <T>
      * @return
      */
-    <T> CommonResponse post(Class<T> ropResponseClass,String methodName ,String version);
+    <T> CommonResponse execute(Class<T> ropResponseClass,String methodName ,String version);
 
-    /**
+  /*  *//**
      * 使用GET发送服务请求
      * @param ropResponseClass
      * @param <T>
      * @return
-     */
+     *//*
     <T> CommonResponse get(BaseRopRequest ropRequest,Class<T> ropResponseClass);
 
-    /**
+    *//**
      * 使用GET发送ropRequest的请求
      * @param ropRequest
      * @param ropResponseClass
      * @param version
      * @param <T>
      * @return
-     */
+     *//*
     <T> CommonResponse get(BaseRopRequest ropRequest, Class<T> ropResponseClass, String version);
 
-    /**
+    *//**
      * 直接使用 ropRequest发送请求
      * @param ropRequest
      * @param ropResponseClass
@@ -87,7 +87,7 @@ public interface ClientHttpRequest {
      * @param version
      * @param <T>
      * @return
-     */
+     *//*
     <T> CommonResponse get(Class<T> ropResponseClass,String methodName ,String version);
-
+*/
 }

@@ -195,7 +195,7 @@ public class DefaultRopHttpClient implements RopHttpClient {
         }
 
         @Override
-        public <T> CommonResponse post(BaseRopRequest ropRequest, Class<T> ropResponseClass) {
+        public <T> CommonResponse execute(BaseRopRequest ropRequest, Class<T> ropResponseClass) {
             String methodName = ropRequest.getApiMethodName();
             String version = "1.0";
             Map<String, String> requestParams = getRequestForm(ropRequest, methodName, version); //;addOtherParamMap(methodName, version);
@@ -203,18 +203,37 @@ public class DefaultRopHttpClient implements RopHttpClient {
         }
 
         @Override
-        public <T> CommonResponse post(BaseRopRequest ropRequest, Class<T> ropResponseClass, String version) {
+        public <T> CommonResponse execute(BaseRopRequest ropRequest, Class<T> ropResponseClass, String version) {
             Map<String, String> requestParams = getRequestForm(ropRequest, ropRequest.getApiMethodName(), version);
             return post(ropResponseClass, requestParams);
         }
 
         @Override
-        public <T> CommonResponse post(Class<T> ropResponseClass, String methodName, String version) {
+        public <T> CommonResponse execute(Class<T> ropResponseClass, String methodName, String version) {
             Map<String, String> requestParams = addOtherParamMap(methodName, version);
             return post(ropResponseClass, requestParams);
         }
 
-        @Override
+        /*
+        *返回连接
+        * */
+        public String buildGetUrl(BaseRopRequest ropRequest) {
+            String methodName = ropRequest.getApiMethodName();
+            String version = "1.0";
+            Map<String, String> requestParams = getRequestForm(ropRequest, methodName, version);
+            return buildGetUrl(requestParams);
+        }
+
+        public String buildGetUrl(BaseRopRequest ropRequest, String version) {
+            Map<String, String> requestParams = getRequestForm(ropRequest, ropRequest.getApiMethodName(), version);
+            return buildGetUrl(requestParams);
+        }
+
+        public String buildGetUrl(String methodName, String version) {
+            Map<String, String> requestParams = addOtherParamMap(methodName, version);
+            return buildGetUrl(requestParams);
+        }
+       /* @Override
         public <T> CommonResponse get(BaseRopRequest ropRequest, Class<T> ropResponseClass) {
             String methodName = ropRequest.getApiMethodName();
             String version = "1.0";
@@ -238,7 +257,7 @@ public class DefaultRopHttpClient implements RopHttpClient {
         public <T> CommonResponse get(Class<T> ropResponseClass, String methodName, String version) {
             Map<String, String> requestParams = addOtherParamMap(methodName, version);
             return get(ropResponseClass, requestParams);
-        }
+        }*/
 
         private <T> CommonResponse toCompositeResponse(String content, Class<T> ropResponseClass) {
             boolean successful = isSuccessful(content);
