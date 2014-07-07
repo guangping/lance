@@ -187,7 +187,7 @@ public class DefaultRopHttpClient implements RopHttpClient {
         }
 
         /*
-        * post待实现
+        * post实现
         * */
         private <T> CommonResponse post(Class<T> ropResponseClass, Map<String, String> requestParams) {
             String responseContent = HttpUtils.post(serverUrl, requestParams);
