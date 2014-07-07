@@ -19,8 +19,10 @@ import javax.validation.constraints.NotNull;
  * @version 1.0
  */
 public class SessionRequest extends BaseRopRequest<SessionResponse> {
+
     @NotNull
     private String userName;
+
 
     @IgnoreSign
     private String password;

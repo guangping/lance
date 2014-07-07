@@ -11,7 +11,6 @@ import com.rop.service.SessionOpenService;
 import com.rop.utils.HttpUtils;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +34,7 @@ public class SysHttpTest {
         // CommonResponse response=ropClient.buildClientRequest().get(ropRequest, SessionResponse.class);
         //CommonResponse response=ropClient.buildClientRequest().get(ropRequest,SessionResponse.class,"2.0");
 
-        CommonResponse response = ropClient.buildClientRequest().get(SessionResponse.class, "user.getSession1", "1.0");
+        CommonResponse response = ropClient.buildClientRequest().execute(SessionResponse.class, "user.getSession1", "1.0");
 
         System.out.println("response:" + response);
     }
@@ -45,7 +44,7 @@ public class SysHttpTest {
         SessionRequest ropRequest = new SessionRequest();
         ropRequest.setUserName("tomson");
         ropRequest.setPassword("123");
-        CommonResponse response = ropClient.buildClientRequest().post(ropRequest, SessionResponse.class);
+        CommonResponse response = ropClient.buildClientRequest().execute(ropRequest, SessionResponse.class);
 
         System.out.println("response:" + JSONObject.toJSONString(response));
     }
@@ -55,7 +54,7 @@ public class SysHttpTest {
         LoginRequest ropRequest = new LoginRequest();
         ropRequest.setUserName("tomson");
         ropRequest.setPassword("123");
-        CommonResponse response = ropClient.buildClientRequest().post(ropRequest, LoginResponse.class);
+        CommonResponse response = ropClient.buildClientRequest().execute(ropRequest, LoginResponse.class);
 
         System.out.println("response:" + response);
     }
@@ -74,7 +73,7 @@ public class SysHttpTest {
     @Test
     public void sync(){
         ExecutorService executorService= Executors.newFixedThreadPool(10);
-        for(int i=0;i<100;i++){
+        for(int i=0;i<20;i++){
             executorService.submit(new TestSession());
         }
 
@@ -89,7 +88,7 @@ public class SysHttpTest {
                SessionRequest ropRequest = new SessionRequest();
                ropRequest.setUserName("tomson");
                ropRequest.setPassword("123");
-               CommonResponse response = ropClient.buildClientRequest().post(ropRequest, SessionResponse.class);
+               CommonResponse response = ropClient.buildClientRequest().execute(ropRequest, SessionResponse.class);
 
                // System.out.println(Thread.currentThread().getName()+":"+ JSONObject.toJSONString(response));
            }
@@ -101,5 +100,10 @@ public class SysHttpTest {
 
     }
 
+
+    @Test
+    public void getUrl(){
+        ropClient.buildClientRequest();
+    }
 
 }

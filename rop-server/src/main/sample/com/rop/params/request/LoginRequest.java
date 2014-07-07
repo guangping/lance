@@ -12,9 +12,12 @@ import javax.validation.constraints.NotNull;
  * Date: 2014-07-01 13:43
  * To change this template use File | Settings | File Templates.
  */
+
 public class LoginRequest extends BaseRopRequest<LoginResponse> {
+
     @NotNull
     private String userName;
+
 
     @IgnoreSign
     private String password;
