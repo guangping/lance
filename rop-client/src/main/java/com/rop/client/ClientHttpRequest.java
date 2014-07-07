@@ -61,6 +61,12 @@ public interface ClientHttpRequest {
      */
     <T> CommonResponse execute(Class<T> ropResponseClass,String methodName ,String version);
 
+    public String buildGetUrl(BaseRopRequest ropRequest);
+
+    public String buildGetUrl(BaseRopRequest ropRequest, String version) ;
+
+    public String buildGetUrl(String methodName, String version);
+
   /*  *//**
      * 使用GET发送服务请求
      * @param ropResponseClass
