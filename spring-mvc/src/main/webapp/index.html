@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="resources/css/common.css" type="text/css">
+
+</head>
+<body>
+<h1>测试js</h1>
+
+<div id="content"></div>
+</body>
+</html>
+<script type="text/javascript" src="resources/jquery/jquery-1.8.1.min.js"/>
+<script type="text/javascript" src="resources/js/common.js"/>
+<script type="text/javascript">
+    $(function () {
+        Service.excuteNoLoading('/main/message/json.form', null, function (reply) {
+            alert(reply);
+        })
+    })
+</script>

@@ -1,0 +1,5 @@
+.jqmOverlay {
+    background-color: #333;
+    filter: alpha(opacity = 50)
+}
+.loading{ background:url('../images/loading.gif') no-repeat scroll center center transparent;}
