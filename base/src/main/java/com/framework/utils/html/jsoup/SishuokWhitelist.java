@@ -1,4 +1,4 @@
-package com.framework.utils.jsoup;
+package com.framework.utils.html.jsoup;
 
 /*
     Thank you to Ryan Grove (wonko.com) for the Ruby HTML cleaner http://github.com/rgrove/sanitize/, which inspired

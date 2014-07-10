@@ -1,4 +1,4 @@
-package com.framework.utils.jsoup;
+package com.framework.utils.html.jsoup;
 
 import org.jsoup.helper.Validate;
 import org.jsoup.nodes.*;

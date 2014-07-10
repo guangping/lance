@@ -1,8 +1,7 @@
-package com.framework.utils;
+package com.framework.utils.html;
 
-import com.framework.utils.jsoup.SishuokCleaner;
-import com.framework.utils.jsoup.SishuokWhitelist;
-import org.apache.commons.lang3.*;
+import com.framework.utils.html.jsoup.SishuokCleaner;
+import com.framework.utils.html.jsoup.SishuokWhitelist;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
