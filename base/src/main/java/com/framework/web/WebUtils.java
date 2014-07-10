@@ -72,22 +72,28 @@ public class WebUtils {
     }
 
 
-    public static String getRequestIp(HttpServletRequest request) {
-        // 取IP地址
-        String vIP = request.getHeader("x-forwarded-for");
-        if (vIP == null || vIP.length() == 0|| "unknown".equalsIgnoreCase(vIP)) {
-            vIP = request.getHeader("X-Forwarded-For");
+    public static String getIpAddr(HttpServletRequest request) {
+        if (request == null) {
+            return "unknown";
         }
-        if (vIP == null || vIP.length() == 0|| "unknown".equalsIgnoreCase(vIP)) {
-            vIP = request.getHeader("Proxy-Client-IP");
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
         }
-        if (vIP == null || vIP.length() == 0|| "unknown".equalsIgnoreCase(vIP)) {
-            vIP = request.getHeader("WL-Proxy-Client-IP");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
         }
-        if (vIP == null || vIP.length() == 0|| "unknown".equalsIgnoreCase(vIP)) {
-            vIP = request.getRemoteAddr();
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        return vIP;
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
 }
