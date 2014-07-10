@@ -1,4 +1,4 @@
-package com.framework.utils.encry;
+package com.framework.utils.encrypt;
 
 import com.framework.utils.Base64Utils;
 
