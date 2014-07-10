@@ -5,7 +5,10 @@ import java.util.List;
 
 public final class ListUtils {
 
-	
+
+    /*
+    *判断是否为空
+    * */
 	public static boolean isEmpty(List list){
 		if(list==null)
 			return true;

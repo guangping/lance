@@ -1,4 +1,6 @@
-package com.framework.utils;
+package com.framework.utils.encry;
+
+import com.framework.utils.Base64Utils;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
