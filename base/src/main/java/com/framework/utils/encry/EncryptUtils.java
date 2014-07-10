@@ -1,4 +1,6 @@
-package com.framework.utils;
+package com.framework.utils.encry;
+
+import com.framework.utils.Constants;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
