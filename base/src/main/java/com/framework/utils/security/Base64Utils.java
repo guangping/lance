@@ -1,4 +1,4 @@
-package com.framework.utils;
+package com.framework.utils.security;
 
 import org.apache.commons.codec.binary.Base64;
 

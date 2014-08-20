@@ -1,6 +1,6 @@
 package com.framework.utils.security;
 
-import com.framework.utils.Base64Utils;
+import com.framework.utils.security.Base64Utils;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;

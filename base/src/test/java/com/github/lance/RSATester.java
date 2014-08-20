@@ -1,6 +1,6 @@
 package com.github.lance;
 
-import com.framework.utils.RSAUtils;
+import com.framework.utils.security.RSAUtils;
 
 import java.util.Map;
 
