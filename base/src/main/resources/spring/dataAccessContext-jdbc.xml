@@ -14,7 +14,6 @@
         <property name="locations">
             <list>
                 <value>file:${CONFIG}jdbc.properties</value>
-                <value>file:${CONFIG}CacheConfig.properties</value>
             </list>
         </property>
     </bean>
