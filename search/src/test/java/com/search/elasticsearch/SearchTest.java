@@ -20,6 +20,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -185,6 +186,7 @@ public class SearchTest {
         RangeFilterBuilder rangeFilterBuilder = FilterBuilders.rangeFilter("_score").from(5).to(3);
         FilteredQueryBuilder filteredQueryBuilder = QueryBuilders.filteredQuery(queryStringQueryBuilder, FilterBuilders.andFilter(rangeFilterBuilder));
 
+        QueryBuilders.wrapperQuery("");
 
         SearchResponse response = client.prepareSearch(DATA_BASE)
                 .setTypes("users")
@@ -192,6 +194,10 @@ public class SearchTest {
                 .setSize(10000).setFrom(0) //setFrom 分页
                 .setExplain(true) //按匹配度排序
                 .setMinScore(5)
+               /*
+               * 排序
+               * .addSort("", SortOrder.DESC)
+               * */
                 .execute()
                 .actionGet();
 
