@@ -1,5 +1,7 @@
 package com.flickr.db.pool;
 
+import com.flickr.db.pojo.Page;
+
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +56,17 @@ public interface IDBExecutors {
     * */
     public void batchInsert(String sql, List<Object[]> params);
 
+    /**
+     * 分页查询
+     * @param sql  查询的sql语句
+     * @param pageNo 查询的起始页
+     * @param pageSize  每页数量
+     * @param args  对应sql语句中的参数值
+     * @return 分页结果集对象
+     */
+    //public Page queryForMapPage(String sql, int pageNo, int pageSize, Object... args);
 
+    //public Page queryForObjectPage(String sql, int pageNo, int pageSize,Class clazz, Object... args);
 
 
 }
