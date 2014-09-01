@@ -2,7 +2,8 @@
 SQLyog Ultimate v8.8 
 MySQL - 5.5.5-10.0.12-MariaDB : Database - flickr
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -26,7 +27,7 @@ CREATE TABLE `sequence` (
   `stub` char(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `stub` (`stub`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 SET   auto_increment_increment = 2;  
