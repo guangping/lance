@@ -119,12 +119,19 @@ public class DBTest {
                 "  PRIMARY KEY (id),\n" +
                 "  UNIQUE KEY stub (stub)\n" +
                 ") ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-        StringBuffer drop=new StringBuffer(300);
+        StringBuffer drop = new StringBuffer(300);
         drop.append("drop table sequence_2");
 
         executors.execute(drop.toString());
-       // executors.execute(sql.toString());
+        // executors.execute(sql.toString());
         System.out.println("执行创建语句!");
+    }
+
+    @Test
+    public void getLastId() {
+        String sql = "select last_insert_id()";
+
+        System.out.println("获取ID:" + executors.getString(sql));
     }
 
 }

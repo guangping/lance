@@ -22,6 +22,10 @@ public interface IDBExecutors {
     * */
     public boolean execute(String sql);
 
+    /*
+    *批量执行sql
+    * */
+    public void executeBatch(List<String> sqls);
 
     /*
     *查询map
@@ -65,7 +69,7 @@ public interface IDBExecutors {
     /*
     *批量插入
     * */
-    public void batchInsert(String sql, List<Object[]> params);
+    public void insertBatch(String sql, List<Object[]> params);
 
     /**
      * 分页查询

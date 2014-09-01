@@ -58,9 +58,31 @@ public class DBExecutors implements IDBExecutors {
         }
     }
 
+
+    @Override
+    public void executeBatch(List<String> sqls) {
+        DruidPooledConnection connection = null;
+        Statement statement = null;
+        try {
+            connection = DruidPool.instance().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            for (String sql : sqls) {
+                statement.addBatch(sql);
+            }
+            statement.executeBatch();
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+            closeConnection(connection);
+        }
+    }
+
     /*
-     * 执行一句查询的sql
-     */
+         * 执行一句查询的sql
+         */
     public Map queryForMap(String sql, Object... params) {
         Map result = new HashMap();
         ResultSet rs = null;
@@ -345,7 +367,7 @@ public class DBExecutors implements IDBExecutors {
     }
 
     @Override
-    public void batchInsert(String sql, List<Object[]> params) {
+    public void insertBatch(String sql, List<Object[]> params) {
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         try {
