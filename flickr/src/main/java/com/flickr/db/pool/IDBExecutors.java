@@ -1,7 +1,5 @@
 package com.flickr.db.pool;
 
-import com.flickr.db.pojo.Page;
-
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +10,19 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public interface IDBExecutors {
+
+
+    /*
+    * 执行存储过程
+    * */
+    public void executeProc(String sql, Object... params);
+
+    /*
+    *执行sql
+    * */
+    public boolean execute(String sql);
+
+
     /*
     *查询map
     * */
@@ -22,9 +33,9 @@ public interface IDBExecutors {
     * */
     public List queryForList(String sql, Object... params);
 
-    public <T>T queryForObject(String sql, Class<T> clazz, Object... args);
+    public <T> T queryForObject(String sql, Class<T> clazz, Object... args);
 
-    public <T> List<T>  queryForList(String sql, Class<T> clazz, Object... args);
+    public <T> List<T> queryForList(String sql, Class<T> clazz, Object... args);
 
     public int getInt(String sql, Object... params);
 
@@ -49,7 +60,7 @@ public interface IDBExecutors {
     /*
     * insert
     * */
-    public String insert(String sql, Object ...params);
+    public String insert(String sql, Object... params);
 
     /*
     *批量插入

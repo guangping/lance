@@ -47,11 +47,24 @@ public class DruidPool {
             Properties ps = new Properties();
             ps.load(new InputStreamReader(new FileInputStream(file)));
             dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(ps);
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void init(){
+       try{
+           DruidPooledConnection connection=dataSource.getConnection();
+           connection.createStatement();
+
+       }catch (SQLException e){
+           e.printStackTrace();
+       }
+
     }
 
     public static DruidPool instance() {

@@ -19,6 +19,45 @@ import java.util.Map;
  */
 public class DBExecutors implements IDBExecutors {
 
+    @Override
+    public void executeProc(String sql, Object... params) {
+        CallableStatement callableStatement = null;
+        DruidPooledConnection connection = null;
+        try {
+            connection = DruidPool.instance().getConnection();
+            callableStatement = connection.prepareCall(sql);
+            if (null != params) {
+                for (int i = 0; i < params.length; i++) {
+                    callableStatement.setObject((i + 1), params[i]);
+                }
+            }
+            callableStatement.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(callableStatement);
+            closeConnection(connection);
+        }
+    }
+
+    @Override
+    public boolean execute(String sql) {
+        boolean rval = false;
+        DruidPooledConnection connection = null;
+        Statement statement = null;
+        try {
+            connection = DruidPool.instance().getConnection();
+            statement = connection.createStatement();
+            rval = statement.execute(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeStatement(statement);
+            closeConnection(connection);
+            return rval;
+        }
+    }
+
     /*
      * 执行一句查询的sql
      */
@@ -46,7 +85,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return result;
         }
@@ -84,7 +123,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return list;
         }
@@ -111,7 +150,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return rval;
         }
@@ -139,7 +178,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return rval;
         }
@@ -166,7 +205,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return rval;
         }
@@ -193,7 +232,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return rval;
         }
@@ -221,7 +260,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
             return rval;
         }
@@ -241,10 +280,11 @@ public class DBExecutors implements IDBExecutors {
                 }
             }
             preparedStatement.execute();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
         }
     }
@@ -263,10 +303,11 @@ public class DBExecutors implements IDBExecutors {
                 }
             }
             preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
         }
     }
@@ -296,7 +337,7 @@ public class DBExecutors implements IDBExecutors {
             e.printStackTrace();
         } finally {
             closeResultSet(rs);
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
 
             return id;
@@ -322,7 +363,7 @@ public class DBExecutors implements IDBExecutors {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closePreparedStatement(preparedStatement);
+            closeStatement(preparedStatement);
             closeConnection(connection);
         }
     }
@@ -350,15 +391,6 @@ public class DBExecutors implements IDBExecutors {
         }
     }
 
-    private void closePreparedStatement(PreparedStatement statement) {
-        try {
-            if (null != statement && !statement.isClosed()) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void closeStatement(Statement statement) {
         try {

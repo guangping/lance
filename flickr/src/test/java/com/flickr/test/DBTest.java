@@ -52,9 +52,18 @@ public class DBTest {
 
     @Test
     public void insert() {
-        String sql = "insert into sequence(stub) values(?)";
+        String sql_one = "set auto_increment_offset=1";
+        String sql_twb = "set auto_increment_increment=2";
+        String sql = "replace into sequence(stub) values(?)";
+        executors.execute(sql_one);
+        executors.execute(sql_twb);
         String id = executors.insert(sql, "b");
         System.out.println("插入数据:" + id);
+    }
+
+    @Test
+    public void callProc() {
+
     }
 
     @Test
@@ -73,32 +82,49 @@ public class DBTest {
     @Test
     public void delete() {
         String sql = "delete from sequence where id=?";
-        executors.delete(sql,"1");
+        executors.delete(sql, "1");
         System.out.println("删除数据!");
     }
 
     @Test
-    public void queryForObject(){
+    public void queryForObject() {
         String sql = "select * from sequence where id=?";
-        Sequences sequences=executors.queryForObject(sql,Sequences.class,"2");
-        System.out.println("结果:"+JSONObject.toJSONString(sequences));
+        Sequences sequences = executors.queryForObject(sql, Sequences.class, "2");
+        System.out.println("结果:" + JSONObject.toJSONString(sequences));
     }
 
     @Test
-    public void queryForList(){
-        String items[]=new String[10];
-        StringBuffer buffer=new StringBuffer(300);
+    public void queryForList() {
+        String items[] = new String[10];
+        StringBuffer buffer = new StringBuffer(300);
         buffer.append("select * from sequence where id in(");
-        for(int i=0;i<10;i++){
-            items[i]=String.valueOf(i+2);
+        for (int i = 0; i < 10; i++) {
+            items[i] = String.valueOf(i + 2);
             buffer.append("?");
             buffer.append(",");
         }
-        buffer.deleteCharAt(buffer.length()-1);
+        buffer.deleteCharAt(buffer.length() - 1);
         buffer.append(")");
-        List<Sequences> list=this.executors.queryForList(buffer.toString(),Sequences.class,items);
-        System.out.println("结果:"+JSONObject.toJSONString(list));
+        List<Sequences> list = this.executors.queryForList(buffer.toString(), Sequences.class, items);
+        System.out.println("结果:" + JSONObject.toJSONString(list));
     }
 
+
+    @Test
+    public void runCreate() {
+        StringBuffer sql = new StringBuffer(300);
+        sql.append("CREATE TABLE sequence_2 (\n" +
+                "  id bigint(20) NOT NULL AUTO_INCREMENT,\n" +
+                "  stub char(1) NOT NULL,\n" +
+                "  PRIMARY KEY (id),\n" +
+                "  UNIQUE KEY stub (stub)\n" +
+                ") ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+        StringBuffer drop=new StringBuffer(300);
+        drop.append("drop table sequence_2");
+
+        executors.execute(drop.toString());
+       // executors.execute(sql.toString());
+        System.out.println("执行创建语句!");
+    }
 
 }
