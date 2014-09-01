@@ -76,7 +76,7 @@ public class DBTest {
             array[0] = "A";
             list.add(array);
         }
-        executors.batchInsert(sql, list);
+        executors.insertBatch(sql, list);
     }
 
     @Test
@@ -127,11 +127,11 @@ public class DBTest {
         System.out.println("执行创建语句!");
     }
 
-    @Test
+    @Test(threadPoolSize=100,invocationCount = 10000)
     public void getLastId() {
         String sql = "select last_insert_id()";
 
-        System.out.println("获取ID:" + executors.getString(sql));
+        System.out.println(Thread.currentThread().getId()+"获取ID:" + executors.getString(sql));
     }
 
 }
