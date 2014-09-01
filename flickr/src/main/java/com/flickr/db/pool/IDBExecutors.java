@@ -1,5 +1,7 @@
 package com.flickr.db.pool;
 
+import com.flickr.db.pojo.Page;
+
 import java.util.List;
 import java.util.Map;
 
@@ -79,9 +81,9 @@ public interface IDBExecutors {
      * @param args  对应sql语句中的参数值
      * @return 分页结果集对象
      */
-    //public Page queryForMapPage(String sql, int pageNo, int pageSize, Object... args);
+    public Page queryForMapPage(String sql,String countSql, int pageNo, int pageSize, Object... args);
 
-    //public Page queryForObjectPage(String sql, int pageNo, int pageSize,Class clazz, Object... args);
+    public Page queryForObjectPage(String sql,String countSql, int pageNo, int pageSize,Class clazz, Object... args);
 
 
 }

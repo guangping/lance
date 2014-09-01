@@ -2,6 +2,7 @@ package com.flickr.db.pool;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSONObject;
+import com.flickr.db.pojo.Page;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -401,6 +402,32 @@ public class DBExecutors implements IDBExecutors {
         List list = this.queryForList(sql, args);
 
         return JSONObject.parseArray(JSONObject.toJSONString(list), clazz);
+    }
+
+    @Override
+    public Page queryForMapPage(String sql, String countSql, int pageNo, int pageSize, Object... args) {
+        if (pageNo < 1) {
+            throw new RuntimeException("pageNo 必须大于等于1!");
+        }
+        List list = this.queryForList(buildPageSql(sql, pageNo, pageSize), args);
+        int totalCount = getInt(countSql, args);
+
+        return new Page(pageNo, totalCount, pageSize, list);
+    }
+
+    @Override
+    public Page queryForObjectPage(String sql, String countSql, int pageNo, int pageSize, Class clazz, Object... args) {
+        List list = this.queryForList(buildPageSql(sql, pageNo, pageSize), clazz, args);
+        int totalCount = getInt(countSql, args);
+
+        return new Page(pageNo, totalCount, pageSize, list);
+    }
+
+    private String buildPageSql(String sql, int page, int pageSize) {
+        StringBuilder builder = new StringBuilder(500);
+        builder.append(sql);
+        builder.append(" LIMIT " + (page - 1) * pageSize + "," + pageSize);
+        return builder.toString();
     }
 
     private void closeResultSet(ResultSet set) {
