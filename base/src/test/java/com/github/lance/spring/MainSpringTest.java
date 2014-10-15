@@ -82,6 +82,7 @@ public class MainSpringTest {
         operation.setRequest_id("1");
         operation.setResponse_id("1");
 
+
         String id=defaultDAO.insert("INF_COMM_CLIENT_OPERATION",operation);
         System.out.println("返还ID:"+id);
     }
