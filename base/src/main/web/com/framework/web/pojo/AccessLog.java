@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class AccessLog implements Serializable {
 
+    private String userName;
+
     private String jsessionId;
 
     private String ip;
@@ -104,5 +106,13 @@ public class AccessLog implements Serializable {
 
     public void setReferer(String referer) {
         this.referer = referer;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
