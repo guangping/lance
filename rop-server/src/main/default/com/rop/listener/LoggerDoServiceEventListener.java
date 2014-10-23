@@ -72,9 +72,7 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
         private IBaseDAO ropDefaultDAO;
         private int Max = 1000;
 
-        private RunnableLogger() {
-
-        }
+        private RunnableLogger() {}
 
         @Override
         public void run() {
@@ -92,7 +90,6 @@ public class LoggerDoServiceEventListener implements RopEventListener<AfterDoSer
                 if (list.size() > 0) {
                     ropDefaultDAO.batchInsert("rop_log", list);
                 }
-
             }
         }
     }
