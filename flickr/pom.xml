@@ -13,6 +13,24 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7.2</version>
+                <configuration>
+                    <!--是否忽略测试-->
+                    <skip>true</skip>
+                    <forkMode>once</forkMode>
+                    <argLine>-Dfile.encoding=UTF-8 -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m</argLine>
+                    <!--  <includes>　
+                          <include>**/*Tests.java</include>
+                      </includes>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!--test-->
@@ -21,8 +39,14 @@
             <artifactId>testng</artifactId>
             <version>6.8</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.3</version>
+        </dependency>
 
 
+        <!--依赖-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -38,5 +62,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.27</version>
         </dependency>
+
+        <!--辅助类-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0</version>
+        </dependency>
+
     </dependencies>
 </project>
