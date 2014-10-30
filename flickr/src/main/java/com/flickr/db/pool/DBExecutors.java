@@ -290,7 +290,8 @@ public class DBExecutors implements IDBExecutors {
     }
 
     @Override
-    public void delete(String sql, Object... params) {
+    public boolean delete(String sql, Object... params) {
+        boolean rval=false;
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -302,13 +303,14 @@ public class DBExecutors implements IDBExecutors {
                     preparedStatement.setObject((i + 1), params[i]);
                 }
             }
-            preparedStatement.execute();
+            rval= preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             closeStatement(preparedStatement);
             closeConnection(connection);
+            return rval;
         }
     }
 

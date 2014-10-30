@@ -56,7 +56,7 @@ public interface IDBExecutors {
     /*
     * delete
     * */
-    public void delete(String sql, Object... params);
+    public boolean delete(String sql, Object... params);
 
     /*
     * update
