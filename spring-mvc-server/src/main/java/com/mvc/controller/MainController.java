@@ -17,31 +17,31 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@RequestMapping(value = "/main")
+@RequestMapping(value = "/main/admin")
 public class MainController {
 
 
     @RequestMapping(value = "/message.form")
     public ModelAndView message() {
         ModelAndView view = new ModelAndView();
-
         view.addObject("message", "注解");
-        view.setViewName("hello");
+        view.setViewName("public/demo/hello");
         return view;
     }
+
 
     @RequestMapping(value = "/message/{arg}")
     public String message(Map<String, Object> map, @PathVariable String arg, HttpServletRequest request) {
         System.out.println("业务处理方法!" + arg + ";HttpServletRequest=====>" + request);
         map.put("message", arg);
-        return "hello";
+        return "public/demo/hello";
     }
 
     @RequestMapping(value = "/{arg}/message")
     public String message(Map<String, Object> map, @PathVariable String arg) {
         System.out.println("业务处理方法!" + arg);
         map.put("message", arg);
-        return "hello";
+        return "public/demo/hello";
     }
 
     @RequestMapping(value = "/message/json")
@@ -50,6 +50,6 @@ public class MainController {
         request.setUserName("mac");
         request.setPassword("123ed");
         params.put("data", JSONObject.toJSONString(request));
-        return "json";
+        return "public/common/json";
     }
 }
