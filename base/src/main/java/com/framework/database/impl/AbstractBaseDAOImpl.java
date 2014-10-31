@@ -272,7 +272,6 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
 
     @Override
     public void execute(String sql, Object... args) {
-
         try {
             this.jdbcTemplate.update(sql, args);
         } catch (Exception e) {
