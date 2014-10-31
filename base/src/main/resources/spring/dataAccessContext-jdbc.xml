@@ -62,7 +62,7 @@
     <bean id="springContextHolder" class="com.framework.spring.SpringContextHolder" lazy-init="false"/>
 
 
-    <!-- 支持 @Transactional 标记 -->
+    <!-- 支持 @Transactional 标记  事物控制-->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource">
