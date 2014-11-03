@@ -16,7 +16,9 @@ END IF;
 END$$
 
 DELIMITER ;
---------------
+
+------------------------------
+
 DELIMITER $$
 
 USE `rss`$$
