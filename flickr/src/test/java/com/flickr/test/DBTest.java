@@ -3,6 +3,7 @@ package com.flickr.test;
 import com.alibaba.fastjson.JSONObject;
 import com.flickr.db.pool.DBExecutors;
 import com.flickr.db.pool.IDBExecutors;
+import com.flickr.test.pojo.Rss;
 import com.flickr.test.pojo.Sequences;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -132,6 +133,14 @@ public class DBTest {
         String sql = "select last_insert_id()";
 
         System.out.println(Thread.currentThread().getId()+"获取ID:" + executors.getString(sql));
+    }
+
+    @Test
+    public void runProc(){
+        String sql="call queryinfo(?,?)";
+       // List list=executors.executeProc(sql,1,10);
+        List list=executors.executeProc(sql,Rss.class,1,10);
+        System.out.println("执行存储过程!"+list.size());
     }
 
 }
