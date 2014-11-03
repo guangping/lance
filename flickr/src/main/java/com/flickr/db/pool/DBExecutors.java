@@ -19,11 +19,14 @@ import java.util.Map;
  * 数据操作封装类
  */
 public class DBExecutors implements IDBExecutors {
+    private final String LAST_ID = "SELECT LAST_INSERT_ID()";
 
     @Override
-    public void executeProc(String sql, Object... params) {
+    public List executeProc(String sql, Object... params) {
         CallableStatement callableStatement = null;
         DruidPooledConnection connection = null;
+        ResultSet rs = null;
+        List list = new ArrayList();
         try {
             connection = DruidPool.instance().getConnection();
             callableStatement = connection.prepareCall(sql);
@@ -32,13 +35,31 @@ public class DBExecutors implements IDBExecutors {
                     callableStatement.setObject((i + 1), params[i]);
                 }
             }
-            callableStatement.execute();
+            rs = callableStatement.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cols = rsmd.getColumnCount();
+            Map result = null;
+            while (rs.next()) {
+                result = new HashMap();
+                for (int i = 1; i <= cols; i++) {
+                    result.put(rsmd.getColumnName(i).toLowerCase(), rs.getString(i));
+                }
+                list.add(result);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            closeResultSet(rs);
             closeStatement(callableStatement);
             closeConnection(connection);
+            return list;
         }
+    }
+
+    @Override
+    public <T> List<T> executeProc(String sql, Class<T> clazz, Object... args) {
+        List list = executeProc(sql, args);
+        return JSONObject.parseArray(JSONObject.toJSONString(list), clazz);
     }
 
     @Override
@@ -291,7 +312,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public boolean delete(String sql, Object... params) {
-        boolean rval=false;
+        boolean rval = false;
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -303,7 +324,7 @@ public class DBExecutors implements IDBExecutors {
                     preparedStatement.setObject((i + 1), params[i]);
                 }
             }
-            rval= preparedStatement.execute();
+            rval = preparedStatement.execute();
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -353,8 +374,7 @@ public class DBExecutors implements IDBExecutors {
                 }
             }
             preparedStatement.executeUpdate();
-            String last_id = "SELECT LAST_INSERT_ID()";
-            rs = preparedStatement.executeQuery(last_id);
+            rs = preparedStatement.executeQuery(LAST_ID);
             rs.first();
             id = rs.getString(1);
             connection.commit();
@@ -364,7 +384,6 @@ public class DBExecutors implements IDBExecutors {
             closeResultSet(rs);
             closeStatement(preparedStatement);
             closeConnection(connection);
-
             return id;
         }
     }
@@ -391,6 +410,40 @@ public class DBExecutors implements IDBExecutors {
             closeStatement(preparedStatement);
             closeConnection(connection);
         }
+    }
+
+    @Override
+    public void insert(String tableName, Map params) {
+        List<String> column = new ArrayList<String>();
+        for (Object obj : params.keySet()) {
+            column.add(String.valueOf(obj));
+        }
+        String sql = getInsertSql(tableName, column);
+    }
+
+
+    /*
+   *获取插入sql
+   * **/
+    private String getInsertSql(String table, List<String> columns) {
+        StringBuffer buffer = new StringBuffer(1000);
+        buffer.append("INSERT INTO ");
+        buffer.append(table);
+        buffer.append("(");
+        for (String key : columns) {
+            buffer.append(key.toUpperCase());
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        buffer.append(") VALUES(");
+        for (String key : columns) {
+            buffer.append(":");
+            buffer.append(key);
+            buffer.append(",");
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        buffer.append(")");
+        return buffer.toString();
     }
 
     @Override
