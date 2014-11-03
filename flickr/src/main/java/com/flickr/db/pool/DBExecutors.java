@@ -3,6 +3,7 @@ package com.flickr.db.pool;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSONObject;
 import com.flickr.db.pojo.Page;
+import com.google.common.base.Preconditions;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public List executeProc(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         CallableStatement callableStatement = null;
         DruidPooledConnection connection = null;
         ResultSet rs = null;
@@ -58,12 +60,15 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public <T> List<T> executeProc(String sql, Class<T> clazz, Object... args) {
+        Preconditions.checkNotNull(sql, "sql is null!");
+        Preconditions.checkNotNull(clazz, "clazz is null!");
         List list = executeProc(sql, args);
         return JSONObject.parseArray(JSONObject.toJSONString(list), clazz);
     }
 
     @Override
     public boolean execute(String sql) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         boolean rval = false;
         DruidPooledConnection connection = null;
         Statement statement = null;
@@ -83,6 +88,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public void executeBatch(List<String> sqls) {
+        Preconditions.checkNotNull(sqls, "sqls is null!");
         DruidPooledConnection connection = null;
         Statement statement = null;
         try {
@@ -96,6 +102,11 @@ public class DBExecutors implements IDBExecutors {
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
+            try{
+                connection.rollback();
+            }catch (SQLException s){
+                s.printStackTrace();
+            }
         } finally {
             closeStatement(statement);
             closeConnection(connection);
@@ -106,6 +117,7 @@ public class DBExecutors implements IDBExecutors {
          * 执行一句查询的sql
          */
     public Map queryForMap(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         Map result = new HashMap();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -139,6 +151,7 @@ public class DBExecutors implements IDBExecutors {
     * 执行一句查询的sql
     */
     public List queryForList(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         List list = new ArrayList();
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -174,6 +187,7 @@ public class DBExecutors implements IDBExecutors {
     }
 
     public int getInt(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         int rval = 0;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -202,6 +216,7 @@ public class DBExecutors implements IDBExecutors {
 
 
     public long getLong(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         long rval = 0;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -229,6 +244,7 @@ public class DBExecutors implements IDBExecutors {
     }
 
     public float getFloat(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         float rval = 0;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -256,6 +272,7 @@ public class DBExecutors implements IDBExecutors {
     }
 
     public double getDouble(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         double rval = 0;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -284,6 +301,7 @@ public class DBExecutors implements IDBExecutors {
 
 
     public String getString(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         String rval = null;
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
@@ -312,6 +330,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public boolean delete(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         boolean rval = false;
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
@@ -337,6 +356,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public void update(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -360,6 +380,7 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public String insert(String sql, Object... params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         String id = null;
         ResultSet rs = null;
         DruidPooledConnection connection = null;
@@ -390,17 +411,20 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public void insertBatch(String sql, List<Object[]> params) {
+        Preconditions.checkNotNull(sql, "sql is null!");
         DruidPooledConnection connection = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = DruidPool.instance().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(sql);
-            for (Object[] obj : params) {
-                for (int i = 0; i < obj.length; i++) {
-                    preparedStatement.setObject((i + 1), obj[i]);
+            if(null!=params){
+                for (Object[] obj : params) {
+                    for (int i = 0; i < obj.length; i++) {
+                        preparedStatement.setObject((i + 1), obj[i]);
+                    }
+                    preparedStatement.addBatch();
                 }
-                preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
             connection.commit();
@@ -414,6 +438,8 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public void insert(String tableName, Map params) {
+        Preconditions.checkNotNull(tableName, "tableName is null!");
+        Preconditions.checkNotNull(params, "params is null!");
         List<String> column = new ArrayList<String>();
         for (Object obj : params.keySet()) {
             column.add(String.valueOf(obj));
@@ -448,12 +474,16 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public <T> T queryForObject(String sql, Class<T> clazz, Object... args) {
+        Preconditions.checkNotNull(sql, "sql is null!");
+        Preconditions.checkNotNull(clazz, "clazz is null!");
         Map map = this.queryForMap(sql, args);
         return JSONObject.parseObject(JSONObject.toJSONString(map), clazz);
     }
 
     @Override
     public <T> List<T> queryForList(String sql, Class<T> clazz, Object... args) {
+        Preconditions.checkNotNull(sql, "sql is null!");
+        Preconditions.checkNotNull(clazz, "clazz is null!");
         List list = this.queryForList(sql, args);
 
         return JSONObject.parseArray(JSONObject.toJSONString(list), clazz);
@@ -461,9 +491,9 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public Page queryForMapPage(String sql, String countSql, int pageNo, int pageSize, Object... args) {
-        if (pageNo < 1) {
-            throw new RuntimeException("pageNo 必须大于等于1!");
-        }
+        Preconditions.checkNotNull(sql, "sql is null!");
+        Preconditions.checkState(pageNo < 1, "pageNo 必须大于等于1!");
+        Preconditions.checkState(pageSize < 1, "pageSize 必须大于等于1!");
         List list = this.queryForList(buildPageSql(sql, pageNo, pageSize), args);
         int totalCount = getInt(countSql, args);
 
@@ -472,6 +502,10 @@ public class DBExecutors implements IDBExecutors {
 
     @Override
     public Page queryForObjectPage(String sql, String countSql, int pageNo, int pageSize, Class clazz, Object... args) {
+        Preconditions.checkNotNull(sql, "sql is null!");
+        Preconditions.checkState(pageNo < 1, "pageNo 必须大于等于1!");
+        Preconditions.checkState(pageSize < 1, "pageSize 必须大于等于1!");
+        Preconditions.checkNotNull(clazz, "clazz is null!");
         List list = this.queryForList(buildPageSql(sql, pageNo, pageSize), clazz, args);
         int totalCount = getInt(countSql, args);
 
