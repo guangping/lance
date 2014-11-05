@@ -10,7 +10,7 @@ import java.util.Map;
  * Date: 2014-04-25 22:27
  * To change this template use File | Settings | File Templates.
  */
-public class DefaultDAOImpl<T> extends AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
+public class DefaultDAOImpl extends AbstractBaseDAOImpl implements IBaseDAO {
 
 
 

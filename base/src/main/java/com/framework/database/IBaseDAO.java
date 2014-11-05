@@ -17,7 +17,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  * 数据操作接口
  */
-public interface IBaseDAO<T> {
+public interface IBaseDAO {
 
     /**执行sql语句**/
     public void execute(String sql, Object... args) ;
@@ -51,9 +51,9 @@ public interface IBaseDAO<T> {
      * @param args 对应sql语句中的参数值
      * @return
      */
-    public T queryForObject(String sql, Class clazz, Object... args);
+    public <T>T queryForObject(String sql, Class<T> clazz, Object... args);
 
-    public T queryForObject(String sql, ParameterizedRowMapper mapper, Object... args) ;
+    public <T>T queryForObject(String sql, ParameterizedRowMapper mapper, Object... args) ;
 
     /**
      * 查询单一结果集<br/>
@@ -84,7 +84,7 @@ public interface IBaseDAO<T> {
      * @param args 对应sql语句中的参数值
      * @return 列表中元素为<code>T</code>的<code>List</code>
      */
-    public List<T> queryForList(String sql, RowMapper mapper, Object... args) ;
+    public <T>List<T> queryForList(String sql, RowMapper mapper, Object... args) ;
 
     /**
      * 查询多行结果集<br/>
@@ -94,7 +94,7 @@ public interface IBaseDAO<T> {
      * @param args 对应sql语句中的参数值
      * @return  列表中元素为<code>T</code>的<code>List</code>
      */
-    public List<T> queryForList(String sql, Class clazz, Object... args);
+    public <T>List<T> queryForList(String sql, Class clazz, Object... args);
 
 
     /**
@@ -109,9 +109,9 @@ public interface IBaseDAO<T> {
 
     public Page queryForPage(String sql,String countSql,int pageNo, int pageSize, Object... args);
 
-    public Page queryForPage(String sql,String countSql,int pageNo, int pageSize,Class<T> clazz, Object... args);
+    public Page queryForPage(String sql,String countSql,int pageNo, int pageSize,Class clazz, Object... args);
 
-    public Page queryForPage(String sql, int pageNo, int pageSize,Class<T> clazz, Object... args);
+    public Page queryForPage(String sql, int pageNo, int pageSize,Class clazz, Object... args);
 
     public Page queryForPage(String sql, String countSql,int pageNo, int pageSize,RowMapper rowMapper, Object... args);
 

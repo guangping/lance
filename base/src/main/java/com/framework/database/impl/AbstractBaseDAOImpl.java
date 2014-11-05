@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
  * Date: 2014-04-24 22:12
  * To change this template use File | Settings | File Templates.
  */
-public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
+public abstract class AbstractBaseDAOImpl implements IBaseDAO {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected JdbcTemplate jdbcTemplate;
@@ -168,11 +168,11 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     }
 
     @Override
-    public Page queryForPage(String sql, String countSql, int pageNo, int pageSize, Class<T> clazz, Object... args) {
+    public Page queryForPage(String sql, String countSql, int pageNo, int pageSize, Class clazz, Object... args) {
         Assert.hasText(sql, "SQL语句不能为空");
         Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
         String listSql = buildPageSql(sql, pageNo, pageSize);
-        List<T> list = queryForList(listSql, clazz,args);
+        List list = queryForList(listSql, clazz,args);
         int totalCount = queryForInt(countSql, args);
         return new Page(pageNo, totalCount, pageSize, list);
     }
@@ -189,12 +189,12 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
 
 
     @Override
-    public Page queryForPage(String sql, int pageNo, int pageSize, Class<T> clazz, Object... args) {
+    public Page queryForPage(String sql, int pageNo, int pageSize, Class clazz, Object... args) {
         Assert.hasText(sql, "SQL语句不能为空");
         Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
         String listSql = buildPageSql(sql, pageNo, pageSize);
         String countSql = "SELECT COUNT(1) count from (" + removeOrders(sql)+") ty";
-        List<T> list = queryForList(listSql, clazz,args);
+        List list = queryForList(listSql, clazz,args);
         int totalCount = queryForInt(countSql, args);
         return new Page(pageNo, totalCount, pageSize, list);
     }
@@ -204,7 +204,7 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
         Assert.hasText(sql, "SQL语句不能为空");
         Assert.isTrue(pageNo >= 1, "pageNo 必须大于等于1");
         String listSql = buildPageSql(sql, pageNo, pageSize);
-        List<T> list = queryForList(listSql, rowMapper,args);
+        List list = queryForList(listSql, rowMapper,args);
         int totalCount = queryForInt(countSql, args);
         return new Page(pageNo, totalCount, pageSize, list);
     }
@@ -227,21 +227,20 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
     }
 
     @Override
-    public List<T> queryForList(String sql, RowMapper mapper, Object... args) {
+    public <T> List<T> queryForList(String sql, RowMapper mapper, Object... args) {
         return this.jdbcTemplate.query(sql, args, mapper);
     }
 
     @Override
-    public List<T> queryForList(String sql, Class clazz, Object... args) {
+    public <T> List<T> queryForList(String sql, Class clazz, Object... args) {
         return this.jdbcTemplate.query(sql, ParameterizedBeanPropertyRowMapper.newInstance(clazz), args);
     }
 
 
     @Override
-    public T queryForObject(String sql, Class clazz, Object... args) {
+    public <T> T queryForObject(String sql, Class<T> clazz, Object... args) {
         try {
-            Object object = this.jdbcTemplate.queryForObject(sql, ParameterizedBeanPropertyRowMapper.newInstance(clazz), args);
-            return (T) object;
+             return this.jdbcTemplate.queryForObject(sql, ParameterizedBeanPropertyRowMapper.newInstance(clazz), args);
         } catch (RuntimeException e) {
             if (logger.isDebugEnabled()) {
                 logger.error("查询出错:{},出错sql:{}", new Object[]{e, sql});
@@ -253,7 +252,7 @@ public abstract class AbstractBaseDAOImpl<T> implements IBaseDAO<T> {
 
 
     @Override
-    public T queryForObject(String sql, ParameterizedRowMapper mapper, Object... args) {
+    public <T> T queryForObject(String sql, ParameterizedRowMapper mapper, Object... args) {
         try {
             Object obj = this.jdbcTemplate.queryForObject(sql, mapper, args);
             return (T) obj;
