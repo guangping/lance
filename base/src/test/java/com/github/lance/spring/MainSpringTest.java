@@ -201,4 +201,9 @@ public class MainSpringTest {
         Page page=defaultDAO.queryForPage(sql,1,1000,Operation.class);
         System.out.println("page====>"+page);
     }
+
+    @Test
+    public void runS(){
+
+    }
 }
