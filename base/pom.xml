@@ -89,11 +89,11 @@
             <artifactId>spring-aop</artifactId>
             <version>4.0.0.RELEASE</version>
         </dependency>
-        <dependency>
+     <!--   <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-asm</artifactId>
             <version>3.1.4.RELEASE</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
@@ -132,12 +132,12 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.2</version>
+            <version>1.7.5</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.2</version>
+            <version>1.7.5</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -167,7 +167,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.1.37</version>
+            <version>1.1.40</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
