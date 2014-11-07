@@ -33,6 +33,7 @@
                                 <source>src/main/java</source>
                                 <source>src/main/web</source>
                                 <source>src/main/basic</source>
+                                <source>src/main/images</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -89,11 +90,6 @@
             <artifactId>spring-aop</artifactId>
             <version>4.0.0.RELEASE</version>
         </dependency>
-     <!--   <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-asm</artifactId>
-            <version>3.1.4.RELEASE</version>
-        </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
@@ -175,6 +171,13 @@
             <version>3.1</version>
         </dependency>
 
+        <!--图片处理相关-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.7</version>
+        </dependency>
+
         <!--web 测试相关-->
         <dependency>
             <groupId>org.testng</groupId>
@@ -188,8 +191,6 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
-
-
 
 
     </dependencies>
