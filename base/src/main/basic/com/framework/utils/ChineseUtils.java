@@ -42,7 +42,7 @@ public class ChineseUtils {
     * */
     public static String converToEnameUpper(String name) throws BadHanyuPinyinOutputFormatCombination {
         StringBuilder succeedPinyin = new StringBuilder();
-        HanyuPinyinOutputFormat format=new HanyuPinyinOutputFormat();
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.UPPERCASE);//大小写输出
         //如果不想要音调 删除就行
      /*   format.setToneType(HanyuPinyinToneType.WITH_TONE_MARK);//音调设置
@@ -62,7 +62,7 @@ public class ChineseUtils {
    * */
     public static String converToEnameLower(String name) throws BadHanyuPinyinOutputFormatCombination {
         StringBuilder succeedPinyin = new StringBuilder();
-        HanyuPinyinOutputFormat format=new HanyuPinyinOutputFormat();
+        HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);//大小写输出
         //如果不想要音调 删除就行
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -77,4 +77,70 @@ public class ChineseUtils {
         }
         return succeedPinyin.toString();
     }
+
+    /*
+    *截取字符串 中文
+    * */
+    public static String substring(String text, int i, int length)
+            throws UnsupportedEncodingException {
+        if (text == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        int currentLength = 0;
+        for (char c : text.toCharArray()) {
+            currentLength += String.valueOf(c).getBytes("GBK").length;
+            if (currentLength <= length) {
+                sb.append(c);
+            } else {
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String subString(String text, int length, String endWith) {
+        int textLength = text.length();
+        int byteLength = 0;
+        StringBuffer returnStr = new StringBuffer();
+        for (int i = 0; i < textLength && byteLength < length * 2; i++) {
+            String str_i = text.substring(i, i + 1);
+            if (str_i.getBytes().length == 1) {//英文
+                byteLength++;
+            } else {//中文
+                byteLength += 2;
+            }
+            returnStr.append(str_i);
+        }
+        try {
+            if (byteLength < text.getBytes("GBK").length) {//getBytes("GBK")每个汉字长2，getBytes("UTF-8")每个汉字长度为3
+                returnStr.append(endWith);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return returnStr.toString();
+    }
+
+
+    /*获取字符串长度*/
+    public static int length(String value) {
+        int valueLength = 0;
+        String chinese = "[\u0391-\uFFE5]";
+        /* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
+        for (int i = 0; i < value.length(); i++) {
+            /* 获取一个字符 */
+            String temp = value.substring(i, i + 1);
+            /* 判断是否为中文字符 */
+            if (temp.matches(chinese)) {
+                /* 中文字符长度为2 */
+                valueLength += 2;
+            } else {
+                /* 其他字符长度为1 */
+                valueLength += 1;
+            }
+        }
+        return valueLength;
+    }
+
 }
