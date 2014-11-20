@@ -1,5 +1,6 @@
 package com.flickr.test.html;
 
+import com.flickr.db.pojo.DBParams;
 import com.flickr.db.pool.DBExecutors;
 import com.flickr.db.pool.IDBExecutors;
 import org.jsoup.Connection;
@@ -61,14 +62,6 @@ public class HtmlTest {
         urls.add("http://news.163.com/special/00011K6L/rss_hotnews.xml");
         urls.add("http://news.163.com/special/00011K6L/rss_newsspecial.xml");
         urls.add("http://news.163.com/special/00011K6L/rss_photo.xml");
-        urls.add("http://news.163.com/special/00011K6L/rss_discovery.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportslq.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportscba.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportsyc.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportsyj.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportsgj.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportszg.xml");
-        urls.add("http://sports.163.com/special/00051K7F/rss_sportszh.xml");
         urls.add("http://sports.163.com/special/00051K7F/rss_sportstennis.xml");
         urls.add("http://sports.163.com/special/00051K7F/rss_sportscp.xml");
         urls.add("http://ent.163.com/special/00031K7Q/rss_toutiao.xml");
@@ -94,24 +87,13 @@ public class HtmlTest {
         urls.add("http://tech.163.com/digi/special/00161K7K/rss_digipc.xml");
         urls.add("http://mobile.163.com/special/001144R8/mobile163_copy.xml");
         urls.add("http://mobile.163.com/special/001144R8/xinjisudi_copy.xml");
-        urls.add("http://mobile.163.com/special/001144R8/mirss.xml");
-        urls.add("http://mobile.163.com/special/001144R8/mdrss.xml");
-        urls.add("http://mobile.163.com/special/001144R8/shoujipingce.xml");
-        urls.add("http://mobile.163.com/special/001144R8/shoujidaogou_copy.xml");
-        urls.add("http://mobile.163.com/special/001144R8/phonemarketrss.xml");
-        urls.add("http://bj.house.163.com/special/000741FI/bjrss.xml");
-        urls.add("http://game.163.com/special/003144N4/rss_gametop.xml");
-        urls.add("http://book.163.com/special/0092451H/rss_whzx.xml");
-        urls.add("http://gongyi.163.com/special/009344MB/gyxw2.xml");
-        urls.add("http://daxue.163.com/special/00913J5N/daxuerss.xml");
          //sina
-        urls.add("http://blog.sina.com.cn/rss/THEBUND.xml");
         urls.add("http://blog.sina.com.cn/rss/sciam.xml");
         //凤凰网
-        urls.add("http://news.ifeng.com/history/rss/index.xml");
-        urls.add("http://news.ifeng.com/rss/society.xml");
-        urls.add("http://zhihurss.jd-app.com/zhihuzhuanlan/taosay?limit=200");
+        urls.add("http://zhihurss.jd-app.com/zhihuzhuanlan/taosay?limit=20");
 
+        //股票
+        urls.add("http://rss.cnfol.com/1356.xml");
 
     }
 
@@ -192,6 +174,28 @@ public class HtmlTest {
 
         System.out.println("====>" + format.format(new Date(str)));
     }
+
+
+    @Test
+    public void runDBParams(){
+        List<DBParams> list=new ArrayList<DBParams>();
+        DBParams params1=new DBParams();
+        params1.setSql("INSERT INTO rss(title,description,category,author,pubDate)\n" +
+                "VALUES(?,?,?,?,?)");
+        params1.setArgs(new Object[]{"1","1","1","1",format.format(new Date())});
+        list.add(params1);
+
+        DBParams params2=new DBParams();
+        params2.setSql("INSERT INTO rss(title,description,category,author,pubDate)\n" +
+                "VALUES(?,?,?,?,?)");
+        params2.setArgs(new Object[]{"2","2","2","2",format.format(new Date())});
+        list.add(params2);
+
+        executors.executeDiff(list);
+    }
+
+
+
 
     @AfterMethod
     public void close() {

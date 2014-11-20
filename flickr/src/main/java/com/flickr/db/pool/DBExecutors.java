@@ -2,6 +2,7 @@ package com.flickr.db.pool;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSONObject;
+import com.flickr.db.pojo.DBParams;
 import com.flickr.db.pojo.Page;
 import com.google.common.base.Preconditions;
 
@@ -406,6 +407,39 @@ public class DBExecutors implements IDBExecutors {
             closeStatement(preparedStatement);
             closeConnection(connection);
             return id;
+        }
+    }
+
+    @Override
+    public void executeDiff(List<DBParams> list) {
+        Preconditions.checkNotNull(list, "list is null!");
+
+        DruidPooledConnection connection = null;
+        List<PreparedStatement> data=new ArrayList<PreparedStatement>();
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DruidPool.instance().getConnection();
+            connection.setAutoCommit(false);
+            for(DBParams obj :list){
+                preparedStatement = connection.prepareStatement(obj.getSql());
+                if (null != obj.getArgs()) {
+                    for (int i = 0; i <obj.getArgs().length; i++) {
+                        preparedStatement.setObject((i + 1), obj.getArgs()[i]);
+                    }
+                }
+                data.add(preparedStatement);
+            }
+            for(PreparedStatement st : data){
+                st.executeUpdate();
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            for(PreparedStatement st : data){
+                closeStatement(st);
+            }
+            closeConnection(connection);
         }
     }
 

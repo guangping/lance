@@ -1,5 +1,6 @@
 package com.flickr.db.pool;
 
+import com.flickr.db.pojo.DBParams;
 import com.flickr.db.pojo.Page;
 
 import java.util.List;
@@ -76,6 +77,11 @@ public interface IDBExecutors {
     public void insertBatch(String sql, List<Object[]> params);
 
     public void insert(String tableName, Map params);
+
+    /*
+    *批量执行，支持不同sql
+    * **/
+    public void executeDiff(List<DBParams> list);
 
 
     /**
