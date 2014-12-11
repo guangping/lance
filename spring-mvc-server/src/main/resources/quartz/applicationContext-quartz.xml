@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+
+    <bean id="defaultJobs" class="com.quartz.common.jobs.DefaultJobs"/>
+
+    <bean id="defaultJobTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="defaultJobs"/>
+        </property>
+        <property name="targetMethod">
+            <value>execute</value>
+        </property>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="defaultDoTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="defaultJobTask"/>
+        </property>
+        <property name="cronExpression">
+            <!-- 每隔2秒执行一次-->
+            <value>0/2 * * * * ?</value>
+        </property>
+    </bean>
+
+    <bean id="defaultQuertz" lazy-init="true" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="defaultDoTime"/>
+            </list>
+        </property>
+    </bean>
+</beans>
