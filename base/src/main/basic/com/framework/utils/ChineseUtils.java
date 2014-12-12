@@ -81,7 +81,7 @@ public class ChineseUtils {
     /*
     *截取字符串 中文
     * */
-    public static String substring(String text, int i, int length)
+    public static String subString(String text,int length)
             throws UnsupportedEncodingException {
         if (text == null) {
             return null;
@@ -99,28 +99,26 @@ public class ChineseUtils {
         return sb.toString();
     }
 
-    public static String subString(String text, int length, String endWith) {
-        int textLength = text.length();
-        int byteLength = 0;
-        StringBuffer returnStr = new StringBuffer();
-        for (int i = 0; i < textLength && byteLength < length * 2; i++) {
-            String str_i = text.substring(i, i + 1);
-            if (str_i.getBytes().length == 1) {//英文
-                byteLength++;
-            } else {//中文
-                byteLength += 2;
-            }
-            returnStr.append(str_i);
+    /*
+    *在字符串中插入其他字符
+    * */
+    public static String insertStr(String text,String sign,int count)
+            throws UnsupportedEncodingException {
+        if (text == null) {
+            return null;
         }
-        try {
-            if (byteLength < text.getBytes("GBK").length) {//getBytes("GBK")每个汉字长2，getBytes("UTF-8")每个汉字长度为3
-                returnStr.append(endWith);
+        StringBuilder sb = new StringBuilder();
+        int currentLength = 0;
+        for (char c : text.toCharArray()) {
+            currentLength += String.valueOf(c).getBytes("GBK").length;
+            sb.append(c);
+            if(currentLength%count==0){
+                sb.append(sign);
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
-        return returnStr.toString();
+        return sb.toString();
     }
+
 
 
     /*获取字符串长度*/

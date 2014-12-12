@@ -81,7 +81,7 @@ public class SishuokWhitelist {
      * Links (<code>a</code> elements) can point to <code>http, https, ftp, mailto</code>, and have an enforced
      * <code>rel=nofollow</code> attribute.
      * <p/>
-     * Does not allow images.
+     * Does not allow image.
      *
      * @return whitelist
      */

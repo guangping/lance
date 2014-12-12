@@ -38,6 +38,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
 
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Transactional
     @Override
     public String insert(String table, Map arg) {
         Assert.hasText(table, "表名不能为空!");
@@ -59,6 +60,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
         }
     }
 
+    @Transactional
     @Override
     public String insert(String table, Object arg) {
         Assert.hasText(table, "表名不能为空!");
@@ -269,6 +271,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
         return this.jdbcTemplate.queryForMap(sql, args);
     }
 
+    @Transactional
     @Override
     public void execute(String sql, Object... args) {
         try {
@@ -300,6 +303,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
         return jdbcTemplate.queryForObject(sql, String.class);
     }
 
+    @Transactional
     @Override
     public void update(String sql, Object... args) {
         Assert.hasText(sql, "sql不能为空!");
@@ -312,6 +316,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
     }
 
 
+    @Transactional
     @Override
     public void updateNamedParameter(String sql, Object arg) {
         Assert.hasText(sql, "sql不能为空!");
@@ -330,6 +335,7 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
         }
     }
 
+    @Transactional
     @Override
     public void update(String table, Map fields, Map where) {
         Assert.hasText(table, "表名不能为空!");
@@ -377,31 +383,4 @@ public abstract class AbstractBaseDAOImpl implements IBaseDAO {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    /**
-     * 格式化列名 只适用于Mysql
-     *
-     * @param col
-     * @return
-     */
-    protected String quoteCol(String col) {
-        if (StringUtils.isBlank(col)) {
-            return "";
-        } else {
-            return col;
-        }
-    }
-
-    /**
-     * 格式化值 只适用于Mysql
-     *
-     * @param value
-     * @return
-     */
-    protected String quoteValue(String value) {
-        if (StringUtils.isBlank(value)) {
-            return "''";
-        } else {
-            return "'" + value.replaceAll("'", "''") + "'";
-        }
-    }
 }
