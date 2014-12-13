@@ -1,6 +1,7 @@
 package com.framework.web.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.framework.utils.RegExpUtils;
 import com.framework.utils.StringUtils;
 import com.framework.web.pojo.AccessLog;
 import com.google.common.collect.Lists;
@@ -141,7 +142,7 @@ public class WebUtils {
         AccessLog log=new AccessLog();
         log.setJsessionId(request.getRequestedSessionId());
         log.setIp(getIpAddr(request));
-        log.setUrl(request.getQueryString());
+        log.setUrl(getRequestURIWithParam(request));
         log.setReferer(request.getHeader("Referer"));
         log.setParams(getParams(request));
         log.setAccept(request.getHeader("accept"));
@@ -149,5 +150,29 @@ public class WebUtils {
         log.setHeaders(getHeaders(request));
 
         return log;
+    }
+
+    public static int getPage(HttpServletRequest request) {
+        return getParams(request,"page",1);
+
+    }
+
+    public static int getRows(HttpServletRequest request) {
+        return getParams(request,"rows",20);
+    }
+
+    public static String getParams(HttpServletRequest request, String key, String defaultValue) {
+        return StringUtils.isNotBlank(request.getParameter(key)) ? request.getParameter(key) : defaultValue;
+    }
+
+    public static int getParams(HttpServletRequest request, String key, int defaultValue) {
+        String value = request.getParameter(key);
+        if (StringUtils.isBlank(value)) {
+            return defaultValue;
+        }
+        if (RegExpUtils.compileJAk(RegExpUtils.UP_ZERO_NUM, value)) {
+            return Integer.parseInt(value);
+        }
+        return defaultValue;
     }
 }
