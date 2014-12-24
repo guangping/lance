@@ -1,0 +1,63 @@
+package com.varela.cache;
+
+import com.varela.pojo.Vehicle;
+import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: lance
+ * Date: 2014-12-12 17:31
+ * To change this template use File | Settings | File Templates.
+ */
+@Aspect
+public class VehicleCacheAspect extends BaseCacheAspect {
+    public VehicleCacheAspect() {
+        setCacheName("vehicleCache");
+    }
+
+    /*
+    *切入点
+    * **/
+    /*
+    * 匹配车型service
+    * */
+    @Pointcut("target(com.varela.service.VehicleService)")
+    private void vehicleServicePointcut() {
+    }
+
+    @Pointcut("execution(* query(..))")
+    private void cachePutPointcut() {
+    }
+
+    /*
+    * 拦截
+    * */
+    @Around("vehicleServicePointcut() && cachePutPointcut()")
+    public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
+        String methodName = pjp.getSignature().getName();
+        Object arg = pjp.getArgs().length >= 1 ? pjp.getArgs()[0] : null;
+        String key = "";
+        Object data = null;
+        if (arg instanceof Vehicle) {
+            Vehicle vehicle = (Vehicle) arg;
+            if (StringUtils.isNotBlank(vehicle.getCity_code())) {
+                key = "city_code_" + vehicle.getCity_code();
+                data = get(key);
+            }
+        }
+        if (null != data) {
+            return data;
+        }
+        //调用核心逻辑
+        Object retVal = pjp.proceed();
+        if (StringUtils.isNotBlank(key)) {
+            put(key, retVal);
+        }
+        return retVal;
+    }
+
+}
