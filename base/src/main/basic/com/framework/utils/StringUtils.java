@@ -1,11 +1,5 @@
 package com.framework.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
 /**
  * Created with IntelliJ IDEA.
  * User: guangping
