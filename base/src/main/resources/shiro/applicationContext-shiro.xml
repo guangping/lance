@@ -7,12 +7,12 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="defaultCredentialsMatcher" class="com.varela.shiro.credential.DefaultCredentialsMatcher">
+    <bean id="defaultCredentialsMatcher" class="com.framework.shiro.credential.DefaultCredentialsMatcher">
         <property name="hashAlgorithmName" value="MD5"/>
         <property name="hashIterations" value="10"/>
         <property name="storedCredentialsHexEncoded" value="false"/>
     </bean>
-    <bean id="rightsAuthorizingRealm" class="com.varela.shiro.realms.RightsAuthorizingRealm">
+    <bean id="rightsAuthorizingRealm" class="com.framework.shiro.realms.RightsAuthorizingRealm">
         <!--自定义验证方法-->
         <property name="credentialsMatcher" ref="defaultCredentialsMatcher"/>
         <property name="authenticationCachingEnabled" value="false"/>
@@ -23,7 +23,7 @@
     </bean>
 
 
-    <bean id="preFilters" class="com.varela.shiro.filters.PreFilters"/>
+    <bean id="preFilters" class="com.framework.shiro.filters.PreFilters"/>
 
     <!-- 退出登录过滤器 -->
     <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">

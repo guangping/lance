@@ -35,6 +35,7 @@
                                 <source>src/main/basic</source>
                                 <source>src/main/cache</source>
                                 <source>src/main/mvc</source>
+                                <source>src/main/shiro</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -202,6 +203,23 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.7.4</version>
         </dependency>
+        <!--shiro-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
 
 
         <!--web 测试相关-->
