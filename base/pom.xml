@@ -34,6 +34,7 @@
                                 <source>src/main/web</source>
                                 <source>src/main/basic</source>
                                 <source>src/main/cache</source>
+                                <source>src/main/mvc</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -98,6 +99,21 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+            <version>4.0.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.0.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.0.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
             <version>4.0.0.RELEASE</version>
         </dependency>
         <dependency>
