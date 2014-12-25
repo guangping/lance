@@ -138,12 +138,12 @@ public class WebUtils {
         return params;
     }
 
-    public static AccessLog getAccessLog(HttpServletRequest request){
-        AccessLog log=new AccessLog();
+    public static AccessLog getAccessLog(HttpServletRequest request) {
+        AccessLog log = new AccessLog();
         log.setJsessionId(request.getRequestedSessionId());
         log.setIp(getIpAddr(request));
         log.setUrl(getRequestURIWithParam(request));
-        log.setReferer(request.getHeader("Referer"));
+        log.setReferer((null != request.getHeader("Referer")) ? request.getHeader("Referer") : request.getHeader("referer"));
         log.setParams(getParams(request));
         log.setAccept(request.getHeader("accept"));
         log.setUserAgent(request.getHeader("User-Agent"));
@@ -174,5 +174,17 @@ public class WebUtils {
             return Integer.parseInt(value);
         }
         return defaultValue;
+    }
+
+    /*
+   *设置值
+   * */
+    public static HttpServletRequest setHttpServletRequestValues(HttpServletRequest request) {
+        HttpServletRequest val = request;
+        Map<String, String[]> params = request.getParameterMap();
+        for (Map.Entry<String, String[]> obj : params.entrySet()) {
+            val.setAttribute(obj.getKey(),(obj.getValue().length==1)?obj.getValue()[0]:obj.getValue());
+        }
+        return val;
     }
 }
