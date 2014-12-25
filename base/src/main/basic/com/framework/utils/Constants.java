@@ -14,4 +14,8 @@ public class Constants {
     public static final String GBK = "GBK";
 
 
- }
+    public static final String JSON = "json";
+
+
+
+}
