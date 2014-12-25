@@ -1,6 +1,5 @@
 package com.framework.web.utils;
 
-import com.alibaba.fastjson.JSON;
 import com.framework.utils.RegExpUtils;
 import com.framework.utils.StringUtils;
 import com.framework.web.pojo.AccessLog;
