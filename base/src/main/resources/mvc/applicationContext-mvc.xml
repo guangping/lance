@@ -12,8 +12,15 @@
 
     <context:annotation-config/>
     <mvc:annotation-driven/>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="synchronizeOnSession" value="true"/>
+    </bean>
 
     <mvc:interceptors>
+        <!-- 指定拦截url   <mvc:interceptor>
+               <mvc:mapping path="/user/**"/>
+               <bean/>
+           </mvc:interceptor>-->
         <bean class="com.framework.interceptor.ResourceInterceptor"/>
     </mvc:interceptors>
 
