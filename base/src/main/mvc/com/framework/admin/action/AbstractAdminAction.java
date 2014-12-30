@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/admin")
 public class AbstractAdminAction {
+    protected final String JSON = "common/data";
 }

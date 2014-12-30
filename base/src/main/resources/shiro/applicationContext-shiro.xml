@@ -72,6 +72,9 @@
          <property name="interval" value="3600000"/>
          <property name="sessionManager" ref="sessionManager"/>
      </bean>     -->
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
 
 
 </beans>
