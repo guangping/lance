@@ -1,7 +1,11 @@
 package com.framework.admin.action;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,4 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AbstractAdminAction {
     protected final String JSON = "common/data";
+
+    @ModelAttribute
+    public void modeAttribute(HttpServletRequest request, ModelMap model) throws Exception {
+        String uri = request.getRequestURI().replace(request.getContextPath(), "");
+        System.out.println("uri==>" + uri);
+    }
 }
