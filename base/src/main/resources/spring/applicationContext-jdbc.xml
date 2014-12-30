@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
        default-autowire="byName" default-lazy-init="false">
     <!--开启AOP监听-->
-    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+    <aop:aspectj-autoproxy/>
 
     <!-- 属性文件读入 -->
     <bean id="propertyConfigurer"
