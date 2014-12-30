@@ -35,7 +35,7 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <!-- Shiro的核心安全接口,这个属性是必须的 -->
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/main/public/login.html"/>
+        <property name="loginUrl" value="/public/login.html"/>
         <property name="successUrl" value="/error/index.html"/>
         <property name="unauthorizedUrl" value="/error/unauthorized.html"/>
         <property name="filters">
