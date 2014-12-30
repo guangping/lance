@@ -55,6 +55,7 @@
 
                 /main/orders/**=authc
                 /main/user/** = authc
+                /admin/**=authc,perms,roles
             </value>
         </property>
     </bean>
@@ -64,4 +65,13 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!--
+      定时清理僵尸session，Shiro会启用一个后台守护线程定时执行清理操作
+      用户直接关闭浏览器造成的孤立会话
+     <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+         <property name="interval" value="3600000"/>
+         <property name="sessionManager" ref="sessionManager"/>
+     </bean>     -->
+
+
 </beans>
