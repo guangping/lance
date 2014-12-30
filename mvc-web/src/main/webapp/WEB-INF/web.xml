@@ -43,7 +43,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>springmvc-dispatcher-servlet</servlet-name>
-        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.html,*.htm</url-pattern>
     </servlet-mapping>
 
 
@@ -75,7 +75,7 @@
         </init-param>
         <init-param>
             <param-name>whiteListURL</param-name>
-            <param-value>/index.html,/main/*,/deliver/*,/download/*,/integral*</param-value>
+            <param-value>/public/*,/admin/*</param-value>
         </init-param>
     </filter>
     <filter-mapping>
