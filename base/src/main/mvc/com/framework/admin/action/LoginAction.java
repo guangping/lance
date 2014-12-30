@@ -1,6 +1,5 @@
 package com.framework.admin.action;
 
-import com.alibaba.fastjson.JSON;
 import com.framework.admin.pojo.SysUser;
 import com.framework.database.pojo.Result;
 import org.apache.shiro.SecurityUtils;
