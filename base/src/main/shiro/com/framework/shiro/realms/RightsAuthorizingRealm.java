@@ -27,6 +27,7 @@ public class RightsAuthorizingRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         Subject subject = SecurityUtils.getSubject();
         logger.debug("当前用户：" + subject.getPrincipal());
+        System.out.println("授权方法");
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         return info;
@@ -39,6 +40,7 @@ public class RightsAuthorizingRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         String userName = String.valueOf(token.getPrincipal());
+        System.out.println("认证方法");
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userName,"", getName());
         return info;
