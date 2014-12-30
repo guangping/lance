@@ -1,5 +1,6 @@
 package com.framework.admin.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.framework.admin.pojo.SysUser;
 import com.framework.database.pojo.Result;
 import org.apache.shiro.SecurityUtils;
@@ -24,8 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/public")
 public class LoginAction {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(HttpServletRequest request) {
-        return null;
+    public String login() {
+        return "admin/login";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -57,6 +58,7 @@ public class LoginAction {
             result.setMsg("密码错误!");
             e.printStackTrace();
         }
+        request.setAttribute("data", JSONObject.toJSONString(result));
         return "common/data";
     }
 
