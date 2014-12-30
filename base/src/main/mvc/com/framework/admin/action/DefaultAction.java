@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiresPermissions("user:*")
 public class DefaultAction extends AbstractAdminAction {
 
-    @RequestMapping(value = "",method = RequestMethod.GET)
+    @RequestMapping(value = "/index",method = RequestMethod.GET)
     public String execute(HttpServletRequest request){
         request.setAttribute("data", JSONObject.toJSONString(new Result()));
 
