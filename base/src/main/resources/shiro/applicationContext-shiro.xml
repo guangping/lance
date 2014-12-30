@@ -51,10 +51,8 @@
                 /resources/** = anon
                 /error/**=anon
                 /logout = logout
-                /main/public/**=anon
+                /public/**=anon
 
-                /main/orders/**=authc
-                /main/user/** = authc
                 /admin/**=authc,perms,roles
             </value>
         </property>
