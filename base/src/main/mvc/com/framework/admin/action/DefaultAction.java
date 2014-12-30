@@ -23,6 +23,6 @@ public class DefaultAction extends AbstractAdminAction {
     public String execute(HttpServletRequest request){
         request.setAttribute("data", JSONObject.toJSONString(new Result()));
 
-        return JSON;
+        return "admin/index";
     }
 }
