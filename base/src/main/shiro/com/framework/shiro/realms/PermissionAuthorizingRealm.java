@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * Date: 2014-07-09 15:29
  * To change this template use File | Settings | File Templates.
  */
-public class RightsAuthorizingRealm extends AuthorizingRealm {
+public class PermissionAuthorizingRealm extends AuthorizingRealm {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
 

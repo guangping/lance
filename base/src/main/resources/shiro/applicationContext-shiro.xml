@@ -12,7 +12,7 @@
         <property name="hashIterations" value="10"/>
         <property name="storedCredentialsHexEncoded" value="false"/>
     </bean>
-    <bean id="rightsAuthorizingRealm" class="com.framework.shiro.realms.RightsAuthorizingRealm">
+    <bean id="rightsAuthorizingRealm" class="com.framework.shiro.realms.PermissionAuthorizingRealm">
         <!--自定义验证方法-->
         <property name="credentialsMatcher" ref="defaultCredentialsMatcher"/>
         <property name="authenticationCachingEnabled" value="false"/>
