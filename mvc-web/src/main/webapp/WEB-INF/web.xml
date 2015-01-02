@@ -62,7 +62,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>springmvc-dispatcher-servlet</servlet-name>
-        <url-pattern>*.html,*.htm</url-pattern>
+        <url-pattern>*.html</url-pattern>
     </servlet-mapping>
 
 
