@@ -1,3 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="/WEB-INF/tld/c.tld" %>
-<c:redirect url="${ctx}/public/login.html"/>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<h1>Hello</h1>
+</body>
+</html>
