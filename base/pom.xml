@@ -231,10 +231,11 @@
         </dependency>
         <!--freemarker-->
         <dependency>
-            <groupId>freemarker</groupId>
+            <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.9</version>
+            <version>2.3.21</version>
         </dependency>
+
 
 
 
