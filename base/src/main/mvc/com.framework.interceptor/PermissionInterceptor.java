@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * User: lance
  * Date: 2015-01-02 13:59
  * To change this template use File | Settings | File Templates.
+ * 权限处理
  */
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
