@@ -3,6 +3,7 @@ package com.framework.interceptor;
 import com.framework.web.utils.WebUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,6 +19,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
+
         System.out.println("url===>"+WebUtils.getRequestURI(request));
         return super.preHandle(request, response, handler);
     }
