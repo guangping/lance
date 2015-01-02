@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(value = "/public")
-public class LoginAction {
+public class AdminLoginAction {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "admin/login";
