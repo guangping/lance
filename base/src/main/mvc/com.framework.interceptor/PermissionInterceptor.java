@@ -3,7 +3,6 @@ package com.framework.interceptor;
 import com.framework.web.utils.WebUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
