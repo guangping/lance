@@ -9,7 +9,8 @@
        http://www.springframework.org/schema/context/spring-context-4.0.xsd
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
-    <context:component-scan base-package="com.framework.admin.action,com.framework.admin.service,com.framework.main.action"/>
+    <context:component-scan
+            base-package="com.framework.admin.action,com.framework.admin.service,com.framework.main.action"/>
     <context:annotation-config/>
     <mvc:annotation-driven/>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
@@ -17,10 +18,11 @@
     </bean>
 
     <mvc:interceptors>
-        <!-- 指定拦截url   <mvc:interceptor>
-               <mvc:mapping path="/user/**"/>
-               <bean/>
-           </mvc:interceptor>-->
+        <!-- 指定拦截url-->
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <bean class="com.framework.interceptor.PermissionInterceptor"/>
+        </mvc:interceptor>
         <bean class="com.framework.interceptor.ResourceInterceptor"/>
     </mvc:interceptors>
     <!--视图层 jsp
@@ -48,7 +50,7 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
         <property name="suffix" value=".ftl"/>
         <property name="contentType" value="text/html;charset=utf-8"/>
-        <property name="cache" value="true" />
+        <property name="cache" value="true"/>
         <property name="exposeRequestAttributes" value="true"/>
         <property name="exposeSessionAttributes" value="true"/>
         <property name="exposeSpringMacroHelpers" value="true"/>
