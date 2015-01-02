@@ -20,7 +20,6 @@ public class DefaultAction extends AbstractAction {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(HttpServletRequest request) {
         request.setAttribute("data", JSONObject.toJSONString(new Result()));
-
         return JSON;
     }
 
