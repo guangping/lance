@@ -20,7 +20,7 @@ public class AbstractAdminAction {
     protected final String JSON = "common/data";
 
     @ModelAttribute
-    public void modeAttribute(HttpServletRequest request, ModelMap model) throws Exception {
+    public void modeAttribute(HttpServletRequest request) throws Exception {
         String uri = request.getRequestURI().replace(request.getContextPath(), "");
         System.out.println("uri==>" + uri);
     }
