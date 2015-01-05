@@ -30,7 +30,7 @@ public class PermissionAuthorizingRealm extends AuthorizingRealm {
         System.out.println("授权方法");
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //此 部分根据数据库配置添加用户的权限信息
-
+        info.addStringPermission("user");
         info.addStringPermission("/admin/index.html");
 
         return info;
