@@ -1,4 +1,4 @@
-package com.framework.main.action;
+package com.framework.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.pojo.Result;
