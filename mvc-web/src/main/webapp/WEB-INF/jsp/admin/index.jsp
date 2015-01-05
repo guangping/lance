@@ -5,9 +5,9 @@
     <title></title>
 </head>
 <body>
-<%--<shiro:hasPermission name="user">
+<shiro:hasPermission name="user">
     <button>创建用户</button>
-</shiro:hasPermission>--%>
-
+</shiro:hasPermission>
+    ddd
 </body>
 </html>
