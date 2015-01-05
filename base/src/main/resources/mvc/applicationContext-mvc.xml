@@ -21,7 +21,7 @@
         <!-- 指定拦截url-->
         <mvc:interceptor>
             <mvc:mapping path="/admin/**"/>
-            <bean class="com.framework.interceptor.PermissionInterceptor"/>
+            <bean class="com.framework.shiro.interceptor.PermissionInterceptor"/>
         </mvc:interceptor>
         <bean class="com.framework.interceptor.ResourceInterceptor"/>
     </mvc:interceptors>

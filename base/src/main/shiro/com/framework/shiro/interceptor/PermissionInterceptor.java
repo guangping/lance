@@ -1,4 +1,4 @@
-package com.framework.interceptor;
+package com.framework.shiro.interceptor;
 
 import com.framework.web.utils.WebUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
