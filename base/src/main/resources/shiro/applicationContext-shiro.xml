@@ -53,7 +53,7 @@
                 /logout = logout
                 /public/**=anon
 
-                /admin/**=authc,perms[user]
+                /admin/**=authc,perms
             </value>
         </property>
     </bean>
