@@ -3,7 +3,6 @@ package com.framework.shiro.realms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -30,6 +29,7 @@ public class PermissionAuthorizingRealm extends AuthorizingRealm {
         logger.debug("当前用户：" + subject.getPrincipal());
         System.out.println("授权方法");
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        //此 部分根据数据库配置添加用户的权限信息
 
         info.addStringPermission("/admin/index.html");
 
@@ -45,7 +45,7 @@ public class PermissionAuthorizingRealm extends AuthorizingRealm {
         String userName = String.valueOf(token.getPrincipal());
         System.out.println("认证方法");
 
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userName,"", getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(userName, "", getName());
         return info;
     }
 }
