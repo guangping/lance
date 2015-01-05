@@ -40,7 +40,7 @@
         <property name="unauthorizedUrl" value="/error/unauthorized.html"/>
         <property name="filters">
             <util:map>
-                <!-- <entry key="authc" value-ref="formAuthenticationFilter"/>-->
+                <entry key="perms" value-ref="urlPermissionFilter"/>
                 <entry key="logout" value-ref="logoutFilter"/>
             </util:map>
         </property>
@@ -57,7 +57,7 @@
             </value>
         </property>
     </bean>
-
+    <bean id="urlPermissionFilter" class="com.framework.shiro.filters.URLPermissionFilter"/>
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
         <property name="arguments" ref="securityManager"/>
