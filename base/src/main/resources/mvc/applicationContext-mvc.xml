@@ -18,11 +18,11 @@
     </bean>
 
     <mvc:interceptors>
-        <!-- 指定拦截url-->
+        <!-- 指定拦截url
         <mvc:interceptor>
             <mvc:mapping path="/admin/**"/>
             <bean class="com.framework.shiro.interceptor.PermissionInterceptor"/>
-        </mvc:interceptor>
+        </mvc:interceptor>  -->
         <bean class="com.framework.interceptor.ResourceInterceptor"/>
     </mvc:interceptors>
     <!--视图层 jsp -->
