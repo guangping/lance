@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@RequiresPermissions("user")
+//@RequiresPermissions("user")
 public class AdminDefaultAction extends AbstractAdminAction {
 
     @RequestMapping(value = "/index",method = RequestMethod.GET)
