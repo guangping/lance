@@ -31,6 +31,7 @@ public class URLPermissionFilter extends PermissionsAuthorizationFilter {
     protected String[] buildPermissions(ServletRequest request) {
         String[] perms = new String[1];
         HttpServletRequest req = (HttpServletRequest) request;
+        String method=req.getMethod();
         perms[0] = WebUtils.getRequestURI(req);
         return perms;
     }
