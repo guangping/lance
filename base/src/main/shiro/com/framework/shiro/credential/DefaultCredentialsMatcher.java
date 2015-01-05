@@ -20,7 +20,7 @@ public class DefaultCredentialsMatcher extends HashedCredentialsMatcher {
         String tokenCredentials = String.valueOf(usernamePasswordToken.getPassword());
 
         String accountCredentials = String.valueOf(info.getCredentials());
-
+        tokenCredentials.equals(accountCredentials);
         return true;
     }
 }
